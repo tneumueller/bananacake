@@ -21,7 +21,7 @@ namespace BCake.Parser.Syntax.Types {
         public override void ParseInner() {
             string access = null, name = null, symbolType = null;
             Types.Type valueType = null;
-            FunctionType.ArgumentType[] argList = null;
+            FunctionType.ParameterType[] argList = null;
 
             // variables AS WELL AS functions and other constructs
             var memberFunctions = new List<FunctionType>();
@@ -51,7 +51,7 @@ namespace BCake.Parser.Syntax.Types {
                             i = Parser.findClosingScope(tokens, i);
 
                             // +1 in Take to include closing bracket, makes things easier in the parse method
-                            argList = FunctionType.ParseArgumentList(tokens.Skip(argListBegin + 1).Take(i - argListBegin).ToArray());
+                            argList = FunctionType.ParseArgumentList(Scope, tokens.Skip(argListBegin + 1).Take(i - argListBegin).ToArray());
                         }
                         else throw new UnexpectedTokenException(token);
                         break;

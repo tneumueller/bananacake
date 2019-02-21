@@ -44,7 +44,29 @@ namespace BCake.Parser.Syntax.Expressions {
                 }
             }
 
-            if (tokens.Length == 2) {
+            if (tokens.Length > 2) {
+                var t0 = tokens[0];
+                var t1 = tokens[1];
+
+                if (Nodes.SymbolNode.CouldBeIdentifier(t0.Value, out var m0)) {
+                    var symbol = Scope.GetSymbol(t0.Value);
+                    if (symbol == null) throw new UndefinedSymbolException(t0, t0.Value, Scope);
+                    if (symbol is Types.FunctionType && t1.Value == "(") {
+                        var argListClose = Parser.findClosingScope(tokens, 1);
+
+                        return new Expression(
+                            t0,
+                            Scope,
+                            OperatorInvoke.Parse(
+                                Scope,
+                                Expression.Parse(Scope, tokens.Take(1).ToArray()),
+                                tokens.Skip(2).Take(argListClose - 2).ToArray()
+                            )
+                        );
+                    }
+                }
+
+            } else if (tokens.Length == 2) {
                 var t0 = tokens[0];
                 var t1 = tokens[1];
 

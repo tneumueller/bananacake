@@ -38,5 +38,9 @@
     <Content Include="src\parser\exceptions\NotAnLValueException.cs" />
     <Content Include="src\parser\exceptions\InvalidArgumentException.cs" />
     <Content Include="src\parser\exceptions\TypeException.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorInvoke.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\functions\ArgumentsNode.cs" />
+    <Content Include="src\parser\exceptions\InvalidArgumentsException.cs" />
+    <Content Include="src\parser\exceptions\TokenException.cs" />
   </ItemGroup>
 </Project>

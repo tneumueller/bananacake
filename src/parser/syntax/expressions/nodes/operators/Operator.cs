@@ -46,6 +46,8 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
         public Operator() {
             var operatorAttr = (OperatorSymbolAttribute)this.GetType().GetCustomAttributes(typeof(OperatorSymbolAttribute), true).FirstOrDefault();
+            if (operatorAttr == null) return;
+
             typeLeft = operatorAttr.Left;
             typeRight = operatorAttr.Right;
             needsLValue = typeLeft == OperatorSymbolAttribute.OperatorParameterType.LValue;

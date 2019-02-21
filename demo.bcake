@@ -8,6 +8,11 @@ namespace BCake.Demo {
             int i;
             i = 0x1 + 0x10 + 0b11 + 010;
             getA();
+            multiply(d, 1, 2);
+        }
+
+        public int multiply(Demo2 a, int b, int c, bool b) {
+            
         }
     }
 
