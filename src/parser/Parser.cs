@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 using BCake.Parser.Exceptions;
+using BCake.Parser.Syntax.Expressions.Nodes;
 
 namespace BCake.Parser
 {
     public class Parser
     {
         private static string rxSeparators = @"(\s*([\(\).,:;{}])\s*|\s+([\(\).,:;{}])?\s*)";
-        public static readonly string rxIdentifier = @"^[A-Za-z_][A-Za-z_0-9]*$";
 
         public string Filename { get; private set; }
         private Token[] tokens;
@@ -70,8 +70,8 @@ namespace BCake.Parser
             this.tokens = tokens.ToArray();
         }
 
-        public Syntax.Namespace[] ParseNamespaces() {
-            var namespaces = new List<Syntax.Namespace>();
+        public Syntax.Namespace ParseRoot() {
+            var globalNamespace = new Syntax.Namespace();
             string access = null, type = null, name = null;
 
             for (int i = 0; i < tokens.Length; ++i) {
@@ -96,8 +96,9 @@ namespace BCake.Parser
                         i = findClosingScope(tokens, i);
 
                         if (type == "namespace") {
-                            namespaces.Add(
+                            globalNamespace.Scope.Declare(
                                 new Syntax.Namespace(
+                                    globalNamespace,
                                     access,
                                     name,
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
@@ -116,7 +117,7 @@ namespace BCake.Parser
                             name = "";
                             
                             while (true) {
-                                if ((m = new Regex(rxIdentifier).Match(token.Value.Trim())).Success) name += m.Value;
+                                if (SymbolNode.CouldBeIdentifier(token.Value.Trim(), out m)) name += m.Value;
                                 else throw new UnexpectedTokenException(token);
 
                                 if (i + 2 < tokens.Length && tokens[i + 1].Value == ".") {
@@ -131,7 +132,7 @@ namespace BCake.Parser
                 }
             }
 
-            return namespaces.ToArray();
+            return globalNamespace;
         }
 
         public static int findClosingScope(Token[] tokens, int startTokenIndex) {

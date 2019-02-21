@@ -1,9 +1,15 @@
 namespace BCake.Parser.Syntax.Types {
-    public class Type {
-        public Namespace Namespace { get; protected set; }
+    public abstract class Type {
+        public Scopes.Scope Scope { get; protected set; }
         public string Access { get; protected set; }
         public string Name { get; protected set; }
-        public virtual string FullName { get { return Namespace.Name + "." + Name; } }
+        public virtual string FullName {
+            get { 
+                var typeName = Scope.FullName;
+                if (typeName == null || typeName.Length < 1) return Name;
+                else return typeName + "." + Name;
+            }
+        }
         public Token DefiningToken { get; protected set; }
     }
 }

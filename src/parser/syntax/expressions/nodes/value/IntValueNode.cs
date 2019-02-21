@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using BCake.Parser.Syntax.Types;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
     public class IntValueNode : ValueNode {
@@ -7,6 +8,11 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
         public static readonly string rxDecIntLiteral = @"^([0-9]+)$";
         public static readonly string rxHexIntLiteral = @"^0x([0-9a-fA-F]+)$";
         public static readonly string rxBinIntLiteral = @"^0b([0-1]+)$";
+        public static Types.PrimitiveType Type = new PrimitiveType(Namespace.Global.Scope, "int");
+
+        public override Types.Type ReturnType {
+            get => Type;
+        }
 
         public IntValueNode(int value) {
             Value = value;

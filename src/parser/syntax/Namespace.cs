@@ -3,22 +3,31 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using BCake.Parser.Exceptions;
+using BCake.Parser.Syntax.Types;
+using BCake.Parser.Syntax.Expressions.Nodes;
+using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Parser.Syntax {
-    public class Namespace {
-        public string Access { get; private set; }
-        public string Name { get; private set; }
-        private BCake.Parser.Token[] tokens;
+    public class Namespace : Types.ComplexType {
+        public static Namespace Global { get; protected set; }
 
-        public Namespace(string access, string name, BCake.Parser.Token[] tokens) {
+        public Namespace() {
+            Access = "public";
+            Scope = new Scopes.Scope();
+            Global = this;
+
+            InitPrimitives();
+        }
+        public Namespace(Types.Type parent, string access, string name, BCake.Parser.Token[] tokens) {
             Access = access;
             Name = name;
             this.tokens = tokens;
+
+            Scope = new Scopes.Scope(parent);
         }
 
-        public Types.ComplexType[] ParseSymbols(Namespace[] allNamespaces) {
+        public override void ParseInner() {
             string access = null, name = null, type = null;
-            var complexTypes = new List<Types.ComplexType>();
 
             for (int i = 0; i < tokens.Length; ++i) {
                 var token = tokens[i];
@@ -44,7 +53,7 @@ namespace BCake.Parser.Syntax {
                         i = Parser.findClosingScope(tokens, i);
 
                         if (type == "class") {
-                            complexTypes.Add(
+                            Scope.Declare(
                                 new Types.ClassType(
                                     this,
                                     access,
@@ -65,8 +74,13 @@ namespace BCake.Parser.Syntax {
                         break;
                 }
             }
+        }
 
-            return complexTypes.ToArray();
+        private void InitPrimitives() {
+            Scope.Declare(
+                IntValueNode.Type,
+                BoolValueNode.Type
+            );
         }
     }
 }

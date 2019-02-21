@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using BCake.Parser.Syntax;
 
 namespace BCake {
     public class Application {
@@ -14,9 +16,8 @@ namespace BCake {
 
             ParseArguments(args);
 
+            Namespace globalNamespace = null;
             var parsers = new List<Parser.Parser>();
-            var namespaces = new List<Parser.Syntax.Namespace>();
-            var complexTypes = new List<Parser.Syntax.Types.ComplexType>();
 
             foreach (var f in Files) {
                 Console.WriteLine(f.FullName);
@@ -24,9 +25,17 @@ namespace BCake {
             }
 
             try {
-                foreach (var p in parsers) namespaces.AddRange(p.ParseNamespaces());
-                foreach (var ns in namespaces) complexTypes.AddRange(ns.ParseSymbols(namespaces.ToArray()));
-                foreach (var t in complexTypes) t.ParseInner(namespaces.ToArray(), complexTypes.ToArray());
+                foreach (var p in parsers) globalNamespace = p.ParseRoot();
+                var namespaces = globalNamespace.Scope.AllMembers.Where(m => m is Namespace).Cast<Namespace>();
+                foreach (var ns in namespaces) ns.ParseInner();
+                foreach (var ns in namespaces) {
+                    foreach (var m in ns.Scope.AllMembers) {
+                        var t = m as Parser.Syntax.Types.ComplexType;
+                        if (t != null) {
+                            t.ParseInner();
+                        }
+                    }
+                }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }

@@ -8,26 +8,48 @@ namespace BCake.Parser.Syntax.Scopes {
         public static int ScopeCount { get; protected set; }
         public int Id { get; protected set; }
         public Type ParentType { get; protected set; }
+        public Type Type { get; protected set; }
         public string FullName {
             get {
-                if (ParentType == null) return $"Scope #{Id}";
-                else return ParentType.FullName;
+                if (Id == 0) return null;
+                if (ParentType != null) return ParentType.FullName + (Type != null ?  "." + Type.Name : null);
+                return $"Scope #{Id}";
             }
         }
         private Dictionary<string, Type> MembersByName = new Dictionary<string, Type>();
+        public IEnumerable<Type> AllMembers {
+            get {
+                return MembersByName.Values;
+            }
+        }
 
         public Scope() {
             Id = ScopeCount++;
         }
-
         public Scope(Type parent) {
             Id = ScopeCount++;
             ParentType = parent;
         }
+        public Scope(Type parent, Type type) {
+            Id = ScopeCount++;
+            ParentType = parent;
+            Type = type;
+        }
 
-        public void RegisterMember(Type m) {
-            if (MembersByName.ContainsKey(m.Name)) throw new DuplicateDeclarationException(m.DefiningToken, MembersByName[m.Name]);
-            MembersByName.Add(m.Name, m);
+        public void Declare(params Type[] members) {
+            foreach (var m in members) Declare(m);
+        }
+        public void Declare(Type m) {
+            Declare(m, m.Name);
+        }
+        public void Declare(Type m, string nameOverride) {
+            if (MembersByName.ContainsKey(nameOverride)) throw new DuplicateDeclarationException(m.DefiningToken, MembersByName[nameOverride]);
+            MembersByName.Add(nameOverride, m);
+        }
+
+        public Type GetSymbol(string name) {
+            if (!MembersByName.ContainsKey(name)) return ParentType?.Scope?.GetSymbol(name);
+            return MembersByName[name]; 
         }
     }
 }

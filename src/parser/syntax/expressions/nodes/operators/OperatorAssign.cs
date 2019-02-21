@@ -3,7 +3,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         Symbol = "=",
         Left = OperatorSymbolAttribute.OperatorParameterType.LValue
     )]
-    public class OperatorAssign : Operator {
-        
+    public class OperatorAssign : Operator, IRValue {
+        public OperatorAssign() {
+            System.Console.WriteLine("New OperatorAssign");
+        }
     }
 }

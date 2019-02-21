@@ -2,23 +2,27 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using BCake.Parser.Exceptions;
 using System.Text.RegularExpressions;
+using BCake.Parser.Exceptions;
+using BCake.Parser.Syntax.Expressions.Nodes;
 
 namespace BCake.Parser.Syntax.Types {
     public class ClassType : ComplexType {
-        public ClassType(Namespace ns, string access, string name, BCake.Parser.Token[] tokens) {
+        public override string FullName { get => Scope.FullName; }
+        public ClassType(Type parent, string access, string name, BCake.Parser.Token[] tokens) {
             Access = access;
             Name = name;
-            Namespace = ns;
             this.tokens = tokens;
 
-            Scope = new Scopes.Scope();
+            Scope = new Scopes.Scope(parent, this);
+            Scope.Declare(this, "this");
         }
 
-        public override void ParseInner(Namespace[] allNamespaces, Type[] allTypes) {
-            string access = null, name = null, symbolType = null, valueType = null;
+        public override void ParseInner() {
+            string access = null, name = null, symbolType = null;
+            Types.Type valueType = null;
             FunctionType.ArgumentType[] argList = null;
+
             // variables AS WELL AS functions and other constructs
             var memberFunctions = new List<FunctionType>();
 
@@ -34,7 +38,7 @@ namespace BCake.Parser.Syntax.Types {
 
                     case "void":
                         symbolType = "function";
-                        valueType = token.Value;
+                        valueType = Scope.GetSymbol(token.Value) ?? throw new UndefinedSymbolException(token, token.Value, Scope);
                         break;
 
                     case "(":
@@ -65,7 +69,6 @@ namespace BCake.Parser.Syntax.Types {
                         
                         var newFunction = new FunctionType(
                             tokens[i - 1],
-                            Namespace,
                             this,
                             access,
                             valueType,
@@ -73,10 +76,11 @@ namespace BCake.Parser.Syntax.Types {
                             argList,
                             tokens.Skip(beginBody + 1).Take(i - beginBody - 1).ToArray()
                         );
-                        Scope.RegisterMember(newFunction);
+                        Scope.Declare(newFunction);
                         memberFunctions.Add(newFunction);
 
-                        access = name = symbolType = valueType = null;
+                        access = name = symbolType = null;
+                        valueType = null;
                         break;
 
                     case ";":
@@ -87,26 +91,26 @@ namespace BCake.Parser.Syntax.Types {
 
                             var newMember = new MemberVariableType(
                                 tokens[i - 1],
-                                Namespace,
                                 this,
                                 access,
                                 valueType,
                                 name
                             );
-                            Scope.RegisterMember(newMember);
+                            Scope.Declare(newMember);
 
-                            access = name = symbolType = valueType = null;
+                            access = name = symbolType = null;
+                            valueType = null;
                         }
                         else throw new UnexpectedTokenException(token);
                         break;
 
                     default:
                         if (token.Value.Trim().Length < 1) break;
-                        if (!new Regex(Parser.rxIdentifier).Match(token.Value).Success)
+                        if (!SymbolNode.CouldBeIdentifier(token.Value.Trim(), out var m))
                             throw new UnexpectedTokenException(token);
 
                         if (valueType == null) {
-                            valueType = token.Value;
+                            valueType = Scope.GetSymbol(token.Value) ?? throw new UndefinedSymbolException(token, token.Value, Scope);
                         } else {
                             if (name != null) throw new UnexpectedTokenException(token);
                             name = token.Value;
@@ -116,7 +120,7 @@ namespace BCake.Parser.Syntax.Types {
             }
 
             foreach (var m in memberFunctions) {
-                m.ParseInner(allNamespaces, allTypes);
+                m.ParseInner();
             }
         }
     }

@@ -1,22 +1,34 @@
 using System;
+using System.Text.RegularExpressions;
+using BCake.Parser.Syntax.Expressions.Nodes;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes {
-    public class SymbolNode : Node {
-        public string SymbolName { get; protected set; }
-
-        public SymbolNode(string symbolName) {
-            SymbolName = symbolName;
-
-            Console.WriteLine("New symbol node " + SymbolName);
+    public class SymbolNode : Node, ILValue, IRValue {
+        public static readonly string rxIdentifier = @"^[A-Za-z_][A-Za-z_0-9]*$";
+        public Types.Type Symbol { get; protected set; }
+        public override Types.Type ReturnType {
+            get {
+                if (Symbol is Types.LocalVariableType) return (Symbol as Types.LocalVariableType).Type;
+                if (Symbol is Types.MemberVariableType) return (Symbol as Types.LocalVariableType).Type;
+                return null; // todo what now? does not make much sense
+            }
         }
 
-        public static SymbolNode Parse(Token token) {
-            ValueNode node;
+        public SymbolNode(Types.Type symbol) {
+            Symbol = symbol;
 
-            Console.WriteLine("Parsing symbol node from " + token.Value);
-            return new SymbolNode(token.Value);
+            Console.WriteLine("New symbol node " + Symbol.FullName);
+        }
 
-            return null;
+        public static bool CouldBeIdentifier(string s, out Match m) {
+            m = Regex.Match(s, Syntax.Expressions.Nodes.SymbolNode.rxIdentifier);
+            return m.Success;
+        }
+
+        public static SymbolNode Parse(Scopes.Scope scope, Token token) {
+            var symbol = scope.GetSymbol(token.Value);
+            if (symbol == null) return null;
+            return new SymbolNode(symbol);
         }
     }
 }

@@ -1,15 +1,13 @@
-namespace demo.test.abc {
-    private class Demo {
+namespace BCake.Demo {
+    private class Program {
         private int a;
         private bool b;
 
         public int getA() {
-            a = 0x1 + 0x10 + 0b11 + 010;
-            return a;
-        }
-
-        public bool getA() {
-            return 1;
+            Demo2 d;
+            int i;
+            i = 0x1 + 0x10 + 0b11 + 010;
+            getA();
         }
     }
 

@@ -2,29 +2,29 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using BCake.Parser.Exceptions;
 using System.Text.RegularExpressions;
+using BCake.Parser.Exceptions;
+using BCake.Parser.Syntax.Expressions.Nodes;
 
 namespace BCake.Parser.Syntax.Types {
     public class FunctionType : ComplexType {
-        public ClassType Class { get; protected set; }
-        public string ReturnType { get; protected set; }
-        public override string FullName { get { return Class.FullName + ":" + Name; } }
+        public Type Parent { get; protected set; }
+        public Type ReturnType { get; protected set; }
+        public override string FullName { get { return Parent.FullName + ":" + Name; } }
         public Expressions.Expression[] Expressions { get; protected set; }
 
-        public FunctionType(Token token, Namespace ns, ClassType c, string access, string returnType, string name, ArgumentType[] arguments, Token[] tokens) {
+        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ArgumentType[] arguments, Token[] tokens) {
             DefiningToken = token;
-            Namespace = ns;
-            Class = c;
+            Parent = parent;
             Access = access;
             ReturnType = returnType;
             Name = name;
             this.tokens = tokens;
 
-            Scope = new Scopes.Scope();
+            Scope = new Scopes.Scope(parent, this);
 
             var argListStr = string.Join(", ", arguments.Select(a => $"{a.Type} {a.Name}"));
-            Console.WriteLine($"New function {Access} {ReturnType} {FullName}({argListStr})");
+            Console.WriteLine($"New function {Access} {ReturnType.FullName} {FullName}({argListStr})");
         }
 
         public static ArgumentType[] ParseArgumentList(Token[] tokens) {
@@ -45,7 +45,7 @@ namespace BCake.Parser.Syntax.Types {
 
                     default:
                         if (token.Value.Trim().Length < 1) break;
-                        if (!new Regex(Parser.rxIdentifier).Match(token.Value).Success)
+                        if (!SymbolNode.CouldBeIdentifier(token.Value.Trim(), out var m))
                             throw new UnexpectedTokenException(token);
 
                         if (type == null) {
@@ -62,7 +62,7 @@ namespace BCake.Parser.Syntax.Types {
             return arguments.ToArray();
         }
 
-        public override void ParseInner(Namespace[] allNamespaces, Type[] allTypes) {
+        public override void ParseInner() {
             var pos = 0;
             var expressions = new List<Expressions.Expression>();
             
@@ -72,8 +72,8 @@ namespace BCake.Parser.Syntax.Types {
 
                 if (expLength == 0) break;
 
-                expressions.Add(BCake.Parser.Syntax.Expressions.Expression.Parse(expTokens.ToArray()));
-                pos += expLength;
+                expressions.Add(BCake.Parser.Syntax.Expressions.Expression.Parse(Scope, expTokens.ToArray()));
+                pos += expLength + 1;
             }
 
             Expressions = expressions.ToArray();

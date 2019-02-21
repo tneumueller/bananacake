@@ -17,9 +17,7 @@
     <Content Include="src\parser\syntax\types\VariableType.cs" />
     <Content Include="src\parser\syntax\types\MemberVariableType.cs" />
     <Content Include="src\parser\syntax\expressions\rValue.cs" />
-    <Content Include="src\parser\syntax\expressions\RValue.cs" />
     <Content Include="src\parser\syntax\expressions\Expression.cs" />
-    <Content Include="src\parser\syntax\expressions\LValue.cs" />
     <Content Include="src\parser\syntax\expressions\operators\Operator.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\ValueNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\Node.cs" />
@@ -31,5 +29,14 @@
     <Content Include="src\parser\syntax\expressions\nodes\SymbolNode.cs" />
     <Content Include="src\parser\syntax\scopes\Scope.cs" />
     <Content Include="src\parser\exceptions\DuplicateDeclarationException.cs" />
+    <Content Include="src\parser\exceptions\UndefinedSymbolException.cs" />
+    <Content Include="src\parser\syntax\types\LocalVariableType.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\LValueAttribute.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\ILValue.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\IRValue.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\value\BoolValueNode.cs" />
+    <Content Include="src\parser\exceptions\NotAnLValueException.cs" />
+    <Content Include="src\parser\exceptions\InvalidArgumentException.cs" />
+    <Content Include="src\parser\exceptions\TypeException.cs" />
   </ItemGroup>
 </Project>
