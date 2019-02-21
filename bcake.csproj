@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="src\parser\syntax\SyntaxTree.cs" />
+    <Content Include="src\parser\Parser.cs" />
+    <Content Include="src\parser\syntax\Namespace.cs" />
+    <Content Include="src\parser\exceptions\UnexpectedTokenException.cs" />
+    <Content Include="src\parser\syntax\types\Type.cs" />
+    <Content Include="src\parser\syntax\types\PrimitiveType.cs" />
+    <Content Include="src\parser\syntax\types\ClassType.cs" />
+    <Content Include="src\parser\syntax\types\ComplexType.cs" />
+    <Content Include="src\parser\syntax\types\FunctionType.cs" />
+    <Content Include="src\parser\syntax\types\VariableType.cs" />
+    <Content Include="src\parser\syntax\types\MemberVariableType.cs" />
+    <Content Include="src\parser\syntax\expressions\rValue.cs" />
+    <Content Include="src\parser\syntax\expressions\RValue.cs" />
+    <Content Include="src\parser\syntax\expressions\Expression.cs" />
+    <Content Include="src\parser\syntax\expressions\LValue.cs" />
+    <Content Include="src\parser\syntax\expressions\operators\Operator.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\ValueNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\Node.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\Operator.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorSymbolAttribute.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorPlus.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorAssign.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\value\IntValueNode.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+namespace demo.test.abc {
+    private class Demo {
+        private int a;
+        private bool b;
+
+        public int getA() {
+            a = 0x1 + 0x10 + 0b11 + 010;
+            return a;
+        }
+    }
+
+    class Demo2 {
+
+    }
+}
