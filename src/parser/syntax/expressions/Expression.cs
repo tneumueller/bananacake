@@ -28,8 +28,6 @@ namespace BCake.Parser.Syntax.Expressions {
                     .LastOrDefault();
 
                 if (opPos < tokens.Length) {
-                    Console.WriteLine($"Operator {opSymbol} at position {opPos}");
-
                     return new Expression(
                         Operator.Parse(op, tokens.Take(opPos).ToArray(), tokens.Skip(opPos + 1).ToArray())
                     );
@@ -37,13 +35,13 @@ namespace BCake.Parser.Syntax.Expressions {
             }
 
             if (tokens.Length == 1) {
-                return new Expression(
-                    Nodes.ValueNode.Parse(tokens[0])
-                );
+                Nodes.Node node;
+
+                if ((node = Nodes.ValueNode.Parse(tokens[0])) != null) return new Expression(node);
+                if ((node = Nodes.SymbolNode.Parse(tokens[0])) != null) return new Expression(node);
             }
 
-            // throw new Exceptions.UnexpectedTokenException(tokens[0]);
-            return null;
+            throw new Exceptions.UnexpectedTokenException(tokens[0]);
         }
     }
 }

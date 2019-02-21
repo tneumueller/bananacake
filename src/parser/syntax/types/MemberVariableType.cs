@@ -11,7 +11,8 @@ namespace BCake.Parser.Syntax.Types {
         public string Type { get; protected set; }
         public override string FullName { get { return Class.FullName + ":" + Name; } }
 
-        public MemberVariableType(Namespace ns, ClassType c, string access, string type, string name) {
+        public MemberVariableType(Token token, Namespace ns, ClassType c, string access, string type, string name) {
+            DefiningToken = token;
             Namespace = ns;
             Class = c;
             Access = access;

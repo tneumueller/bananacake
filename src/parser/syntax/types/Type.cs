@@ -4,5 +4,6 @@ namespace BCake.Parser.Syntax.Types {
         public string Access { get; protected set; }
         public string Name { get; protected set; }
         public virtual string FullName { get { return Namespace.Name + "." + Name; } }
+        public Token DefiningToken { get; protected set; }
     }
 }

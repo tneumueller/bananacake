@@ -13,7 +13,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
                 return node;
             }
 
-            // throw new BCake.Parser.Exceptions.UnexpectedTokenException(token);
             return null;
         }
     }

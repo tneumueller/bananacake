@@ -12,13 +12,16 @@ namespace BCake.Parser.Syntax.Types {
         public override string FullName { get { return Class.FullName + ":" + Name; } }
         public Expressions.Expression[] Expressions { get; protected set; }
 
-        public FunctionType(Namespace ns, ClassType c, string access, string returnType, string name, ArgumentType[] arguments, Token[] tokens) {
+        public FunctionType(Token token, Namespace ns, ClassType c, string access, string returnType, string name, ArgumentType[] arguments, Token[] tokens) {
+            DefiningToken = token;
             Namespace = ns;
             Class = c;
             Access = access;
             ReturnType = returnType;
             Name = name;
             this.tokens = tokens;
+
+            Scope = new Scopes.Scope();
 
             var argListStr = string.Join(", ", arguments.Select(a => $"{a.Type} {a.Name}"));
             Console.WriteLine($"New function {Access} {ReturnType} {FullName}({argListStr})");

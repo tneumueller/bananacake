@@ -19,10 +19,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         }
 
         public static Node Parse(Type opType, Token[] left, Token[] right) {
-            foreach (var t in left) Console.WriteLine(t.Value);
-            Console.WriteLine(GetOperatorSymbol(opType));
-            foreach (var t in right) Console.WriteLine(t.Value);
-
             var op = (Operator)Activator.CreateInstance(opType);
             op.Left = Expression.Parse(left);
             op.Right = Expression.Parse(right);

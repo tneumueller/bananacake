@@ -12,13 +12,14 @@ namespace BCake.Parser.Syntax.Types {
             Name = name;
             Namespace = ns;
             this.tokens = tokens;
+
+            Scope = new Scopes.Scope();
         }
 
         public override void ParseInner(Namespace[] allNamespaces, Type[] allTypes) {
             string access = null, name = null, symbolType = null, valueType = null;
             FunctionType.ArgumentType[] argList = null;
             // variables AS WELL AS functions and other constructs
-            var memberVariables = new List<MemberVariableType>();
             var memberFunctions = new List<FunctionType>();
 
             for (int i = 0; i < tokens.Length; ++i) {
@@ -62,7 +63,8 @@ namespace BCake.Parser.Syntax.Types {
                         var beginBody = i;
                         i = Parser.findClosingScope(tokens, i);
                         
-                        memberFunctions.Add(new FunctionType(
+                        var newFunction = new FunctionType(
+                            tokens[i - 1],
                             Namespace,
                             this,
                             access,
@@ -70,7 +72,10 @@ namespace BCake.Parser.Syntax.Types {
                             name,
                             argList,
                             tokens.Skip(beginBody + 1).Take(i - beginBody - 1).ToArray()
-                        ));
+                        );
+                        Scope.RegisterMember(newFunction);
+                        memberFunctions.Add(newFunction);
+
                         access = name = symbolType = valueType = null;
                         break;
 
@@ -80,13 +85,16 @@ namespace BCake.Parser.Syntax.Types {
 
                             if (name == null || valueType == null) throw new UnexpectedTokenException(token);
 
-                            memberVariables.Add(new MemberVariableType(
+                            var newMember = new MemberVariableType(
+                                tokens[i - 1],
                                 Namespace,
                                 this,
                                 access,
                                 valueType,
                                 name
-                            ));
+                            );
+                            Scope.RegisterMember(newMember);
+
                             access = name = symbolType = valueType = null;
                         }
                         else throw new UnexpectedTokenException(token);

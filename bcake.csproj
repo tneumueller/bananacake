@@ -28,5 +28,8 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorPlus.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorAssign.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\value\IntValueNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\SymbolNode.cs" />
+    <Content Include="src\parser\syntax\scopes\Scope.cs" />
+    <Content Include="src\parser\exceptions\DuplicateDeclarationException.cs" />
   </ItemGroup>
 </Project>
