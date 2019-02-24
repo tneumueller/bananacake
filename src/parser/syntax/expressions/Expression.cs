@@ -26,6 +26,18 @@ namespace BCake.Parser.Syntax.Expressions {
         }
 
         public static Expression Parse(Scopes.Scope Scope, Token[] tokens) {
+            tokens = tokens.Where(t => t.Value.Trim().Length > 0).ToArray();
+
+            if (tokens.Length < 1) return null;
+
+            if (tokens[0].Value == "return") {
+                return new Expression(
+                    tokens[0],
+                    Scope,
+                    OperatorReturn.Create(tokens[0], Scope, tokens.Skip(1).ToArray())
+                );
+            }
+
             for (int i = 0; i < OperatorPrecedence.Length; ++i) {
                 var op = OperatorPrecedence[i];
                 var opSymbol = Operator.GetOperatorSymbol(op);
@@ -77,7 +89,7 @@ namespace BCake.Parser.Syntax.Expressions {
                     var symbol = Scope.GetSymbol(t0.Value);
                     if (symbol == null) throw new UndefinedSymbolException(t0, t0.Value, Scope);
                     if (symbol is Types.ClassType || symbol is Types.PrimitiveType) {
-                        var newLocalVar = new Types.LocalVariableType(t1, Scope.Type, symbol, t1.Value);
+                        var newLocalVar = new Types.LocalVariableType(t1, Scope, symbol, t1.Value);
                         Scope.Declare(newLocalVar);
                         return new Expression(t0, Scope, Nodes.SymbolNode.Parse(Scope, t1));
                     }

@@ -26,6 +26,11 @@ namespace BCake.Parser.Syntax.Scopes {
         public Scope() {
             Id = ScopeCount++;
         }
+        public Scope(Scope parent) {
+            Id = ScopeCount++;
+            ParentType = parent.ParentType;
+            Type = parent.Type;
+        }
         public Scope(Type parent) {
             Id = ScopeCount++;
             ParentType = parent;
@@ -50,6 +55,11 @@ namespace BCake.Parser.Syntax.Scopes {
         public Type GetSymbol(string name) {
             if (!MembersByName.ContainsKey(name)) return ParentType?.Scope?.GetSymbol(name);
             return MembersByName[name]; 
+        }
+
+        public FunctionType GetClosestFunction() {
+            if (Type is FunctionType) return Type as FunctionType;
+            else return ParentType?.Scope?.GetClosestFunction();
         }
     }
 }

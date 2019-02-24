@@ -2,16 +2,23 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using BCake.Parser.Syntax.Types;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
     public class ArgumentsNode : Node {
         public Argument[] Arguments { get; protected set; }
+        public Expression FunctionNode { get; protected set; }
+        /* ArgumentsNode needs to have the same return type as the function itself for typechecking */
+        public override Types.Type ReturnType { get => FunctionNode.ReturnType; }
 
-        public ArgumentsNode() {
+        public ArgumentsNode(Expression functionNode, Argument[] arguments) {
+            Arguments = arguments;
+            FunctionNode = functionNode;
+
             System.Console.WriteLine("New ArgumentsNode");
         }
 
-        public static ArgumentsNode Parse(Scopes.Scope scope, Token[] tokens) {
+        public static ArgumentsNode Parse(Expression functionNode, Scopes.Scope scope, Token[] tokens) {
             var pos = 0;
             var arguments = new List<Argument>();
 
@@ -25,9 +32,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
                 pos += paramTokens.Length + 1;
             }
 
-            var arg = new ArgumentsNode();
-            arg.Arguments = arguments.ToArray();
-            return arg;
+            return new ArgumentsNode(functionNode, arguments.ToArray());
         }
 
         public class Argument {

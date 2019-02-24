@@ -11,21 +11,23 @@ namespace BCake.Parser.Syntax.Types {
         public Type Parent { get; protected set; }
         public Type ReturnType { get; protected set; }
         public override string FullName { get { return Parent.FullName + ":" + Name; } }
-        public Expressions.Expression[] Expressions { get; protected set; }
+        public ScopeNode Root { get; protected set; }
         public ParameterType[] Parameters { get; protected set; }
 
-        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] arguments, Token[] tokens) {
+        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] parameters, Token[] tokens) {
             DefiningToken = token;
             Parent = parent;
             Access = access;
             ReturnType = returnType;
             Name = name;
-            Parameters = arguments;
+            Parameters = parameters;
             this.tokens = tokens;
 
             Scope = new Scopes.Scope(parent, this);
+            foreach (var p in parameters) p.SetScope(Scope);
+            Scope.Declare(parameters);
 
-            var argListStr = string.Join(", ", arguments.Select(a => $"{a.Type.FullName} {a.Name}"));
+            var argListStr = string.Join(", ", parameters.Select(a => $"{a.Type.FullName} {a.Name}"));
             Console.WriteLine($"New function {Access} {ReturnType.FullName} {FullName}({argListStr})");
         }
 
@@ -42,7 +44,7 @@ namespace BCake.Parser.Syntax.Types {
                     case ",":
                         if (type == null && name == null) break;
                         if (type == null || name == null) throw new UnexpectedTokenException(token);
-                        arguments.Add(new ParameterType(type, name));
+                        arguments.Add(new ParameterType(token, type, name));
                         name = null;
                         type = null;
                         break;
@@ -68,28 +70,19 @@ namespace BCake.Parser.Syntax.Types {
         }
 
         public override void ParseInner() {
-            var pos = 0;
-            var expressions = new List<Expressions.Expression>();
-            var tokens = this.tokens.Where(t => t.Value.Trim().Length > 0);
-            
-            while (true) {
-                var expTokens = tokens.Skip(pos).TakeWhile(t => t.Value.Trim() != ";");
-                var expLength = expTokens.Count();
-
-                if (expLength == 0) break;
-
-                expressions.Add(BCake.Parser.Syntax.Expressions.Expression.Parse(Scope, expTokens.ToArray()));
-                pos += expLength + 1;
-            }
-
-            Expressions = expressions.ToArray();
+            Root = ScopeNode.Parse(DefiningToken, Scope, tokens);
         }
 
         public class ParameterType : Type {
             public Type Type { get; protected set; }
-            public ParameterType(Type type, string name) {
+            public ParameterType(Token token, Type type, string name) {
+                DefiningToken = token;
                 Type = type;
                 Name = name;
+            }
+
+            public void SetScope(Scopes.Scope s) {
+                Scope = s;
             }
         }
     }

@@ -7,12 +7,20 @@ namespace BCake.Demo {
             Demo2 d;
             int i;
             i = 0x1 + 0x10 + 0b11 + 010;
-            getA();
-            multiply(d, 1, 2);
+            i = getA();
+
+            {
+                int xyz;
+                xyz = 0;
+            }
+
+            xyz = 1;
+            return multiply(d, 1, 2, false);
         }
 
-        public int multiply(Demo2 a, int b, int c, bool b) {
-            
+        public int multiply(Demo2 a, int b, int c, bool d) {
+            c = 5;
+            return b + c;
         }
     }
 

@@ -83,7 +83,10 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             return op;
         }
 
-        private void CheckReturnTypes(Expression e) {
+        protected void CheckRightReturnType(Types.Type type) {
+            if (Right != null && Right.ReturnType != type) throw new TypeException(Right.DefiningToken, Right.ReturnType, type);
+        }
+        protected void CheckReturnTypes(Expression e) {
             var other = e == Right ? Left : Right;
             if (Right == null || Left == null) return;
             if (Right.ReturnType != Left.ReturnType) throw new TypeException(e.DefiningToken, e.ReturnType, other.ReturnType);

@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public class OperatorInvoke : Operator, IRValue {
-
         public OperatorInvoke() {
             System.Console.WriteLine("New OperatorInvoke");
         }
@@ -11,7 +10,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public static OperatorInvoke Parse(Scopes.Scope scope, Expression functionNode, Token[] argList) {
             var op = new OperatorInvoke();
 
-            var arguments = Nodes.Functions.ArgumentsNode.Parse(scope, argList);
+            var arguments = Nodes.Functions.ArgumentsNode.Parse(functionNode, scope, argList);
             op.Left = functionNode;
             op.Right = new Expression(
                 argList.FirstOrDefault() ?? functionNode.DefiningToken,
