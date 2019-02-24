@@ -47,5 +47,15 @@
     <Content Include="src\parser\syntax\expressions\nodes\CodeScope.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\CodeScopeNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\ScopeNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorMinus.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorMultiply.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorDivide.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorGreater.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorGreater.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\ComparisonOperator.cs" />
+    <Content Include="src\parser\syntax\expressions\ScopeExpression.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\IfConditionExpression.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\IfConditionNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\WhileLoopNode.cs" />
   </ItemGroup>
 </Project>

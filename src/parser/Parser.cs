@@ -98,7 +98,7 @@ namespace BCake.Parser
                         if (type == "namespace") {
                             globalNamespace.Scope.Declare(
                                 new Syntax.Namespace(
-                                    globalNamespace,
+                                    globalNamespace.Scope,
                                     access,
                                     name,
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()

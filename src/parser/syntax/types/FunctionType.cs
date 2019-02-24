@@ -23,7 +23,7 @@ namespace BCake.Parser.Syntax.Types {
             Parameters = parameters;
             this.tokens = tokens;
 
-            Scope = new Scopes.Scope(parent, this);
+            Scope = new Scopes.Scope(parent.Scope, this);
             foreach (var p in parameters) p.SetScope(Scope);
             Scope.Declare(parameters);
 

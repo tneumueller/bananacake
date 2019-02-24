@@ -37,21 +37,31 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
 
                 var delimiter = tokens.Skip(pos + expLength).Take(1).FirstOrDefault();
                 if (delimiter.Value == "{") {
-                    // then a statement has not been terminated by a ; which is illegal
-                    if (expLength > 0) throw new Exceptions.UnexpectedTokenException(delimiter);
-                    
                     var subscopeBegin = pos + expLength;
                     var subscopeEnd = Parser.findClosingScope(tokens, subscopeBegin);
                     if (subscopeEnd == -1) throw new Exceptions.UnexpectedTokenException(delimiter);
 
                     var subscopeTokens = tokens.Skip(subscopeBegin + 1).Take(subscopeEnd - subscopeBegin - 1).ToArray();
-                    expressions.Add(
-                        new Expression(
-                            delimiter,
-                            scope,
-                            ScopeNode.Parse(delimiter, parentScope, subscopeTokens)
-                        )
-                    );
+                    var subscopeNode = ScopeNode.Parse(delimiter, scope, subscopeTokens);
+
+                    if (expLength > 0) {
+                        expressions.Add(
+                            ScopeExpression.Parse(
+                                scope,
+                                tokens.Skip(pos).Take(subscopeBegin - 1).ToArray(),
+                                subscopeNode
+                            )
+                        );
+                    } else {
+                        expressions.Add(
+                            new Expression(
+                                delimiter,
+                                scope,
+                                subscopeNode
+                            )
+                        );
+                    }
+
                     pos = subscopeEnd + 1;
                 } else {
                     expressions.Add(BCake.Parser.Syntax.Expressions.Expression.Parse(scope, expTokens.ToArray()));

@@ -3,13 +3,23 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators;
+using BCake.Parser.Syntax.Expressions.Nodes.Operators.Comparison;
 using BCake.Parser.Exceptions;
 
 namespace BCake.Parser.Syntax.Expressions {
     public class Expression {
         private static readonly Type[] OperatorPrecedence = new Type[] {
+            // assigment
             typeof(OperatorAssign),
-            typeof(OperatorPlus)
+            
+            // comparison
+            typeof(OperatorGreater),
+
+            // arithmetic
+            typeof(OperatorPlus),
+            typeof(OperatorMinus),
+            typeof(OperatorMultiply),
+            typeof(OperatorDivide),
         };
 
         public Token DefiningToken { get; protected set; }

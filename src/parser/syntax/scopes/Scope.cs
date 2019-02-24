@@ -7,13 +7,12 @@ namespace BCake.Parser.Syntax.Scopes {
     public class Scope {
         public static int ScopeCount { get; protected set; }
         public int Id { get; protected set; }
-        public Type ParentType { get; protected set; }
         public Type Type { get; protected set; }
+        public Scope Parent { get; protected set; }
         public string FullName {
             get {
                 if (Id == 0) return null;
-                if (ParentType != null) return ParentType.FullName + (Type != null ?  "." + Type.Name : null);
-                return $"Scope #{Id}";
+                return Parent.FullName + (Type?.Name != null ?  "." + Type?.Name : null);
             }
         }
         private Dictionary<string, Type> MembersByName = new Dictionary<string, Type>();
@@ -28,16 +27,11 @@ namespace BCake.Parser.Syntax.Scopes {
         }
         public Scope(Scope parent) {
             Id = ScopeCount++;
-            ParentType = parent.ParentType;
-            Type = parent.Type;
+            Parent = parent;
         }
-        public Scope(Type parent) {
+        public Scope(Scope parent, Type type) {
             Id = ScopeCount++;
-            ParentType = parent;
-        }
-        public Scope(Type parent, Type type) {
-            Id = ScopeCount++;
-            ParentType = parent;
+            Parent = parent;
             Type = type;
         }
 
@@ -53,13 +47,13 @@ namespace BCake.Parser.Syntax.Scopes {
         }
 
         public Type GetSymbol(string name) {
-            if (!MembersByName.ContainsKey(name)) return ParentType?.Scope?.GetSymbol(name);
+            if (!MembersByName.ContainsKey(name)) return Parent?.GetSymbol(name);
             return MembersByName[name]; 
         }
 
         public FunctionType GetClosestFunction() {
             if (Type is FunctionType) return Type as FunctionType;
-            else return ParentType?.Scope?.GetClosestFunction();
+            else return Parent?.GetClosestFunction();
         }
     }
 }

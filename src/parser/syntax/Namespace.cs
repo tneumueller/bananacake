@@ -18,7 +18,7 @@ namespace BCake.Parser.Syntax {
 
             InitPrimitives();
         }
-        public Namespace(Types.Type parent, string access, string name, BCake.Parser.Token[] tokens) {
+        public Namespace(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens) {
             Access = access;
             Name = name;
             this.tokens = tokens;
@@ -55,7 +55,7 @@ namespace BCake.Parser.Syntax {
                         if (type == "class") {
                             Scope.Declare(
                                 new Types.ClassType(
-                                    this,
+                                    Scope,
                                     access,
                                     name,
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
