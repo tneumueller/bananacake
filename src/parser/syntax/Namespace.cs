@@ -23,7 +23,7 @@ namespace BCake.Parser.Syntax {
             Name = name;
             this.tokens = tokens;
 
-            Scope = new Scopes.Scope(parent);
+            Scope = new Scopes.Scope(parent, this);
         }
 
         public override void ParseInner() {

@@ -12,7 +12,12 @@ namespace BCake.Parser.Syntax.Scopes {
         public string FullName {
             get {
                 if (Id == 0) return null;
-                return Parent.FullName + (Type?.Name != null ?  "." + Type?.Name : null);
+
+                var name = Parent?.FullName ?? "";
+                if (Type?.Name == null) return name;
+                if (name.Length < 1) name = Type?.Name;
+                else name += "." + Type?.Name;
+                return name;
             }
         }
         private Dictionary<string, Type> MembersByName = new Dictionary<string, Type>();
