@@ -63,5 +63,12 @@ namespace BCake.Parser.Syntax.Scopes {
             if (Type is FunctionType) return Type as FunctionType;
             else return Parent?.GetClosestFunction();
         }
+
+        public bool IsChildOf(Scope other) {
+            for (var s = this; s.Parent != null; s = s.Parent) {
+                if (s == other) return true;
+            }
+            return false;
+        }
     }
 }

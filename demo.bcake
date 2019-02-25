@@ -3,16 +3,18 @@ namespace BCake.Demo {
         private int a;
         private bool b;
 
-        public Program() {
+        private Program() {
 
         }
 
         public int getA() {
             Demo2 d;
+            Program p;
             int i;
 
             i = 5;
             d = new Demo2();
+            p = new Program();
 
             if (i + 1 > 5) {
                 int xyz;
@@ -35,7 +37,12 @@ namespace BCake.Demo {
 
     class Demo2 {
         public Demo2() {
-            
+
+        }
+
+        public int testAccess() {
+            Program p;
+            p = new Program();
         }
     }
 }

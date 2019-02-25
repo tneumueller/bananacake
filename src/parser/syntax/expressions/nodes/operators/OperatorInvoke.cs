@@ -14,6 +14,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             if (function == null) {
                 var classType = (functionNode.Root as SymbolNode)?.Symbol as Types.ClassType;
                 function = classType?.Scope.GetSymbol("!constructor", true) as Types.FunctionType;
+                if (function.Access != "public" && !scope.IsChildOf(classType.Scope)) {
+                    throw new Exceptions.AccessException(functionNode.DefiningToken, function, scope);
+                }
             }
 
             functionNode = new Expression(

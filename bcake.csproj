@@ -58,5 +58,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\IfConditionNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\WhileLoopNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorNew.cs" />
+    <Content Include="src\parser\exceptions\AccessException.cs" />
   </ItemGroup>
 </Project>
