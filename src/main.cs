@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using BCake.Parser.Syntax;
+using BCake.Parser.Syntax.Types;
 
 namespace BCake {
     public class Application {
@@ -30,9 +31,12 @@ namespace BCake {
                 foreach (var ns in namespaces) ns.ParseInner();
                 foreach (var ns in namespaces) {
                     foreach (var m in ns.Scope.AllMembers) {
-                        var t = m as Parser.Syntax.Types.ComplexType;
-                        if (t != null) {
-                            t.ParseInner();
+                        var t = m as ComplexType;
+                        if (t != null) t.ParseInner();
+                    }
+                    foreach (var m in ns.Scope.AllMembers.Where(m => m is ClassType)) {
+                        foreach (var f in m.Scope.AllMembers.Where(n => n is FunctionType).Cast<FunctionType>()) {
+                            f.ParseInner();
                         }
                     }
                 }

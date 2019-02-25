@@ -13,12 +13,14 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 return _left;
             }
             protected set {
+                _left = value;
+                if (value == null) return;
+
                 if (needsLValue && !(value.Root is ILValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeLeft);
                 if (leftNeedsNone && (value.Root is ILValue || value.Root is IRValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeLeft);
 
-                _left = value;
                 CheckReturnTypes(value);
             }
         }
@@ -28,12 +30,14 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 return _right;
             }
             protected set {
+                _right = value;
+                if (value == null) return;
+
                 if (needsRValue && !(value.Root is IRValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeRight);
                 if (rightNeedsNone && (value.Root is ILValue || value.Root is IRValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeRight);
 
-                _right = value;
                 CheckReturnTypes(value);
             }
         }
@@ -41,7 +45,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
         public override Types.Type ReturnType {
             // it does not matter which one we return because they have to be equal
-            get => Left.ReturnType;
+            get => Left?.ReturnType ?? Right?.ReturnType;
         }
 
         public Operator() {
@@ -56,30 +60,21 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             rightNeedsNone = typeRight == OperatorSymbolAttribute.OperatorParameterType.None;
         }
 
-        public static string GetOperatorSymbol(Type t) {
+        public virtual void OnCreated(Token token, Scopes.Scope scope) {}
+
+        public static OperatorSymbolAttribute GetOperatorMetadata(Type t) {
             var opSymbolAttr = t.GetCustomAttributes(
                 typeof(OperatorSymbolAttribute),
                 true
             ).FirstOrDefault() as OperatorSymbolAttribute;
-
-            if (opSymbolAttr == null) return null;
-            return opSymbolAttr.Symbol;
+            return opSymbolAttr;
         }
 
-        public static Node Parse(Scopes.Scope scope, Type opType, Token[] left, Token[] right) {
+        public static Node Parse(Scopes.Scope scope, Type opType, Token token, Token[] left, Token[] right) {
             var op = (Operator)Activator.CreateInstance(opType);
-            
-            Console.Write("Left: ");
-            foreach (var t in left) Console.Write(t.Value);
-            Console.WriteLine();
-
-            Console.Write("Right: ");
-            foreach (var t in right) Console.Write(t.Value);
-            Console.WriteLine();
-
             op.Left = Expression.Parse(scope, left);
             op.Right = Expression.Parse(scope, right);
-
+            op.OnCreated(token, scope);
             return op;
         }
 

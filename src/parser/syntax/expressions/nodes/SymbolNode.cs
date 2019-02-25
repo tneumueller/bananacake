@@ -12,6 +12,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
                 if (Symbol is Types.MemberVariableType) return (Symbol as Types.MemberVariableType).Type;
                 if (Symbol is Types.FunctionType) return (Symbol as Types.FunctionType).ReturnType;
                 if (Symbol is Types.FunctionType.ParameterType) return (Symbol as Types.FunctionType.ParameterType).Type;
+                if (Symbol is Types.ClassType) return Symbol as Types.ClassType;
                 return null; // todo what now? does not make much sense
             }
         }

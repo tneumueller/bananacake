@@ -46,8 +46,11 @@ namespace BCake.Parser.Syntax.Scopes {
             MembersByName.Add(nameOverride, m);
         }
 
-        public Type GetSymbol(string name) {
-            if (!MembersByName.ContainsKey(name)) return Parent?.GetSymbol(name);
+        public Type GetSymbol(string name, bool localOnly = false) {
+            if (!MembersByName.ContainsKey(name)) {
+                if (!localOnly) return Parent?.GetSymbol(name);
+                else return null;
+            }
             return MembersByName[name]; 
         }
 

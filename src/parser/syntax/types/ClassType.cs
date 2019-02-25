@@ -23,7 +23,6 @@ namespace BCake.Parser.Syntax.Types {
             Types.Type valueType = null;
             FunctionType.ParameterType[] argList = null;
 
-            // variables AS WELL AS functions and other constructs
             var memberFunctions = new List<FunctionType>();
 
             for (int i = 0; i < tokens.Length; ++i) {
@@ -45,7 +44,12 @@ namespace BCake.Parser.Syntax.Types {
                         if (symbolType == null) {
                             symbolType = "function";
 
-                            if (name == null || valueType == null) throw new UnexpectedTokenException(token);
+                            if (valueType == null) throw new UnexpectedTokenException(token);
+                            if (name == null && valueType == this) {
+                                name = "!constructor"; // the ! is used as a kind of "escape" because it is impossible for a user created function to contain a ! in its name
+                            } else if (name == null) {
+                                throw new UnexpectedTokenException(token);
+                            }
 
                             var argListBegin = i;
                             i = Parser.findClosingScope(tokens, i);
@@ -117,10 +121,6 @@ namespace BCake.Parser.Syntax.Types {
                         }
                         break;
                 }
-            }
-
-            foreach (var m in memberFunctions) {
-                m.ParseInner();
             }
         }
     }

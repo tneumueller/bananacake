@@ -57,5 +57,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\IfConditionExpression.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\IfConditionNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\WhileLoopNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorNew.cs" />
   </ItemGroup>
 </Project>
