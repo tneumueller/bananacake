@@ -44,6 +44,9 @@ namespace BCake {
                         }
                     }
                 }
+
+                var interpreter = new BCake.Runtime.Interpreter(globalNamespace);
+                interpreter.Run();
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
