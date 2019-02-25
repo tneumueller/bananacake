@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.IO;
 using BCake.Parser.Exceptions;
 using BCake.Parser.Syntax.Expressions.Nodes;
+using BCake.Parser.Syntax.Scopes;
+using BCake.Parser.Syntax.Types;
 
 namespace BCake.Parser
 {
@@ -67,25 +69,62 @@ namespace BCake.Parser
                 }
             }
 
-            this.tokens = tokens.ToArray();
+            this.tokens = tokens.Where(t => t.Value.Trim().Length > 0).ToArray();
         }
 
         public Syntax.Namespace ParseRoot() {
             var globalNamespace = new Syntax.Namespace();
+            Parser.ParseTypes(globalNamespace.Scope, tokens, new string[] { "namespace", "class", "function" });
+            return globalNamespace;
+        }
+
+        public static void ParseTypes(Scope targetScope, Token[] tokens, string[] allowedTypes) {
             string access = null, type = null, name = null;
+            Syntax.Types.Type valueType = null;
+            FunctionType.ParameterType[] argList = null;
 
             for (int i = 0; i < tokens.Length; ++i) {
                 var token = tokens[i];
 
                 switch (token.Value) {
                     case "public":
+                    case "protected":
                     case "private":
                         if (access != null) throw new UnexpectedTokenException(token);
                         access = token.Value;
                         break;
 
+                    case "void":
+                        type = "function";
+                        if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
+                        valueType = targetScope.GetSymbol(token.Value) ?? throw new UndefinedSymbolException(token, token.Value, targetScope);
+                        break;
+
                     case "namespace":
+                    case "class":
+                        if (!allowedTypes.Contains(token.Value)) throw new UnexpectedTokenException(token);
                         type = token.Value;
+                        break;
+
+                    case "(":
+                        if (type == null) {
+                            type = "function";
+                            if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
+
+                            if (valueType == null) throw new UnexpectedTokenException(token);
+                            if (name == null && valueType == targetScope.Type) {
+                                name = "!constructor"; // the ! is used as a kind of "escape" because it is impossible for a user created function to contain a ! in its name
+                            } else if (name == null) {
+                                throw new UnexpectedTokenException(token);
+                            }
+
+                            var argListBegin = i;
+                            i = Parser.findClosingScope(tokens, i);
+
+                            // +1 in Take to include closing bracket, makes things easier in the parse method
+                            argList = FunctionType.ParseArgumentList(targetScope, tokens.Skip(argListBegin + 1).Take(i - argListBegin).ToArray());
+                        }
+                        else throw new UnexpectedTokenException(token);
                         break;
 
                     case "{":
@@ -96,43 +135,86 @@ namespace BCake.Parser
                         i = findClosingScope(tokens, i);
 
                         if (type == "namespace") {
-                            globalNamespace.Scope.Declare(
+                            targetScope.Declare(
                                 new Syntax.Namespace(
-                                    globalNamespace.Scope,
+                                    targetScope,
                                     access,
                                     name,
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
                                 )
                             );
-
-                            access = type = name = null;
+                        } else if (type == "class") {
+                            targetScope.Declare(
+                                new Syntax.Types.ClassType(
+                                    targetScope,
+                                    access,
+                                    name,
+                                    tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
+                                )
+                            );
+                        } else if (type == "function") {
+                            var newFunction = new FunctionType(
+                                tokens[i - 1],
+                                targetScope.Type,
+                                access,
+                                valueType,
+                                name,
+                                argList,
+                                tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
+                            );
+                            targetScope.Declare(newFunction);
                         }
+
+                        access = type = name = null;
+                        valueType = null;
+                        break;
+
+                    case ";":
+                        if (type == null) {
+                            type = "variable";
+                            if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
+                            if (name == null || valueType == null) throw new UnexpectedTokenException(token);
+
+                            var newMember = new MemberVariableType(
+                                tokens[i - 1],
+                                targetScope.Type,
+                                access,
+                                valueType,
+                                name
+                            );
+                            targetScope.Declare(newMember);
+
+                            access = name = type = null;
+                            valueType = null;
+                        }
+                        else throw new UnexpectedTokenException(token);
                         break;
 
                     default: {
-                            if (token.Value.Trim().Length < 1) break;
-                            if (name != null) throw new UnexpectedTokenException(token);
-
-                            Match m;
-                            name = "";
+                            var temp = "";
                             
                             while (true) {
-                                if (SymbolNode.CouldBeIdentifier(token.Value.Trim(), out m)) name += m.Value;
+                                if (SymbolNode.CouldBeIdentifier(token.Value.Trim(), out var m)) temp += m.Value;
                                 else throw new UnexpectedTokenException(token);
 
                                 if (i + 2 < tokens.Length && tokens[i + 1].Value == ".") {
-                                    name += ".";
+                                    temp += ".";
                                     i += 2;
                                     token = tokens[i];
                                 } else break;
+                            }
+
+                            if (type != "class" && type != "namespace" && valueType == null) {
+                                valueType = targetScope.GetSymbol(temp) ?? throw new UndefinedSymbolException(token, temp, targetScope);
+                            } else {
+                                if (name != null) throw new UnexpectedTokenException(token);
+                                name = temp;
                             }
 
                             break;
                         }
                 }
             }
-
-            return globalNamespace;
         }
 
         public static int findClosingScope(Token[] tokens, int startTokenIndex) {

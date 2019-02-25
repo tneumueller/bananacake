@@ -27,15 +27,19 @@ namespace BCake {
 
             try {
                 foreach (var p in parsers) globalNamespace = p.ParseRoot();
-                var namespaces = globalNamespace.Scope.AllMembers.Where(m => m is Namespace).Cast<Namespace>();
+
+                var namespaces = globalNamespace.Scope.AllMembers.Where(elem => elem is Namespace).Cast<Namespace>();
                 foreach (var ns in namespaces) ns.ParseInner();
+
+                namespaces = namespaces.Append(globalNamespace);
                 foreach (var ns in namespaces) {
-                    foreach (var m in ns.Scope.AllMembers) {
-                        var t = m as ComplexType;
-                        if (t != null) t.ParseInner();
+                    foreach (var m in ns.Scope.AllMembers.Where(elem => elem is ComplexType).Where(elem => !(elem is Namespace)).Cast<ComplexType>()) {
+                        m.ParseInner();
                     }
-                    foreach (var m in ns.Scope.AllMembers.Where(m => m is ClassType)) {
-                        foreach (var f in m.Scope.AllMembers.Where(n => n is FunctionType).Cast<FunctionType>()) {
+                }
+                foreach (var ns in namespaces) {
+                    foreach (var m in ns.Scope.AllMembers.Where(elem => elem is ClassType)) {
+                        foreach (var f in m.Scope.AllMembers.Where(elem => elem is FunctionType).Cast<FunctionType>()) {
                             f.ParseInner();
                         }
                     }

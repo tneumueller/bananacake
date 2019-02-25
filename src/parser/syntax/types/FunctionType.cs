@@ -50,7 +50,6 @@ namespace BCake.Parser.Syntax.Types {
                         break;
 
                     default:
-                        if (token.Value.Trim().Length < 1) break;
                         if (!SymbolNode.CouldBeIdentifier(token.Value.Trim(), out var m))
                             throw new UnexpectedTokenException(token);
 

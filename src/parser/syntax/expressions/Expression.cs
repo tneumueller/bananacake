@@ -40,8 +40,6 @@ namespace BCake.Parser.Syntax.Expressions {
         }
 
         public static Expression Parse(Scopes.Scope Scope, Token[] tokens) {
-            tokens = tokens.Where(t => t.Value.Trim().Length > 0).ToArray();
-
             if (tokens.Length < 1) return null;
 
             for (int i = 0; i < OperatorPrecedence.Length; ++i) {

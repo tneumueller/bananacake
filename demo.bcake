@@ -1,5 +1,5 @@
 namespace BCake.Demo {
-    private class Program {
+    public class Program {
         private int a;
         private bool b;
 
@@ -34,15 +34,18 @@ namespace BCake.Demo {
             return b + c;
         }
     }
+}
 
-    class Demo2 {
-        public Demo2() {
+class Demo2 {
+    public Demo2() {
 
-        }
-
-        public int testAccess() {
-            Program p;
-            p = new Program();
-        }
     }
+
+    public int test1() {
+
+    }
+}
+
+int main() {
+    
 }

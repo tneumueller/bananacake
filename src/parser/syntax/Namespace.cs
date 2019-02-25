@@ -13,7 +13,7 @@ namespace BCake.Parser.Syntax {
 
         public Namespace() {
             Access = "public";
-            Scope = new Scopes.Scope();
+            Scope = new Scopes.Scope(null, this);
             Global = this;
 
             InitPrimitives();
@@ -27,53 +27,7 @@ namespace BCake.Parser.Syntax {
         }
 
         public override void ParseInner() {
-            string access = null, name = null, type = null;
-
-            for (int i = 0; i < tokens.Length; ++i) {
-                var token = tokens[i];
-
-                switch (token.Value) {
-                    case "class":
-                        type = token.Value;
-                        break;
-
-                    case "public":
-                    case "protected":
-                    case "private":
-                        if (access != null) throw new UnexpectedTokenException(token);
-                        access = token.Value;
-                        break;
-
-                    case "{":
-                        if (type == null || name == null) throw new UnexpectedTokenException(token);
-                        // by default the class will get the same access level as the namespace
-                        if (access == null) access = this.Access;
-
-                        var beginScope = i;
-                        i = Parser.findClosingScope(tokens, i);
-
-                        if (type == "class") {
-                            Scope.Declare(
-                                new Types.ClassType(
-                                    Scope,
-                                    access,
-                                    name,
-                                    tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
-                                )
-                            );
-
-                            access = type = name = null;
-                        }
-                        break;
-
-                    default:
-                        if (token.Value.Trim().Length < 1) break;
-
-                        if (name != null) throw new UnexpectedTokenException(token);
-                        name = token.Value;
-                        break;
-                }
-            }
+            Parser.ParseTypes(Scope, tokens, new string[] { "class", "function" });
         }
 
         private void InitPrimitives() {

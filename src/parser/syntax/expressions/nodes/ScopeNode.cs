@@ -27,7 +27,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
 
             var pos = 0;
             var expressions = new List<Expressions.Expression>();
-            tokens = tokens.Where(t => t.Value.Trim().Length > 0).ToArray();
             
             while (true) {
                 if (pos >= tokens.Length) break;

@@ -16,8 +16,6 @@ namespace BCake.Parser.Syntax.Expressions {
         }
 
         public new static ScopeExpression Parse(Scopes.Scope scope, Token[] tokens, Nodes.Node subscope) {
-            tokens = tokens.Where(t => t.Value.Trim().Length > 0).ToArray();
-
             if (tokens.Length < 1) return null;
 
             var t0 = tokens.FirstOrDefault();
