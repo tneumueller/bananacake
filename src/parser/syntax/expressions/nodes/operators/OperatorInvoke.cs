@@ -22,7 +22,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             functionNode = new Expression(
                 functionNode.DefiningToken,
                 functionNode.Scope,
-                new SymbolNode(function)
+                new SymbolNode(functionNode.DefiningToken, function)
             );
             op.Left = functionNode;
 

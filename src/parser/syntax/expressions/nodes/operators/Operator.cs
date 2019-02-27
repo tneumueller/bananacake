@@ -48,7 +48,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             get => Left?.ReturnType ?? Right?.ReturnType;
         }
 
-        public Operator() {
+        // null is passed to parent class as token parameter because it is set in the parse method
+        // this is the case, because the constructor has to be parameterless
+        public Operator() : base(null) {
             var operatorAttr = (OperatorSymbolAttribute)this.GetType().GetCustomAttributes(typeof(OperatorSymbolAttribute), true).FirstOrDefault();
             if (operatorAttr == null) return;
 
@@ -74,6 +76,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var op = (Operator)Activator.CreateInstance(opType);
             op.Left = Expression.Parse(scope, left);
             op.Right = Expression.Parse(scope, right);
+            op.DefiningToken = token;
             op.OnCreated(token, scope);
             return op;
         }

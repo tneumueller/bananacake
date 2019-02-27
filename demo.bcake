@@ -47,5 +47,11 @@ class Demo2 {
 }
 
 int main() {
+    int i;
+    i = 5;
+    return multiply(i, 15);
+}
 
+int multiply(int a, int b) {
+    return a * b;
 }

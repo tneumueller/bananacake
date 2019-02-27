@@ -113,7 +113,7 @@ namespace BCake.Parser.Syntax.Expressions {
                 Nodes.Node node;
                 var t = tokens[0];
 
-                if ((node = Nodes.ValueNode.Parse(t)) != null) return new Expression(t, Scope, node);
+                if ((node = Nodes.Value.ValueNode.Parse(t)) != null) return new Expression(t, Scope, node);
                 if ((node = Nodes.SymbolNode.Parse(Scope, t)) != null) return new Expression(t, Scope, node);
                 else throw new Exceptions.UndefinedSymbolException(t, t.Value, Scope);
             }

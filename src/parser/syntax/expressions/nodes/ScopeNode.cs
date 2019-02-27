@@ -5,14 +5,11 @@ using System.Collections.Generic;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes {
     public class ScopeNode : Node {
-        public Token DefiningToken { get; protected set; }
         public Expressions.Expression[] Expressions { get; protected set; }
         public Scopes.Scope Scope { get; protected set; }
 
-        private ScopeNode(Token token, Scopes.Scope scope, Expressions.Expression[] expressions) {
-            DefiningToken = token;
+        private ScopeNode(Token token, Scopes.Scope scope, Expressions.Expression[] expressions) : base(token) {
             Expressions = expressions;
-
             Scope = scope;
         }
 

@@ -60,5 +60,23 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorNew.cs" />
     <Content Include="src\parser\exceptions\AccessException.cs" />
     <Content Include="src\runtime\Interpreter.cs" />
+    <Content Include="src\runtime\RuntimeFunction.cs" />
+    <Content Include="src\runtime\nodes\RuntimeFunction.cs" />
+    <Content Include="src\runtime\nodes\Node.cs" />
+    <Content Include="src\runtime\nodes\RuntimeNode.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeIntValueNode.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeValueNode.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperator.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorPlus.cs" />
+    <Content Include="src\runtime\nodes\expressions\RuntimeExpression.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\value\ValueNode.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeBoolValueNode.cs" />
+    <Content Include="src\runtime\RuntimeScope.cs" />
+    <Content Include="src\runtime\nodes\RuntimeScopeNode.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorReturn.cs" />
+    <Content Include="src\runtime\nodes\RuntimeSymbolNode.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorAssign.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorInvoke.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorDivide.cs" />
   </ItemGroup>
 </Project>

@@ -6,9 +6,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public class OperatorReturn : Operator, IRValue {
         public Types.FunctionType ParentFunction { get; protected set; }
 
-        public OperatorReturn() {
-            System.Console.WriteLine("New OperatorReturn");
-        }
+        public OperatorReturn() {}
 
         public override void OnCreated(Token token, Scopes.Scope scope) {
             ParentFunction = scope.GetClosestFunction() ?? throw new Exceptions.InvalidReturnException(token);

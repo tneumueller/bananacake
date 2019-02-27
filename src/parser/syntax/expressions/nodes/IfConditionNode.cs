@@ -5,12 +5,10 @@ using System.Collections.Generic;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes {
     public class IfConditionNode : Node {
-        public Token DefiningToken { get; protected set; }
         public Expressions.Expression Expression { get; protected set; }
         public Scopes.Scope Scope { get; protected set; }
 
-        public IfConditionNode(Token token, Scopes.Scope scope, Expressions.Expression expression) {
-            DefiningToken = token;
+        public IfConditionNode(Token token, Scopes.Scope scope, Expressions.Expression expression) : base(token) {
             Expression = expression;
 
             if (Expression.ReturnType != Nodes.Value.BoolValueNode.Type)

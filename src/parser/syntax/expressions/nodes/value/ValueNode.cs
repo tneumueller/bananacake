@@ -1,8 +1,10 @@
 using System;
 
-namespace BCake.Parser.Syntax.Expressions.Nodes {
+namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
     public abstract class ValueNode : Node, IRValue {
         public virtual object Value { get; protected set; }
+
+        public ValueNode(Token token) : base(token) {}
 
         public static ValueNode Parse(Token token) {
             ValueNode node;

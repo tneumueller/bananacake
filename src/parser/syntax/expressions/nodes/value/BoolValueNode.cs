@@ -10,14 +10,14 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
             get => Type;
         }
 
-        public BoolValueNode(bool value) {
+        public BoolValueNode(Token token, bool value) : base(token) {
             Value = value;
             Console.WriteLine("New BoolValueNode with value " + Value);
         }
 
         public new static ValueNode Parse(Token token) {
-            if (token.Value == "true") return new BoolValueNode(true);
-            if (token.Value == "false") return new BoolValueNode(false);
+            if (token.Value == "true") return new BoolValueNode(token, true);
+            if (token.Value == "false") return new BoolValueNode(token, false);
             return null;
         }
     }

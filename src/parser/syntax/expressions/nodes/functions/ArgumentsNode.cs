@@ -11,7 +11,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
         /* ArgumentsNode needs to have the same return type as the function itself for typechecking */
         public override Types.Type ReturnType { get => FunctionNode.ReturnType; }
 
-        public ArgumentsNode(Expression functionNode, Argument[] arguments) {
+        public ArgumentsNode(Token token, Expression functionNode, Argument[] arguments) : base(token) {
             Arguments = arguments;
             FunctionNode = functionNode;
 
@@ -32,7 +32,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
                 pos += paramTokens.Length + 1;
             }
 
-            return new ArgumentsNode(functionNode, arguments.ToArray());
+            return new ArgumentsNode(tokens.FirstOrDefault(), functionNode, arguments.ToArray());
         }
 
         public class Argument {

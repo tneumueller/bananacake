@@ -46,12 +46,11 @@ namespace BCake {
                 }
 
                 var interpreter = new BCake.Runtime.Interpreter(globalNamespace);
-                interpreter.Run();
+                return interpreter.Run();
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
+                return 1;
             }
-
-            return 0;
         }
 
         private static void ParseArguments(string[] args) {

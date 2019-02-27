@@ -14,7 +14,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
             get => Type;
         }
 
-        public IntValueNode(int value) {
+        public IntValueNode(Token token, int value) : base(token) {
             Value = value;
             Console.WriteLine("New IntValueNode with value " + Value);
         }
@@ -23,13 +23,13 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
             Match m;
 
             if ((m = Regex.Match(token.Value, rxOctIntLiteral)).Success) {
-                return new IntValueNode(Convert.ToInt32(m.Groups[1].Value, 8));
+                return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 8));
             } else if ((m = Regex.Match(token.Value, rxDecIntLiteral)).Success) {
-                return new IntValueNode(Convert.ToInt32(m.Groups[1].Value, 10));
+                return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 10));
             } else if ((m = Regex.Match(token.Value, rxHexIntLiteral)).Success) {
-                return new IntValueNode(Convert.ToInt32(m.Groups[1].Value, 16));
+                return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 16));
             } else if ((m = Regex.Match(token.Value, rxBinIntLiteral)).Success) {
-                return new IntValueNode(Convert.ToInt32(m.Groups[1].Value, 2));
+                return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 2));
             }
 
             return null;

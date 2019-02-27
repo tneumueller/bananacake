@@ -17,7 +17,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
             }
         }
 
-        public SymbolNode(Types.Type symbol) {
+        public SymbolNode(Token token, Types.Type symbol) : base(token) {
             Symbol = symbol;
 
             Console.WriteLine("New symbol node " + Symbol.FullName);
@@ -31,7 +31,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
         public static SymbolNode Parse(Scopes.Scope scope, Token token) {
             var symbol = scope.GetSymbol(token.Value);
             if (symbol == null) return null;
-            return new SymbolNode(symbol);
+            return new SymbolNode(token, symbol);
         }
     }
 }
