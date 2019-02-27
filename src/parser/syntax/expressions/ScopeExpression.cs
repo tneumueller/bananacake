@@ -15,7 +15,7 @@ namespace BCake.Parser.Syntax.Expressions {
             Scope = new Scopes.Scope(scope);
         }
 
-        public new static ScopeExpression Parse(Scopes.Scope scope, Token[] tokens, Nodes.Node subscope) {
+        public static ScopeExpression Parse(Scopes.Scope scope, Token[] tokens, Nodes.Node subscope) {
             if (tokens.Length < 1) return null;
 
             var t0 = tokens.FirstOrDefault();
@@ -48,7 +48,7 @@ namespace BCake.Parser.Syntax.Expressions {
                     return new ScopeExpression(
                         tokens[1],
                         scope,
-                        new Nodes.IfConditionNode(
+                        new Nodes.Conditional.IfConditionNode(
                             tokens[1],
                             scope,
                             Expression.Parse(

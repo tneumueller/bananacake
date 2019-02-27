@@ -16,5 +16,9 @@ namespace BCake.Runtime.Nodes.Value {
         public override RuntimeValueNode OpDivide(RuntimeValueNode other) {
             throw new Exceptions.RuntimeException("", DefiningToken);
         }
+
+        public override RuntimeValueNode OpGreater(RuntimeValueNode other) {
+            throw new Exceptions.RuntimeException("", DefiningToken);
+        }
     }
 }

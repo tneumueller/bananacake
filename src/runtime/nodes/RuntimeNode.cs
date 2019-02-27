@@ -21,6 +21,8 @@ namespace BCake.Runtime.Nodes {
             if ((n = RuntimeOperator.Create(node, scope)) != null) return n;
             if ((n = RuntimeSymbolNode.Create(node, scope)) != null) return n;
 
+            if ((n = RuntimeScopeNode.Create(node, scope)) != null) return n;
+
             return null; // todo handle this case property (exception?)
         }
 

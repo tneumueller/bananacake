@@ -78,5 +78,12 @@
     <Content Include="src\runtime\nodes\operators\RuntimeOperatorAssign.cs" />
     <Content Include="src\runtime\nodes\operators\RuntimeOperatorInvoke.cs" />
     <Content Include="src\runtime\nodes\operators\RuntimeOperatorDivide.cs" />
+    <Content Include="src\runtime\nodes\RuntimeIfConditionNode.cs" />
+    <Content Include="src\runtime\nodes\expressions\RuntimeIfConditionNode.cs" />
+    <Content Include="src\runtime\nodes\conditional\RuntimeConditionalNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\conditional\IfConditionNode.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\conditional\ConditionalNode.cs" />
+    <Content Include="src\runtime\nodes\conditional\RuntimeIfConditionNode.cs" />
+    <Content Include="src\runtime\nodes\expressions\RuntimeScopeExpression.cs" />
   </ItemGroup>
 </Project>

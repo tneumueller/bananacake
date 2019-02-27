@@ -17,9 +17,23 @@ namespace BCake.Runtime.Nodes.Value {
             return Wrap((int)Value / (int)other.Value);
         }
 
+        public override RuntimeValueNode OpGreater(RuntimeValueNode other) {
+            return Wrap((int)Value > (int)other.Value);
+        }
+
         private RuntimeIntValueNode Wrap(int value) {
             return new RuntimeIntValueNode(
                 new IntValueNode(
+                    DefiningToken,
+                    value
+                ),
+                RuntimeScope
+            );
+        }
+
+        private RuntimeBoolValueNode Wrap(bool value) {
+            return new RuntimeBoolValueNode(
+                new BoolValueNode(
                     DefiningToken,
                     value
                 ),

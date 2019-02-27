@@ -49,7 +49,12 @@ class Demo2 {
 int main() {
     int i;
     i = 5;
-    return multiply(i, 15);
+    int m = multiply(i, 15);
+
+    if (m > 50) {
+        return 1;
+    }
+    return 0;
 }
 
 int multiply(int a, int b) {
