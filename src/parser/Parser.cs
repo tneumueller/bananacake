@@ -239,6 +239,18 @@ namespace BCake.Parser
 
             return -1;
         }
+
+        public static int findListItemEnd(Token[] tokens, int startTokenIndex) {
+            var brackets = new string[] {"(", "{", "[", "<"};
+
+            for (int i = startTokenIndex; i < tokens.Length; ++i) {
+                var token = tokens[i];
+                if (brackets.Contains(token.Value)) i = findClosingScope(tokens, i);
+                else if (token.Value == ",") return i;
+            }
+
+            return -1;
+        }
     }
 
 

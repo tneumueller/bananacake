@@ -44,7 +44,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
                         expressions.Add(
                             ScopeExpression.Parse(
                                 scope,
-                                tokens.Skip(pos).Take(subscopeBegin - 1).ToArray(),
+                                tokens.Skip(pos).Take(subscopeBegin).ToArray(),
                                 subscopeNode
                             )
                         );

@@ -23,7 +23,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
             var arguments = new List<Argument>();
 
             while (true) {
-                var paramTokens = tokens.Skip(pos).TakeWhile(t => t.Value != ",").ToArray();
+                var paramEnd = Parser.findListItemEnd(tokens, pos);
+                if (paramEnd == -1) paramEnd = tokens.Length;
+                var paramTokens = tokens.Skip(pos).Take(paramEnd - pos).ToArray();
                 if (paramTokens.Length < 1) break;
 
                 var paramExpr = Expression.Parse(scope, paramTokens);
