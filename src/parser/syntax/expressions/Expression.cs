@@ -16,6 +16,10 @@ namespace BCake.Parser.Syntax.Expressions {
             
             // comparison
             typeof(OperatorGreater),
+            typeof(OperatorGreaterEqual),
+            typeof(OperatorSmaller),
+            typeof(OperatorSmallerEqual),
+            typeof(OperatorEqual),
 
             // arithmetic
             typeof(OperatorPlus),

@@ -85,5 +85,10 @@
     <Content Include="src\parser\syntax\expressions\nodes\conditional\ConditionalNode.cs" />
     <Content Include="src\runtime\nodes\conditional\RuntimeIfConditionNode.cs" />
     <Content Include="src\runtime\nodes\expressions\RuntimeScopeExpression.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorGreaterEqual.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorSmaller.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorSmallerEqual.cs" />
+    <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorSmallerEqual.cs" />
+    <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorEqual.cs" />
   </ItemGroup>
 </Project>

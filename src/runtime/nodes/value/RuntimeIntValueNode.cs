@@ -20,6 +20,12 @@ namespace BCake.Runtime.Nodes.Value {
         public override RuntimeValueNode OpGreater(RuntimeValueNode other) {
             return Wrap((int)Value > (int)other.Value);
         }
+        public override RuntimeValueNode OpEqual(RuntimeValueNode other) {
+            return Wrap((int)Value == (int)other.Value);
+        }
+        public override RuntimeValueNode OpSmaller(RuntimeValueNode other) {
+            return Wrap((int)Value < (int)other.Value);
+        }
 
         private RuntimeIntValueNode Wrap(int value) {
             return new RuntimeIntValueNode(

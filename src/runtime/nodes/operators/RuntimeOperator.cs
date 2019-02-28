@@ -22,6 +22,10 @@ namespace BCake.Runtime.Nodes.Operators {
                 case OperatorReturn op: return new RuntimeOperatorReturn(op, scope);
 
                 case OperatorGreater op: return new RuntimeOperatorGreater(op, scope);
+                case OperatorGreaterEqual op: return new RuntimeOperatorGreaterEqual(op, scope);
+                case OperatorSmaller op: return new RuntimeOperatorSmaller(op, scope);
+                case OperatorSmallerEqual op: return new RuntimeOperatorSmallerEqual(op, scope);
+                case OperatorEqual op: return new RuntimeOperatorEqual(op, scope);
 
                 case OperatorAssign op: return new RuntimeOperatorAssign(op, scope);
                 case OperatorInvoke op: return new RuntimeOperatorInvoke(op, scope);

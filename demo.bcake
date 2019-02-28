@@ -49,9 +49,10 @@ class Demo2 {
 int main() {
     int i;
     i = 5;
-    int m = multiply(i, 15);
+    int m = multiply(i, 10);
+    bool b = m >= 50;
 
-    if (m > 50) {
+    if (b) {
         return 1;
     }
     return 0;

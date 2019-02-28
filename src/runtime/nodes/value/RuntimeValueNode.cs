@@ -29,5 +29,7 @@ namespace BCake.Runtime.Nodes.Value {
         public abstract RuntimeValueNode OpDivide(RuntimeValueNode other);
 
         public abstract RuntimeValueNode OpGreater(RuntimeValueNode other);
+        public abstract RuntimeValueNode OpEqual(RuntimeValueNode other);
+        public abstract RuntimeValueNode OpSmaller(RuntimeValueNode other);
     }
 }
