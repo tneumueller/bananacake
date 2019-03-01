@@ -1,4 +1,5 @@
-# 🍌 BananaCake 🍰
+![](docs/assets/banner.jpg)
+
 Most people like bananas and we all love cake, so this language is just like banana cake: A combination of the best of two worlds. What does that really mean? I dont know, but it certainly sounds nice. And I like banana cake.
 
 ## TL;DR
