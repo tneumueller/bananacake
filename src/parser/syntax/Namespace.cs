@@ -11,14 +11,14 @@ namespace BCake.Parser.Syntax {
     public class Namespace : Types.ComplexType {
         public static Namespace Global { get; protected set; }
 
-        public Namespace() {
-            Access = "public";
+        public Namespace() : base(null, "public") {
             Scope = new Scopes.Scope(null, this);
             Global = this;
 
             InitPrimitives();
         }
-        public Namespace(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens) {
+        public Namespace(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens)
+            : base(parent, name, access) {
             Access = access;
             Name = name;
             this.tokens = tokens;

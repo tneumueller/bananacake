@@ -14,12 +14,11 @@ namespace BCake.Parser.Syntax.Types {
         public ScopeNode Root { get; protected set; }
         public ParameterType[] Parameters { get; protected set; }
 
-        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] parameters, Token[] tokens) {
+        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] parameters, Token[] tokens)
+            : base(null, name, access) {
             DefiningToken = token;
             Parent = parent;
-            Access = access;
             ReturnType = returnType;
-            Name = name;
             Parameters = parameters;
             this.tokens = tokens;
 
@@ -74,10 +73,10 @@ namespace BCake.Parser.Syntax.Types {
 
         public class ParameterType : Type {
             public Type Type { get; protected set; }
-            public ParameterType(Token token, Type type, string name) {
+            public ParameterType(Token token, Type type, string name)
+                : base(null, name) {
                 DefiningToken = token;
                 Type = type;
-                Name = name;
             }
 
             public void SetScope(Scopes.Scope s) {

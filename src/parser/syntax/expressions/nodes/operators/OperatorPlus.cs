@@ -1,5 +1,5 @@
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
-    [OperatorSymbol(Symbol = "+")]
+    [Operator(Symbol = "+")]
     public class OperatorPlus : Operator, IRValue {
         
     }

@@ -6,8 +6,8 @@ using BCake.Parser.Exceptions;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public abstract class Operator : Node {
-        private bool needsLValue, needsRValue, leftNeedsNone, rightNeedsNone;
-        OperatorSymbolAttribute.OperatorParameterType typeLeft, typeRight;
+        private bool needsLValue, needsRValue, leftNeedsNone, rightNeedsNone, checkReturnTypes;
+        OperatorAttribute.ParameterType typeLeft, typeRight;
         public Expression Left {
             get {
                 return _left;
@@ -51,40 +51,51 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         // null is passed to parent class as token parameter because it is set in the parse method
         // this is the case, because the constructor has to be parameterless
         public Operator() : base(null) {
-            var operatorAttr = (OperatorSymbolAttribute)this.GetType().GetCustomAttributes(typeof(OperatorSymbolAttribute), true).FirstOrDefault();
+            var operatorAttr = (OperatorAttribute)this.GetType().GetCustomAttributes(typeof(OperatorAttribute), true).FirstOrDefault();
             if (operatorAttr == null) return;
 
             typeLeft = operatorAttr.Left;
             typeRight = operatorAttr.Right;
-            needsLValue = typeLeft == OperatorSymbolAttribute.OperatorParameterType.LValue;
-            needsRValue = typeRight == OperatorSymbolAttribute.OperatorParameterType.RValue;
-            leftNeedsNone = typeLeft == OperatorSymbolAttribute.OperatorParameterType.None;
-            rightNeedsNone = typeRight == OperatorSymbolAttribute.OperatorParameterType.None;
+            needsLValue = typeLeft == OperatorAttribute.ParameterType.LValue;
+            needsRValue = typeRight == OperatorAttribute.ParameterType.RValue;
+            leftNeedsNone = typeLeft == OperatorAttribute.ParameterType.None;
+            rightNeedsNone = typeRight == OperatorAttribute.ParameterType.None;
+            checkReturnTypes = operatorAttr.CheckReturnTypes;
         }
 
         public virtual void OnCreated(Token token, Scopes.Scope scope) {}
 
-        public static OperatorSymbolAttribute GetOperatorMetadata(Type t) {
+        public static OperatorAttribute GetOperatorMetadata(Type t) {
             var opSymbolAttr = t.GetCustomAttributes(
-                typeof(OperatorSymbolAttribute),
+                typeof(OperatorAttribute),
                 true
-            ).FirstOrDefault() as OperatorSymbolAttribute;
+            ).FirstOrDefault() as OperatorAttribute;
             return opSymbolAttr;
         }
 
         public static Node Parse(Scopes.Scope scope, Type opType, Token token, Token[] left, Token[] right) {
             var op = (Operator)Activator.CreateInstance(opType);
-            op.Left = Expression.Parse(scope, left);
-            op.Right = Expression.Parse(scope, right);
+            op.Left = op.ParseLeft(scope, left);
+            op.Right = op.ParseRight(scope, right);
             op.DefiningToken = token;
             op.OnCreated(token, scope);
             return op;
+        }
+
+        protected virtual Expression ParseLeft(Scopes.Scope scope, Token[] tokens) {
+            return Expression.Parse(scope, tokens);
+        }
+
+        protected virtual Expression ParseRight(Scopes.Scope scope, Token[] tokens) {
+            return Expression.Parse(scope, tokens);
         }
 
         protected void CheckRightReturnType(Types.Type type) {
             if (Right != null && Right.ReturnType != type) throw new TypeException(Right.DefiningToken, Right.ReturnType, type);
         }
         protected void CheckReturnTypes(Expression e) {
+            if (!checkReturnTypes) return;
+
             var other = e == Right ? Left : Right;
             if (Right == null || Left == null) return;
             if (Right.ReturnType != Left.ReturnType) throw new TypeException(e.DefiningToken, e.ReturnType, other.ReturnType);

@@ -22,7 +22,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\ValueNode.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\Node.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\Operator.cs" />
-    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorSymbolAttribute.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorPlus.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorAssign.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\value\IntValueNode.cs" />
@@ -90,5 +89,10 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorSmallerEqual.cs" />
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorSmallerEqual.cs" />
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorEqual.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\comparison\OperatorEqual.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorAttribute.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorAccess.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorAccess.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeScopeValueNode.cs" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-namespace BCake.Demo {
+namespace Demo {
     public class Program {
         private int a;
         private bool b;
@@ -22,10 +22,6 @@ namespace BCake.Demo {
                 i = i + 1;
             }
 
-            while (i > 0) {
-                i = i - 1;
-            }
-
             return multiply(d, 1, 2, false);
         }
 
@@ -47,17 +43,19 @@ class Demo2 {
 }
 
 int main() {
-    int i;
-    i = 5;
-    int m = multiply(i, 10);
-    bool b = m >= 50;
+    Demo.Program testd;
+    testd.getA();
 
-    if (b) {
-        return 1;
-    }
-    return 0;
+    return modulo(5, 3);
 }
 
 int multiply(int a, int b) {
     return a * b;
+}
+
+int modulo(int a, int b) {
+    if (a < b) {
+        return a;
+    }
+    return modulo(a - b, b);
 }

@@ -12,14 +12,17 @@ namespace BCake.Runtime.Nodes {
         }
 
         public new static RuntimeNode Create(Node node, RuntimeScope scope) {
-            if (node is SymbolNode) {
-                return new RuntimeSymbolNode(scope, node as SymbolNode);
+            switch (node) {
+                case SymbolNode n: return new RuntimeSymbolNode(scope, n);
             }
 
             return null;
         }
 
         public override RuntimeValueNode Evaluate() {
+            if (!(SymbolNode.Symbol is Parser.Syntax.Types.PrimitiveType)) {
+                System.Console.WriteLine("reading value of complex type");
+            }
             return RuntimeScope.GetValue(SymbolNode.Symbol.Name);
         }
     }

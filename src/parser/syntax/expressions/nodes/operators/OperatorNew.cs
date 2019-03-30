@@ -1,7 +1,7 @@
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
-    [OperatorSymbol(
+    [Operator(
         Symbol = "new",
-        Left = OperatorSymbolAttribute.OperatorParameterType.None
+        Left = OperatorAttribute.ParameterType.None
     )]
     public class OperatorNew : Operator, IRValue {
         public Types.FunctionType ParentFunction { get; protected set; }

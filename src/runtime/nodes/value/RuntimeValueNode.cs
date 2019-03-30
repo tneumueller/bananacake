@@ -1,6 +1,7 @@
 using BCake.Parser.Syntax.Expressions;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
+using BCake.Parser.Syntax.Types;
 using BCake.Runtime.Nodes.Expressions;
 
 namespace BCake.Runtime.Nodes.Value {
@@ -14,6 +15,7 @@ namespace BCake.Runtime.Nodes.Value {
             switch (node) {
                 case IntValueNode i: return new RuntimeIntValueNode(i, scope);
                 case BoolValueNode b: return new RuntimeBoolValueNode(b, scope);
+                //case Type t: 
             }
 
             return null; // todo handle this case properly (exception?)

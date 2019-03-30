@@ -1,5 +1,5 @@
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators.Comparison {
-    [OperatorSymbol(Symbol = "==")]
+    [Operator(Symbol = "==")]
     public class OperatorEqual : ComparisonOperator, IRValue {
         
     }

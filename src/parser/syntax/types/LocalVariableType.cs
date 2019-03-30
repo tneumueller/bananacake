@@ -10,11 +10,10 @@ namespace BCake.Parser.Syntax.Types {
         public Type Type { get; protected set; }
         public override string FullName { get { return Scope.FullName + ":" + Name; } }
 
-        public LocalVariableType(Token token, Scopes.Scope scope, Type type, string name) {
+        public LocalVariableType(Token token, Scopes.Scope scope, Type type, string name)
+            : base(scope, name) {
             DefiningToken = token;
             Type = type;
-            Name = name;
-            Scope = scope;
 
             Console.WriteLine($"New local variable {Type.FullName} {FullName}");
         }

@@ -1,7 +1,7 @@
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
-    [OperatorSymbol(
+    [Operator(
         Symbol = "=",
-        Left = OperatorSymbolAttribute.OperatorParameterType.LValue
+        Left = OperatorAttribute.ParameterType.LValue
     )]
     public class OperatorAssign : Operator, IRValue {
         public OperatorAssign() {

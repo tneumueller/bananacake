@@ -13,7 +13,7 @@ namespace BCake.Parser
 {
     public class Parser
     {
-        private static string rxSeparators = @"(\s*([\(\).,:;{}])\s*|\s+([\(\).,:;{}])?\s*)";
+        private static string rxSeparators = @"(\s*([\(\),:;{}])\s*|\s+([\(\).,:;{}])?\s*)";
 
         public string Filename { get; private set; }
         private Token[] tokens;

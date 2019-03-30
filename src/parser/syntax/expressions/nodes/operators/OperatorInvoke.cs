@@ -10,12 +10,22 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public static OperatorInvoke Parse(Scopes.Scope scope, Expression functionNode, Token[] argList) {
             var op = new OperatorInvoke();
 
-            var function = (functionNode.Root as SymbolNode)?.Symbol as Types.FunctionType;
+            Types.FunctionType function;
+            var _function = (functionNode.Root as SymbolNode)?.Symbol;
+            if (_function is Types.CompositeType) function = (_function as Types.CompositeType).OperatorAccess.ReturnType as Types.FunctionType;
+            else function = _function as Types.FunctionType;
+
+            /* if the function is null, this must be a constructor call */
             if (function == null) {
-                var classType = (functionNode.Root as SymbolNode)?.Symbol as Types.ClassType;
+                Types.Type classType;
+                var _classType = (functionNode.Root as SymbolNode)?.Symbol;
+
+                if (_classType is Types.CompositeType) classType = (_classType as Types.CompositeType).OperatorAccess.ReturnType;
+                else classType = _classType;
+
                 function = classType?.Scope.GetSymbol("!constructor", true) as Types.FunctionType;
                 if (function.Access != "public" && !scope.IsChildOf(classType.Scope)) {
-                    throw new Exceptions.AccessException(functionNode.DefiningToken, function, scope);
+                    throw new Exceptions.AccessViolationException(functionNode.DefiningToken, function, scope);
                 }
             }
 

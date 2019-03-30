@@ -11,5 +11,13 @@ namespace BCake.Parser.Syntax.Types {
             }
         }
         public Token DefiningToken { get; protected set; }
+
+        public Type(Scopes.Scope scope, string name) {
+            Scope = scope;
+            Name = name;
+        }
+        public Type(Scopes.Scope scope, string name, string access) : this(scope, name) {
+            Access = access;
+        }
     }
 }
