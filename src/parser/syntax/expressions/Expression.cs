@@ -9,7 +9,11 @@ using BCake.Parser.Exceptions;
 
 namespace BCake.Parser.Syntax.Expressions {
     public class Expression {
+        private static readonly string[] bracketsOpen = new string[] { "(", "[", "{", "<" };
+        private static readonly string[] bracketsClose = new string[] { ")", "]", "}", ">" };
         private static readonly Type[] OperatorPrecedence = new Type[] {
+
+            // functions
             typeof(OperatorReturn),
 
             // assigment
@@ -29,7 +33,8 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorDivide),
 
             typeof(OperatorNew),
-            typeof(OperatorAccess)
+            typeof(OperatorAccess),
+            typeof(OperatorInvoke)
         };
 
         public Token DefiningToken { get; protected set; }
@@ -47,37 +52,7 @@ namespace BCake.Parser.Syntax.Expressions {
 
         public static Expression Parse(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource = null) {
             if (typeSource == null) typeSource = scope;
-
             if (tokens.Length < 1) return null;
-
-            if (tokens.Length > 2) {
-                var t0 = tokens[0];
-                var t1 = tokens[1];
-
-                if (SymbolNode.CouldBeIdentifier(t0.Value, out var m0) && t1.Value == "(") {
-                    Types.Type symbol;
-                    var _symbol = SymbolNode.GetSymbol(typeSource, t0);
-                    if (_symbol == null) throw new UndefinedSymbolException(t0, t0.Value, scope);
-
-                    if (_symbol is Types.CompositeType) symbol = (_symbol as Types.CompositeType).OperatorAccess.ReturnType;
-                    else symbol = _symbol;
-
-                    if ((symbol is Types.FunctionType || symbol is Types.ClassType)) {
-                        // function call or constructor call
-                        var argListClose = Parser.findClosingScope(tokens, 1);
-
-                        return new Expression(
-                            t0,
-                            scope,
-                            OperatorInvoke.Parse(
-                                scope,
-                                Expression.Parse(scope, tokens.Take(1).ToArray()),
-                                tokens.Skip(2).Take(argListClose - 2).ToArray()
-                            )
-                        );
-                    }
-                }
-            }
 
             for (int i = 0; i < OperatorPrecedence.Length; ++i) {
                 var op = OperatorPrecedence[i];
@@ -87,9 +62,14 @@ namespace BCake.Parser.Syntax.Expressions {
                 var tempTokens = tokens;
                 if (reverse) tempTokens = tempTokens.Reverse().ToArray();
 
+                var bracketIndent = 0;
                 var opPos = tempTokens
-                    .Select((t, index) => new { t.Value, index = index + 1 })
-                    .TakeWhile(pair => pair.Value.Trim() != opMeta.Symbol)
+                    .Select((t, index) => {
+                        if (bracketsOpen.ToList().Contains(t.Value)) bracketIndent++;
+                        if (bracketsClose.ToList().Contains(t.Value)) bracketIndent--;
+                        return new { t.Value, index = index + 1, bracketIndent };
+                    })
+                    .TakeWhile(pair => pair.Value.Trim() != opMeta.Symbol || pair.bracketIndent != 0)
                     .Select(pair => pair.index)
                     .LastOrDefault();
 
@@ -104,18 +84,31 @@ namespace BCake.Parser.Syntax.Expressions {
                     tokensRight = temp.Reverse().ToArray();
                 }
 
+                var handler = GetParsePreflight(op);
+                if (handler != null) {
+                    var info = new OperatorParseInfo {
+                        OperatorPosition = opPos,
+                        Tokens = tokens,
+                        TokensLeft = tokensLeft,
+                        TokensRight = tokensRight
+                    };
+
+                    // if the handler returns false, we continue with the next operator
+                    if (!(bool)handler.Invoke(null, new object[] { info })) continue;
+                }
+
                 if (opMeta.Left == OperatorAttribute.ParameterType.None) {
                     if (opPos > 0) throw new UnexpectedTokenException(tempTokens[opPos]);
                     return new Expression(
                         tempTokens[0],
                         scope,
-                        Operator.Parse(scope, op, tempTokens[0], new Token[] {}, tempTokens.Skip(1).ToArray())
+                        Operator.Parse(scope, typeSource, op, tempTokens[0], new Token[] {}, tempTokens.Skip(1).ToArray())
                     );
                 } else {
                     return new Expression(
                         tempTokens[0],
                         scope,
-                        Operator.Parse(scope, op, tempTokens[0], tokensLeft, tokensRight)
+                        Operator.Parse(scope, typeSource, op, tempTokens[0], tokensLeft, tokensRight)
                     );
                 }
             }
@@ -128,13 +121,8 @@ namespace BCake.Parser.Syntax.Expressions {
                     && SymbolNode.CouldBeIdentifier(t1.Value, out var m1)
                 ) {
                     // this could be an identifier, so it might be the type of a declaration
-                    Types.Type symbol;
-                    var _symbol = SymbolNode.GetSymbol(typeSource, t0);
-
-                    if (_symbol == null) throw new UndefinedSymbolException(t0, t0.Value, scope);
-
-                    if (_symbol is Types.CompositeType) symbol = (_symbol as Types.CompositeType).OperatorAccess.ReturnType;
-                    else symbol = _symbol;
+                    var symbol = Types.CompositeType.Resolve(SymbolNode.GetSymbol(typeSource, t0));
+                    if (symbol == null) throw new UndefinedSymbolException(t0, t0.Value, scope);
 
                     if (symbol is Types.ClassType || symbol is Types.PrimitiveType) {
                         var newLocalVar = new Types.LocalVariableType(t1, scope, symbol, t1.Value);
@@ -152,6 +140,22 @@ namespace BCake.Parser.Syntax.Expressions {
             }
 
             throw new Exceptions.UnexpectedTokenException(tokens[0]);
+        }
+
+        private static System.Reflection.MethodInfo GetParsePreflight(Type op) {
+            var methods = op.GetMethods();
+            foreach (var m in methods) {
+                if (!m.IsStatic) continue;
+
+                var attr = m.GetCustomAttributes(
+                    typeof(OperatorParsePreflight),
+                    true
+                ).FirstOrDefault() as OperatorParsePreflight;
+
+                if (attr != null) return m;
+            }
+
+            return null;
         }
     }
 }

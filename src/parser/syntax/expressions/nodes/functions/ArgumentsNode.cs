@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using BCake.Parser.Syntax.Types;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
-    public class ArgumentsNode : Node {
+    public class ArgumentsNode : Node, IRValue {
         public Argument[] Arguments { get; protected set; }
         public Expression FunctionNode { get; protected set; }
         /* ArgumentsNode needs to have the same return type as the function itself for typechecking */

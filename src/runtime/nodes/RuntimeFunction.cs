@@ -6,7 +6,12 @@ namespace BCake.Runtime.Nodes {
         public FunctionType Function { get; protected set; }
         public RuntimeValueNode[] Arguments { get; protected set; }
 
-        public RuntimeFunction(FunctionType function, RuntimeScope scope, RuntimeValueNode[] arguments) : base(function.DefiningToken, scope) {
+        public RuntimeFunction(
+            FunctionType function,
+            RuntimeScope scope,
+            RuntimeValueNode[] arguments
+        )
+            : base(function.DefiningToken, scope) {
             Function = function;
             Arguments = arguments;
 

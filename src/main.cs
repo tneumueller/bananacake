@@ -28,18 +28,18 @@ namespace BCake {
             try {
                 foreach (var p in parsers) globalNamespace = p.ParseRoot();
 
-                var namespaces = globalNamespace.Scope.AllMembers.Where(elem => elem is Namespace).Cast<Namespace>();
+                var namespaces = globalNamespace.Scope.AllMembers.Select(elem => elem.Value).Where(elem => elem is Namespace).Cast<Namespace>();
                 foreach (var ns in namespaces) ns.ParseInner();
 
                 namespaces = namespaces.Append(globalNamespace);
                 foreach (var ns in namespaces) {
-                    foreach (var m in ns.Scope.AllMembers.Where(elem => elem is ComplexType).Where(elem => !(elem is Namespace)).Cast<ComplexType>()) {
+                    foreach (var m in ns.Scope.AllMembers.Select(elem => elem.Value).Where(elem => elem is ComplexType).Where(elem => !(elem is Namespace)).Cast<ComplexType>()) {
                         m.ParseInner();
                     }
                 }
                 foreach (var ns in namespaces) {
-                    foreach (var m in ns.Scope.AllMembers.Where(elem => elem is ClassType)) {
-                        foreach (var f in m.Scope.AllMembers.Where(elem => elem is FunctionType).Cast<FunctionType>()) {
+                    foreach (var m in ns.Scope.AllMembers.Where(elem => elem.Value is ClassType)) {
+                        foreach (var f in m.Value.Scope.AllMembers.Select(elem => elem.Value).Where(elem => elem is FunctionType).Cast<FunctionType>()) {
                             f.ParseInner();
                         }
                     }

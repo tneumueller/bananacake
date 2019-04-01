@@ -7,8 +7,8 @@ using BCake.Runtime.Nodes.Expressions;
 namespace BCake.Runtime.Nodes.Value {
     public abstract class RuntimeValueNode : RuntimeNode {
         public object Value { get; protected set; }
-        public RuntimeValueNode(ValueNode node, RuntimeScope scope) : base(node.DefiningToken, scope) {
-            Value = node.Value;
+        public RuntimeValueNode(Node node, RuntimeScope scope) : base(node.DefiningToken, scope) {
+            if (node is ValueNode) Value = (node as ValueNode).Value;
         }
 
         public new static RuntimeValueNode Create(Node node, RuntimeScope scope) {

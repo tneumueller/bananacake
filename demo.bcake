@@ -43,8 +43,8 @@ class Demo2 {
 }
 
 int main() {
-    Demo.Program testd;
-    testd.getA();
+    Demo2 testd;
+    testd.test1().hallo();
 
     return modulo(5, 3);
 }

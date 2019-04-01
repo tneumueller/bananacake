@@ -21,9 +21,11 @@ namespace BCake.Parser.Syntax.Scopes {
             }
         }
         private Dictionary<string, Type> MembersByName = new Dictionary<string, Type>();
-        public IEnumerable<Type> AllMembers {
+        public IEnumerable<KeyValuePair<string, Type>> AllMembers {
             get {
-                return MembersByName.Values;
+                foreach (var pair in MembersByName) {
+                    yield return pair;
+                }
             }
         }
 
@@ -62,6 +64,13 @@ namespace BCake.Parser.Syntax.Scopes {
         public FunctionType GetClosestFunction() {
             if (Type is FunctionType) return Type as FunctionType;
             else return Parent?.GetClosestFunction();
+        }
+
+        public ClassType GetClosestType() {
+            switch (Type) {
+                case ClassType t: return t;
+                default: return Parent?.GetClosestType();
+            }
         }
 
         public bool IsChildOf(Scope other) {

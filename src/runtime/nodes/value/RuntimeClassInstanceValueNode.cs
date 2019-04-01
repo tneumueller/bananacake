@@ -1,8 +1,17 @@
+using BCake.Parser.Syntax.Scopes;
+using BCake.Parser.Syntax.Types;
+using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Runtime.Nodes.Value {
-    public class RuntimeScopeValueNode : RuntimeValueNode {
-        public RuntimeScopeValueNode(BoolValueNode valueNode, RuntimeScope scope) : base(valueNode, scope) {}
+    public class RuntimeClassInstanceValueNode : RuntimeValueNode {
+        public RuntimeClassInstanceValueNode(SymbolNode node, ComplexType type, RuntimeScope scope) : base(node, scope) {
+            Value = this;
+        }
+
+        public RuntimeValueNode AccessMember(string name) {
+            return RuntimeScope.GetValue(name);
+        }
 
         public override RuntimeValueNode OpPlus(RuntimeValueNode other) {
             throw new Exceptions.RuntimeException("", DefiningToken);

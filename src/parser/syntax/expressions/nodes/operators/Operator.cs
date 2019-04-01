@@ -73,20 +73,20 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             return opSymbolAttr;
         }
 
-        public static Node Parse(Scopes.Scope scope, Type opType, Token token, Token[] left, Token[] right) {
+        public static Node Parse(Scopes.Scope scope, Scopes.Scope typeSource, Type opType, Token token, Token[] left, Token[] right) {
             var op = (Operator)Activator.CreateInstance(opType);
-            op.Left = op.ParseLeft(scope, left);
-            op.Right = op.ParseRight(scope, right);
+            op.Left = op.ParseLeft(scope, left, typeSource);
+            op.Right = op.ParseRight(scope, right, op.Left.ReturnType.Scope);
             op.DefiningToken = token;
             op.OnCreated(token, scope);
             return op;
         }
 
-        protected virtual Expression ParseLeft(Scopes.Scope scope, Token[] tokens) {
+        protected virtual Expression ParseLeft(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             return Expression.Parse(scope, tokens);
         }
 
-        protected virtual Expression ParseRight(Scopes.Scope scope, Token[] tokens) {
+        protected virtual Expression ParseRight(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             return Expression.Parse(scope, tokens);
         }
 

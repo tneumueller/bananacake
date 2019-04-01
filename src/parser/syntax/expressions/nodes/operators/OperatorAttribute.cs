@@ -1,4 +1,8 @@
 using System;
+using OperatorHandler = System.Func<
+    BCake.Parser.Syntax.Expressions.Nodes.Operators.OperatorParseInfo,
+    bool
+>;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public class OperatorAttribute : Attribute {
@@ -6,6 +10,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public ParameterType Left, Right;
         public EvaluationDirection Direction;
         public bool CheckReturnTypes = true;
+
 
         public enum ParameterType {
             RValue = 0,
@@ -18,4 +23,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             RightToLeft
         }
     }
+
+    public class OperatorParsePreflight : Attribute {}
 }

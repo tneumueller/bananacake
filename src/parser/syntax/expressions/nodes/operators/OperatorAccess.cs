@@ -8,7 +8,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         CheckReturnTypes = false
     )]
     public class OperatorAccess : Operator, IRValue {
-        Types.Type SymbolToAccess;
+        public Types.Type SymbolToAccess { get; protected set; }
 
         public override Types.Type ReturnType {
             get {
@@ -23,7 +23,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             System.Console.WriteLine("New OperatorAccess");
         }
 
-        protected override Expression ParseRight(Scopes.Scope scope, Token[] tokens) {
+        protected override Expression ParseRight(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             if (Left == null) throw new System.Exception("Left hand side of access operator must not be null when parsing right hand side");
 
             var symbol = Expression.Parse(scope, tokens, Left.ReturnType.Scope);
