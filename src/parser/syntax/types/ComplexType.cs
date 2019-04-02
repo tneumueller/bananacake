@@ -3,9 +3,9 @@ namespace BCake.Parser.Syntax.Types {
         protected BCake.Parser.Token[] tokens;
 
         public ComplexType(Scopes.Scope scope, string name)
-            : base(scope, name) {}
+            : base(scope, name, null) {}
         public ComplexType(Scopes.Scope scope, string name, string access)
-            : base(scope, name, access) {}
+            : base(scope, name, access, null) {}
 
         public abstract void ParseInner();
     }

@@ -15,11 +15,11 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         }
 
         protected override Expression ParseLeft(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
-            // tokens must have length 1 because we check in the ParseHandler function
+            // tokens must have length 1 because we check in the ParsePreflight function
             var t0 = tokens[0];
 
             Types.Type symbol;
-            var _symbol = SymbolNode.GetSymbol(scope, t0);
+            var _symbol = SymbolNode.GetSymbol(typeSource, t0);
             if (_symbol == null) throw new Exceptions.UndefinedSymbolException(t0, t0.Value, scope);
 
             if (_symbol is Types.CompositeType) symbol = (_symbol as Types.CompositeType).OperatorAccess.ReturnType;
@@ -27,7 +27,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
             if (!(symbol is Types.FunctionType || symbol is Types.ClassType)) throw new Exception("TODO invalid call");
 
-            _functionNode = Expression.Parse(scope, tokens.Take(1).ToArray());
+            _functionNode = Expression.Parse(scope, tokens.Take(1).ToArray(), typeSource);
             var unresolvedFunction = (_functionNode.Root as SymbolNode)?.Symbol;
             _function = Types.CompositeType.Resolve<Types.FunctionType>(unresolvedFunction);
 

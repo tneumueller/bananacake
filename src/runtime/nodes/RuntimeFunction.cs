@@ -29,7 +29,15 @@ namespace BCake.Runtime.Nodes {
         }
 
         public override Nodes.Value.RuntimeValueNode Evaluate() {
-            return new RuntimeScopeNode(RuntimeScope, Function.Root).Evaluate();
+            var result = new RuntimeScopeNode(RuntimeScope, Function.Root).Evaluate();
+            
+            if (Function.Name == "!constructor") {
+                // return new RuntimeClassInstanceValueNode(
+                //     Function.Root
+                // )
+            }
+
+            return result;
         }
     }
 }

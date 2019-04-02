@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BCake.Parser.Syntax;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Scopes;
 using BCake.Parser.Syntax.Types;
@@ -19,9 +20,25 @@ namespace BCake.Runtime {
             if (!RuntimeScopeForScope.ContainsKey(scope))
                 RuntimeScopeForScope.Add(scope, this);
 
-            foreach (var member in scope.AllMembers) {
-                Values.Add(member.Key, null);
+            foreach (var member in scope.AllMembers) InitDefault(member);
+        }
+
+        private void InitDefault(KeyValuePair<string, Type> member) {
+            RuntimeValueNode defaultValue = null;
+
+            switch (member.Value) {
+                case PrimitiveType t: break;
+                case FunctionType t: break;
+                case FunctionType.ParameterType t: break;
+                case Namespace t: break;
+                case ComplexType t: defaultValue = new RuntimeNullValueNode(new Parser.Syntax.Expressions.Nodes.Value.NullValueNode(new Parser.Token()), this); break;
+                case LocalVariableType t:
+                    t.Type
+                    break;
+                default: defaultValue = RuntimeValueNode.InstantiateWithDefaultValue(member.Value, this); break;
             }
+
+            Values.Add(member.Key, defaultValue);
         }
 
         public RuntimeValueNode GetValue(string symbol) {

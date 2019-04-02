@@ -4,6 +4,10 @@ using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Runtime.Nodes.Value {
+    // [RuntimeValueNode(
+    //     Value = false,
+    //     ValueNodeType = typeof()
+    // )]
     public class RuntimeClassInstanceValueNode : RuntimeValueNode {
         public RuntimeClassInstanceValueNode(SymbolNode node, ComplexType type, RuntimeScope scope) : base(node, scope) {
             Value = this;

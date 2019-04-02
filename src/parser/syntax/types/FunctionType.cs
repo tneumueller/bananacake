@@ -74,7 +74,7 @@ namespace BCake.Parser.Syntax.Types {
         public class ParameterType : Type {
             public Type Type { get; protected set; }
             public ParameterType(Token token, Type type, string name)
-                : base(null, name) {
+                : base(null, name, type.DefaultValue) {
                 DefiningToken = token;
                 Type = type;
             }

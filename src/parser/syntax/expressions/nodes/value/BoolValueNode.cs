@@ -4,7 +4,7 @@ using BCake.Parser.Syntax.Types;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
     public class BoolValueNode : ValueNode {
-        public static Types.PrimitiveType Type = new PrimitiveType(Namespace.Global.Scope, "bool");
+        public static Types.PrimitiveType Type = new PrimitiveType(Namespace.Global.Scope, "bool", false);
 
         public override Types.Type ReturnType {
             get => Type;

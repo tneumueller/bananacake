@@ -44,6 +44,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
 
             var compositeTypeTokens = new List<Token>();
             var parts = token.Value.Split(".");
+
+            if (parts.Length > 1) throw new Exception($"FATAL Parser thought this type is composite but it is not: {token.Value}");
+
             foreach (var p in parts) {
                 compositeTypeTokens.Add(new Token {
                     Column = token.Column,

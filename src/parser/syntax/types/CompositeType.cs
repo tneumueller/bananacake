@@ -5,7 +5,7 @@ namespace BCake.Parser.Syntax.Types {
         public OperatorAccess OperatorAccess { get; protected set; }
 
         public CompositeType(Scopes.Scope scope, OperatorAccess operatorAccess)
-            : base(scope, operatorAccess.ReturnType.Name) {
+            : base(scope, operatorAccess.ReturnType.Name, null) {
             OperatorAccess = operatorAccess;
         }
 

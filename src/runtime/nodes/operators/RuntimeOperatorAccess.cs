@@ -8,7 +8,11 @@ namespace BCake.Runtime.Nodes.Operators {
         public RuntimeOperatorAccess(OperatorAccess op, RuntimeScope scope) : base(op, scope) {}
 
         public override RuntimeValueNode Evaluate() {
-            // todo
+            var left = new RuntimeExpression(Operator.Left, RuntimeScope).Evaluate();
+            var right = new RuntimeExpression(
+                Operator.Right,
+                RuntimeScope.ResolveRuntimeScope(Operator.Left.ReturnType.Scope)
+            ).Evaluate();
             return null;
         }
     }

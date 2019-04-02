@@ -65,9 +65,10 @@ namespace BCake.Parser.Syntax.Expressions {
                 var bracketIndent = 0;
                 var opPos = tempTokens
                     .Select((t, index) => {
+                        var ret = new { t.Value, index = index + 1, bracketIndent };
                         if (bracketsOpen.ToList().Contains(t.Value)) bracketIndent++;
                         if (bracketsClose.ToList().Contains(t.Value)) bracketIndent--;
-                        return new { t.Value, index = index + 1, bracketIndent };
+                        return ret;
                     })
                     .TakeWhile(pair => pair.Value.Trim() != opMeta.Symbol || pair.bracketIndent != 0)
                     .Select(pair => pair.index)

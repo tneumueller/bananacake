@@ -97,10 +97,11 @@
     <Content Include="src\parser\syntax\types\CompositeType.cs" />
     <Content Include="src\runtime\nodes\value\RuntimeClassInstanceValueNode.cs" />
     <Content Include="src\runtime\nodes\operators\RuntimeOperatorNew.cs" />
-    <Content Include="src\parser\syntax\expressions\nodes\value\ClassInstanceValueNode.cs" />
     <Content Include="src\runtime\exceptions\NullReferenceException.cs" />
     <Content Include="src\runtime\exceptions\RuntimeException.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\InPlaceOperator.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorParseInfo.cs" />
+    <Content Include="src\runtime\nodes\value\DefaultValueAttribute.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\value\NullValueNode.cs" />
   </ItemGroup>
 </Project>

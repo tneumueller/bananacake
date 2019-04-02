@@ -44,7 +44,7 @@ class Demo2 {
 
 int main() {
     Demo2 testd;
-    testd.test1().hallo();
+    testd.test1();
 
     return modulo(5, 3);
 }

@@ -1,6 +1,10 @@
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Runtime.Nodes.Value {
+    [RuntimeValueNode(
+        Value = 0,
+        ValueNodeType = typeof(IntValueNode)
+    )]
     public class RuntimeIntValueNode : RuntimeValueNode {
         public RuntimeIntValueNode(IntValueNode valueNode, RuntimeScope scope) : base(valueNode, scope) {}
 

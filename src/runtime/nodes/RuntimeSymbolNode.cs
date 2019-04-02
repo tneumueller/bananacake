@@ -2,6 +2,7 @@ using BCake.Runtime.Nodes;
 using BCake.Runtime.Nodes.Value;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators;
+using BCake.Parser.Syntax.Types;
 
 namespace BCake.Runtime.Nodes {
     public class RuntimeSymbolNode : RuntimeNode {
@@ -23,6 +24,7 @@ namespace BCake.Runtime.Nodes {
             if (!(SymbolNode.Symbol is Parser.Syntax.Types.PrimitiveType)) {
                 System.Console.WriteLine("reading value of complex type");
             }
+
             return RuntimeScope.GetValue(SymbolNode.Symbol.Name);
         }
     }

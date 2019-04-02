@@ -11,7 +11,7 @@ namespace BCake.Parser.Syntax.Types {
         public override string FullName { get { return Scope.FullName + ":" + Name; } }
 
         public LocalVariableType(Token token, Scopes.Scope scope, Type type, string name)
-            : base(scope, name) {
+            : base(scope, name, type.DefaultValue) {
             DefiningToken = token;
             Type = type;
 
