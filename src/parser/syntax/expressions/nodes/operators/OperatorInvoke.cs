@@ -55,8 +55,10 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var argList = tokens.Take(argListClose).ToArray();
 
             var arguments = Nodes.Functions.ArgumentsNode.Parse(_functionNode, scope, argList);
-            if (arguments.Arguments.Length != Function.Parameters.Length)
-            throw new Exceptions.InvalidArgumentsException(argList[0], Function, arguments.Arguments);
+            if (arguments.Arguments.Length != Function.Parameters.Length) {
+                if (argList.Length > 0) throw new Exceptions.InvalidArgumentsException(argList.FirstOrDefault(), Function, arguments.Arguments);
+                else throw new Exceptions.InvalidArgumentsException(tokens[0], Function, arguments.Arguments);
+            }
 
             for (int i = 0; i < Function.Parameters.Length; ++i) {
                 var paramType = Function.Parameters[i].Type;

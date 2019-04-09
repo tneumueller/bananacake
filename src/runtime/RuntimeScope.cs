@@ -13,17 +13,30 @@ namespace BCake.Runtime {
         protected Dictionary<string, RuntimeValueNode> Values = new Dictionary<string, RuntimeValueNode>();
         protected static Dictionary<Scope, RuntimeScope> RuntimeScopeForScope = new Dictionary<Scope, RuntimeScope>();
 
-        public RuntimeScope(RuntimeScope parent, Scope scope) {
+        public RuntimeScope(RuntimeScope parent, Scope scope) : this(parent, scope, false) {
+            
+        }
+        public RuntimeScope(RuntimeScope parent, Scope scope, bool lateInit) {
             Parent = parent;
             Scope = scope;
 
             if (!RuntimeScopeForScope.ContainsKey(scope))
                 RuntimeScopeForScope.Add(scope, this);
 
+            if (lateInit) return;
+            Init(scope);
+        }
+
+        public void Init(Scope scope) {
             foreach (var member in scope.AllMembers) {
                 switch (member.Value) {
                     case FunctionType f: {
                         var val = new RuntimeFunctionValueNode(f, this);
+                        Values.Add(member.Key, val);
+                        break;
+                    }
+                    case Namespace n: {
+                        var val = new RuntimeNamespaceValueNode(n, ResolveRuntimeScope(n.Scope));
                         Values.Add(member.Key, val);
                         break;
                     }

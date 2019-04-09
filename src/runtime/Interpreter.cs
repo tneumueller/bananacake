@@ -13,7 +13,7 @@ namespace BCake.Runtime {
 
         public Interpreter(Namespace global) {
             Global = global;
-            RuntimeScope = new RuntimeScope(null, global.Scope);
+            RuntimeScope = new RuntimeScope(null, Global.Scope, true);
         }
 
         public int Run() {
@@ -21,6 +21,7 @@ namespace BCake.Runtime {
             if (entrypoint == null) throw new System.Exception("No entry point defined - you have to specify a global method \"int main(string[] args)\"");
 
             InitScopes();
+            RuntimeScope.Init(Global.Scope);
 
             var exitCodeNode = new Runtime.Nodes.RuntimeFunction(entrypoint, RuntimeScope.ResolveRuntimeScope(entrypoint.Scope), new RuntimeValueNode[] {}).Evaluate() as RuntimeIntValueNode;
             var exitCode = (int)exitCodeNode.Value;
@@ -31,7 +32,7 @@ namespace BCake.Runtime {
         }
 
         private void InitScopes() {
-            var root = new ScopeTreeNode(RuntimeScope.Scope);
+            var root = new ScopeTreeNode(Global.Scope);
             DiscoverScopes(root);
             InitScopesByTree(root, RuntimeScope);
         }
@@ -40,6 +41,7 @@ namespace BCake.Runtime {
 
             foreach (var member in node.Scope.AllMembers) {
                 switch (member.Value) {
+                    case Namespace nt:
                     case ClassType ct:
                     case FunctionType ft:
                         if (member.Value.Scope == node.Scope) continue;

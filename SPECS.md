@@ -2,15 +2,22 @@
 
 ## Syntax
 
-### Statements
+### Operators
 
-A statement can be
-- an assignment, e.g. `a = 5`
-  - The left hand side of the assignment must be an lValue
-  - The right hand side of the assignment must be an rValue
-- a declaration, e.g. `int a`
-- a declaring assignment, e.g. `int a = 5`
-  - Same rules as apply as for assignments
+| Operator       | Description   |
+|----------------|---------------|
+| `return`       | Return        |
+| `=`            | Assignment    |
+| `> >= < <= ==` | Comparison    |
+| `+ -`          |               |
+| `* /`          |               |
+| `new`          | Instantiation |
+| `(`            | Function call |
+| `.`            | Access        |
+
+Operators are evaluated top down in the order of this list, so `.` binds the strongest and `return` the weakest.
+
+### Expressions
 
 #### rValue
 
@@ -20,37 +27,84 @@ An expression that evaluates to a value, e.g. `5 + 6 * 7`.
 
 An expression that evaluates to an object that has an assignment operation, e.g. `person.name`.
 
-### Access levels
+### Variables
+
+Variables can have a type and contain a value of only this type.
+```
+int age;
+bool correct;
+```
+
+Assigning a different type will cause an error:
+```
+age = true;
+correct = 0;
+```
+
+### Functions
+
+Functions can either be members of a class, a namespace or just be global. They are defined like this:
+```
+[<access>] <return-type> <name> ([<parameters>]) {
+    // ...
+}
+```
+
+Access defaults to public and is obsolete when the function is declared globally.
+Private functions inside a namespace can only be accessed from within the same namespace.
+Private functions inside classes can only be accessed from within the same class.
+
+### Classes
+
+BCake features classes. A class can be declared like this:
+```
+<access> class <classname> {
+    // ...
+}
+```
+e.g.
+```
+public class Test {}
+```
 
 Access levels define which other modules will be able to access a symbol. There are the following access levels:
 - `public` - anyone can access the symbol
 - `protected` - only submodules of the symbol or it's derivatives can access it.
 - `private` - only submodules of the symbol can access it.
 
+#### Constructor
+
+Currently, a class can only have one constructor. It is defined like this:
+```
+<access> <classname> ([<parameters>]) {
+    // ...
+}
+```
+
+#### Members
+
+Classes can also have members, e.g.
+```
+public class Test {
+    public int a;
+    private bool b;
+}
+```
+
+The can also have the access levels as seen above.
+
 ### Namespaces
 
 Namespaces encapsulate classes, enums and other types. They can be used to add structure to your code and make it more readable. A namespace is defined as followed:
 
 ```
-[access] namespace ns {
+<access> namespace ns {
     // ...
 }
 ```
 
-Every symbol defined inside the namespace can only be accessed by either
-- prefixing the namespace before the symbols name, separated by a dot, e.g. `ns.DemoClass`
-- importing the namespace at the beginning of the file: `use ns` and then accessing the type as if it was not inside of a namespace. Note that this can lead to ambiguity if two types with equal names are defined in two different imported namespaces. In this case, you will have to use the previous method never the less.
+Every symbol defined inside the namespace can only be accessed by prefixing the namespace before the symbols name, separated by a dot, e.g. `ns.DemoClass`. There is no importing yet, this is subject to change.
 
 If an access level is provided, all contained symbols will default to the specified access level, unless stated differently. Default is `public`.
 
-### Classes
-
-Classes work just like in any other OO language and can be defined as follows:
-
-```
-[access] class DemoClass {
-    
-}
-```
-
-By providing an access level, it can be restricted who may use or instantiate the class.
+Classes and functions can be defined outside of a namespace, variables can't.

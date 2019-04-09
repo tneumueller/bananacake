@@ -8,6 +8,7 @@ using BCake.Parser.Exceptions;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Scopes;
 using BCake.Parser.Syntax.Types;
+using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Parser
 {
@@ -95,9 +96,8 @@ namespace BCake.Parser
                         break;
 
                     case "void":
-                        type = "function";
-                        if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
-                        valueType = targetScope.GetSymbol(token.Value) ?? throw new UndefinedSymbolException(token, token.Value, targetScope);
+                        if (!allowedTypes.Contains("function")) throw new UnexpectedTokenException(token);
+                        valueType = NullValueNode.Type;
                         break;
 
                     case "namespace":

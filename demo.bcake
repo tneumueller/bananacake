@@ -1,4 +1,20 @@
 namespace Demo {
+    private class Mensch {
+        private int age;
+
+        public Mensch(int _age) {
+            age = _age;
+        }
+
+        public bool isAdult() {
+            return age >= 18;
+        }
+
+        public void birthday() {
+            age = age + 1;
+        }
+    }
+
     public class Program {
         private int a;
         private bool b;
@@ -45,6 +61,20 @@ class Demo2 {
 }
 
 int main() {
+    Demo.Mensch mensch1 = new Demo.Mensch(18);
+    Demo.Mensch mensch2 = new Demo.Mensch(17);
+
+    if (mensch1.isAdult()) {
+        println(1111);
+    }
+    if (mensch2.isAdult()) {
+        println(2222);
+    }
+    mensch2.birthday();
+    if (mensch2.isAdult()) {
+        println(3333);
+    }
+
     Demo2 testd = new Demo2();
     print(testd.abcdefg);
     testd.test1();

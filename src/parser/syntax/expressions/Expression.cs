@@ -36,6 +36,9 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorInvoke),
             typeof(OperatorAccess)
         };
+        private static readonly string[] OperatorSymbols = OperatorPrecedence
+            .Select(op => Operator.GetOperatorMetadata(op).Symbol)
+            .ToArray();
 
         public Token DefiningToken { get; protected set; }
         public Nodes.Node Root { get; protected set; }
@@ -53,6 +56,34 @@ namespace BCake.Parser.Syntax.Expressions {
         public static Expression Parse(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource = null) {
             if (typeSource == null) typeSource = scope;
             if (tokens.Length < 1) return null;
+
+            var leftSideJoined = string.Join("", tokens.Take(tokens.Length - 1).Select(t => t.Value));
+            if (tokens.Length >= 2
+                && SymbolNode.CouldBeIdentifier(tokens.Last().Value, out var mName)
+                && SymbolNode.CouldBeIdentifier(leftSideJoined,out var mType)
+                && !OperatorSymbols.Contains(leftSideJoined)
+            ) {
+                var tLast = tokens.Last();
+                Types.Type symbol;
+
+                if (tokens.Length == 2) {
+                    symbol = Types.CompositeType.Resolve(SymbolNode.GetSymbol(typeSource, tokens[0]));
+                } else {
+                    symbol = Expression.Parse(
+                        scope,
+                        tokens.Take(tokens.Length - 1).ToArray(),
+                        typeSource
+                    ).ReturnType;
+                }
+
+                if (symbol == null) throw new UndefinedSymbolException(tokens[0], tokens[0].Value, scope);
+
+                if (symbol is Types.ClassType || symbol is Types.PrimitiveType) {
+                    var newLocalVar = new Types.LocalVariableType(tLast, scope, symbol, tLast.Value);
+                    scope.Declare(newLocalVar);
+                    return new Expression(tLast, scope, SymbolNode.Parse(scope, tLast));
+                }
+            }
 
             for (int i = 0; i < OperatorPrecedence.Length; ++i) {
                 var op = OperatorPrecedence[i];
@@ -120,24 +151,7 @@ namespace BCake.Parser.Syntax.Expressions {
                 }
             }
 
-            if (tokens.Length == 2) {
-                var t0 = tokens[0];
-                var t1 = tokens[1];
-
-                if (SymbolNode.CouldBeIdentifier(t0.Value, out var m0)
-                    && SymbolNode.CouldBeIdentifier(t1.Value, out var m1)
-                ) {
-                    // this could be an identifier, so it might be the type of a declaration
-                    var symbol = Types.CompositeType.Resolve(SymbolNode.GetSymbol(typeSource, t0));
-                    if (symbol == null) throw new UndefinedSymbolException(t0, t0.Value, scope);
-
-                    if (symbol is Types.ClassType || symbol is Types.PrimitiveType) {
-                        var newLocalVar = new Types.LocalVariableType(t1, scope, symbol, t1.Value);
-                        scope.Declare(newLocalVar);
-                        return new Expression(t0, scope, SymbolNode.Parse(scope, t1));
-                    }
-                }
-            } else if (tokens.Length == 1) {
+            if (tokens.Length == 1) {
                 Nodes.Node node;
                 var t = tokens[0];
 

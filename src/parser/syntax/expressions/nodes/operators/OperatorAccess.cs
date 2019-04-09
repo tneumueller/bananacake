@@ -43,7 +43,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
             // we need to treat the left hand side specifically, if it is not a type
             switch (leftSymbol.Symbol) {
-                case Namespace t: return;
                 case ClassType t: return;
 
                 default:
