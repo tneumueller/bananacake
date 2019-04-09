@@ -4,18 +4,53 @@
 
 ### Operators
 
-| Operator       | Description   |
-|----------------|---------------|
-| `return`       | Return        |
-| `=`            | Assignment    |
-| `> >= < <= ==` | Comparison    |
-| `+ -`          |               |
-| `* /`          |               |
-| `new`          | Instantiation |
-| `(`            | Function call |
-| `.`            | Access        |
+| Operator       | Description              |
+|----------------|--------------------------|
+| `return`       | Return                   |
+| `=`            | Assignment               |
+| `> >= < <= ==` | Comparison               |
+| `+ -`          | Arithmetic summation     |
+| `* /`          | Arithmetic factorization |
+| `new`          | Instantiation            |
+| `(`            | Function call            |
+| `.`            | Access                   |
 
 Operators are evaluated top down in the order of this list, so `.` binds the strongest and `return` the weakest.
+
+#### return
+
+Returns the result of a following expression from the nearest function (just what you'd expect).
+
+#### Assignment `=`
+
+Assigns the value of an expression on the right hand side to a LValue on the left hand side.
+
+#### Comparison `> >= < <= ==`
+
+Compares two values for relative equality. To see how comparison operators work for each primitive datatype, go to the individual documentation (see [Datatypes: Primitive](#datatypes-primitive)).
+
+#### Arithmetic summation `+ -`
+
+Do just what you'd expect. Some special behaviours exist, look at the individual documentation for each [primitive datatype](#datatypes-primitive).
+
+#### Arithmetic factorization `* /`
+
+Do just what you'd expect. Some special behaviours exist, look at the individual documentation for each [primitive datatype](#datatypes-primitive).
+
+#### Instantiation `new`
+
+Instantiates a given type by calling its constructor. E.g.
+```
+var human1 = new Human("Mary", 34);
+```
+
+#### Function call `(`
+
+Calls a function with the given parameters.
+
+#### Access `.`
+
+Accesses the property of the result of the left hand side expression.
 
 ### Expressions
 
@@ -108,3 +143,14 @@ Every symbol defined inside the namespace can only be accessed by prefixing the 
 If an access level is provided, all contained symbols will default to the specified access level, unless stated differently. Default is `public`.
 
 Classes and functions can be defined outside of a namespace, variables can't.
+
+### Datatypes
+
+#### Primitive
+<a name="datatypes-primitive"></a>
+
+| Name | Symbol | Value range |
+|-|-|-|
+| [Integer](docs/datatypes/INT.md) | `int` | `-2^16 - 1` to `2^16` |
+| [Boolean](docs/datatypes/BOOL.md) | `bool` | `true`, `false` |
+| [String](docs/datatypes/STRING.md) | `string` | `"strings of variable length"` |
