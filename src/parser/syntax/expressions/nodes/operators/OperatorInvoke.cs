@@ -4,50 +4,48 @@ using System.Linq;
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     [Operator(
         Symbol = "(",
-        CheckReturnTypes = false
+        CheckReturnTypes = false,
+        Direction = OperatorAttribute.EvaluationDirection.RightToLeft
     )]
     public class OperatorInvoke : Operator, IRValue {
+        public Types.FunctionType Function { get; protected set; }
         private Expression _functionNode;
-        private Types.FunctionType _function;
 
         public OperatorInvoke() {
             System.Console.WriteLine("New OperatorInvoke");
         }
 
         protected override Expression ParseLeft(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
-            // tokens must have length 1 because we check in the ParsePreflight function
-            var t0 = tokens[0];
-
             Types.Type symbol;
-            var _symbol = SymbolNode.GetSymbol(typeSource, t0);
-            if (_symbol == null) throw new Exceptions.UndefinedSymbolException(t0, t0.Value, scope);
 
-            if (_symbol is Types.CompositeType) symbol = (_symbol as Types.CompositeType).OperatorAccess.ReturnType;
-            else symbol = _symbol;
+            _functionNode = Expression.Parse(scope, tokens, typeSource);
 
-            if (!(symbol is Types.FunctionType || symbol is Types.ClassType)) throw new Exception("TODO invalid call");
-
-            _functionNode = Expression.Parse(scope, tokens.Take(1).ToArray(), typeSource);
-            var unresolvedFunction = (_functionNode.Root as SymbolNode)?.Symbol;
-            _function = Types.CompositeType.Resolve<Types.FunctionType>(unresolvedFunction);
-
-            /* if the function is null, this must be a constructor call */
-            if (_function == null) {
-                var classType = Types.CompositeType.Resolve((_functionNode.Root as SymbolNode)?.Symbol);
-
-                _function = classType?.Scope.GetSymbol("!constructor", true) as Types.FunctionType;
-                if (_function.Access != "public" && !scope.IsChildOf(classType.Scope)) {
-                    throw new Exceptions.AccessViolationException(_functionNode.DefiningToken, _function, scope);
-                }
-
-                unresolvedFunction = _function;
+            switch (_functionNode.Root) {
+                case SymbolNode s: symbol = s.Symbol; break;
+                case OperatorAccess o: symbol = o.ReturnSymbol; break;
+                default: symbol = _functionNode.ReturnType; break;
             }
 
-            _functionNode = new Expression(
-                _functionNode.DefiningToken,
-                _functionNode.Scope,
-                new SymbolNode(_functionNode.DefiningToken, unresolvedFunction)
-            );
+            if (!(symbol is Types.FunctionType || symbol is Types.ClassType)) throw new Exception("TODO invalid call");
+            Function = symbol as Types.FunctionType;
+
+            /* if the function is null, this must be a constructor call */
+            if (Function == null) {
+                var classType = symbol as Types.ClassType;
+
+                Function = classType?.Scope.GetSymbol("!constructor", true) as Types.FunctionType;
+                if (Function.Access != "public" && !scope.IsChildOf(classType.Scope)) {
+                    throw new Exceptions.AccessViolationException(_functionNode.DefiningToken, Function, scope);
+                }
+
+                symbol = Function;
+            }
+
+            // _functionNode = new Expression(
+            //     _functionNode.DefiningToken,
+            //     _functionNode.Scope,
+            //     new SymbolNode(_functionNode.DefiningToken, symbol)
+            // );
             return _functionNode;
         }
 
@@ -59,13 +57,13 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var argList = tokens.Take(argListClose).ToArray();
 
             var arguments = Nodes.Functions.ArgumentsNode.Parse(_functionNode, scope, argList);
-            if (arguments.Arguments.Length != _function.Parameters.Length)
-            throw new Exceptions.InvalidArgumentsException(argList[0], _function, arguments.Arguments);
+            if (arguments.Arguments.Length != Function.Parameters.Length)
+            throw new Exceptions.InvalidArgumentsException(argList[0], Function, arguments.Arguments);
 
-            for (int i = 0; i < _function.Parameters.Length; ++i) {
-                var paramType = _function.Parameters[i].Type;
+            for (int i = 0; i < Function.Parameters.Length; ++i) {
+                var paramType = Function.Parameters[i].Type;
                 var argType = arguments.Arguments[i].Expression.Root.ReturnType;
-                if (paramType != argType) throw new Exceptions.InvalidArgumentsException(argList[0], _function, arguments.Arguments);
+                if (paramType != argType) throw new Exceptions.InvalidArgumentsException(argList[0], Function, arguments.Arguments);
             }
 
             return new Expression(
@@ -81,10 +79,10 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
             if (tokens.Length <= 2) return false;
 
-            var t0 = tokens[0];
-            var t1 = tokens[1];
-
-            if (!SymbolNode.CouldBeIdentifier(t0.Value, out var m0) || t1.Value != "(") return false;
+            var left = string.Join("", info.TokensLeft.Select(t => t.Value));
+            if (!SymbolNode.CouldBeIdentifier(left, out var m)) {
+                return false;
+            }
 
             return true;
         }

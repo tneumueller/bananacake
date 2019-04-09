@@ -25,11 +25,14 @@ namespace BCake.Runtime.Nodes.Operators {
                 })
                 .Cast<RuntimeValueNode>();
 
-            var functionNode = RuntimeScope.ResolveSymbolNode(Operator.Left.Root as SymbolNode);
-            var function = functionNode.Symbol as FunctionType;
+            // var functionNode = RuntimeScope.ResolveSymbolNode(Operator.Left.Root as SymbolNode);
+            // var function = functionNode.Symbol as FunctionType;
+            
+            var function = (Operator as OperatorInvoke).Function;
+            var functionNode = function.Root;
 
             var functionScope = RuntimeScope.ResolveRuntimeScope(function.Scope);
-            var runtimeFunction = new RuntimeFunction(function, new RuntimeScope(functionScope, function.Scope), argumentsValues.ToArray());
+            RuntimeFunction runtimeFunction;
 
             if (function.Name == "!constructor") {
                 var constructingType = function.Scope.GetClosestType();
@@ -39,14 +42,30 @@ namespace BCake.Runtime.Nodes.Operators {
                     RuntimeScope.ResolveRuntimeScope(function.Scope)
                 );
 
-                // this is guaranteed to exist because we declare it at parse time
-                functionScope.SetValue("this", typeInstance);
+                var constr = typeInstance.AccessMember("!constructor");
+                runtimeFunction = new RuntimeFunction(
+                    function,
+                    constr.RuntimeScope,
+                    argumentsValues.ToArray()
+                );
 
                 runtimeFunction.Evaluate();
                 return typeInstance;
-            }
+            } else {
+                var left = new RuntimeExpression(
+                    Operator.Left,
+                    RuntimeScope.ResolveRuntimeScope(Operator.Left.Scope)
+                ).Evaluate();
 
-            return runtimeFunction.Evaluate();
+                if (!(left is RuntimeFunctionValueNode)) throw new Exceptions.RuntimeException("Cannot invoke non-function", Operator.Left.DefiningToken);
+
+                runtimeFunction = new RuntimeFunction(
+                    left.Value as FunctionType,
+                    left.RuntimeScope,
+                    argumentsValues.ToArray()
+                );
+                return runtimeFunction.Evaluate();
+            }
         }
     }
 }

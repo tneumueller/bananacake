@@ -9,11 +9,17 @@ namespace BCake.Runtime.Nodes.Operators {
 
         public override RuntimeValueNode Evaluate() {
             var left = new RuntimeExpression(Operator.Left, RuntimeScope).Evaluate();
-            var right = new RuntimeExpression(
-                Operator.Right,
-                RuntimeScope.ResolveRuntimeScope(Operator.Left.ReturnType.Scope)
-            ).Evaluate();
-            return null;
+            if (left == null) {
+                throw new Exceptions.NullReferenceException((Operator.Left.Root as SymbolNode)?.Symbol, DefiningToken);
+            }
+            if (!(left is IAccessible)) {
+                throw new Exceptions.RuntimeException($"Symbol is not accessible", left.DefiningToken);
+            }
+
+            var leftAccessible = left as IAccessible;
+            return leftAccessible.AccessMember(
+                (Operator as OperatorAccess).MemberToAccess.Name
+            );
         }
     }
 }

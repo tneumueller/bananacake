@@ -33,20 +33,24 @@ namespace Demo {
 }
 
 class Demo2 {
-    public Demo2() {
+    public int abcdefg;
 
+    public Demo2() {
+        abcdefg = -55;
     }
 
     public int test1() {
-
+        abcdefg = 1337;
     }
 }
 
 int main() {
-    Demo2 testd;
+    Demo2 testd = new Demo2();
     testd.test1();
 
-    return modulo(5, 3);
+    testd.abcdefg = 5;
+
+    return testd.abcdefg;
 }
 
 int multiply(int a, int b) {

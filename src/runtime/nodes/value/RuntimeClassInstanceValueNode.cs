@@ -8,9 +8,33 @@ namespace BCake.Runtime.Nodes.Value {
     //     Value = false,
     //     ValueNodeType = typeof()
     // )]
-    public class RuntimeClassInstanceValueNode : RuntimeValueNode {
-        public RuntimeClassInstanceValueNode(SymbolNode node, ComplexType type, RuntimeScope scope) : base(node, scope) {
+    public class RuntimeClassInstanceValueNode : RuntimeValueNode, IAccessible {
+        public RuntimeClassInstanceValueNode(Node node, ComplexType type, RuntimeScope scope)
+            : base(node, ConstructScope(type, scope)) {
             Value = this;
+
+            RuntimeScope.SetValue("this", this);
+            foreach (var m in RuntimeScope.Scope.AllMembers) {
+                if (!(m.Value is FunctionType)) continue;
+
+                RuntimeScope.SetValue(
+                    m.Key,
+                    new RuntimeFunctionValueNode(
+                        m.Value as FunctionType,
+                        new RuntimeScope(
+                            RuntimeScope,
+                            m.Value.Scope
+                        )
+                    )
+                );
+            }
+        }
+
+        protected static RuntimeScope ConstructScope(ComplexType type, RuntimeScope parent) {
+            return new RuntimeScope(
+                parent,
+                type.Scope
+            );
         }
 
         public RuntimeValueNode AccessMember(string name) {

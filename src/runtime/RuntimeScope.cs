@@ -20,25 +20,16 @@ namespace BCake.Runtime {
             if (!RuntimeScopeForScope.ContainsKey(scope))
                 RuntimeScopeForScope.Add(scope, this);
 
-            foreach (var member in scope.AllMembers) InitDefault(member);
-        }
-
-        private void InitDefault(KeyValuePair<string, Type> member) {
-            RuntimeValueNode defaultValue = null;
-
-            switch (member.Value) {
-                case PrimitiveType t: break;
-                case FunctionType t: break;
-                case FunctionType.ParameterType t: break;
-                case Namespace t: break;
-                case ComplexType t: defaultValue = new RuntimeNullValueNode(new Parser.Syntax.Expressions.Nodes.Value.NullValueNode(new Parser.Token()), this); break;
-                case LocalVariableType t:
-                    t.Type
-                    break;
-                default: defaultValue = RuntimeValueNode.InstantiateWithDefaultValue(member.Value, this); break;
+            foreach (var member in scope.AllMembers) {
+                switch (member.Value) {
+                    case FunctionType f: {
+                        var val = new RuntimeFunctionValueNode(f, this);
+                        Values.Add(member.Key, val);
+                        break;
+                    }
+                    default: Values.Add(member.Key, null); break;
+                }
             }
-
-            Values.Add(member.Key, defaultValue);
         }
 
         public RuntimeValueNode GetValue(string symbol) {

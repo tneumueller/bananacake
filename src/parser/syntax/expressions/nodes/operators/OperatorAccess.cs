@@ -9,8 +9,15 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     )]
     public class OperatorAccess : Operator, IRValue {
         public Types.Type SymbolToAccess { get; protected set; }
+        public Types.Type MemberToAccess { get; protected set; }
 
         public override Types.Type ReturnType {
+            get {
+                return Right.ReturnType;
+            }
+        }
+
+        public Types.Type ReturnSymbol {
             get {
                 switch (Right.Root) {
                     case SymbolNode n: return n.Symbol;
@@ -43,6 +50,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
                 default:
                     SymbolToAccess = leftSymbol.Symbol;
+                    MemberToAccess = (Right.Root as SymbolNode).Symbol;
                     break;
             }
         }

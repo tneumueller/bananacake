@@ -103,5 +103,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorParseInfo.cs" />
     <Content Include="src\runtime\nodes\value\DefaultValueAttribute.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\value\NullValueNode.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeFunctionValueNode.cs" />
   </ItemGroup>
 </Project>

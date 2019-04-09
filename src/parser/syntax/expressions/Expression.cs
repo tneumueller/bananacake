@@ -33,8 +33,8 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorDivide),
 
             typeof(OperatorNew),
-            typeof(OperatorAccess),
-            typeof(OperatorInvoke)
+            typeof(OperatorInvoke),
+            typeof(OperatorAccess)
         };
 
         public Token DefiningToken { get; protected set; }
@@ -65,25 +65,31 @@ namespace BCake.Parser.Syntax.Expressions {
                 var bracketIndent = 0;
                 var opPos = tempTokens
                     .Select((t, index) => {
-                        var ret = new { t.Value, index = index + 1, bracketIndent };
-                        if (bracketsOpen.ToList().Contains(t.Value)) bracketIndent++;
-                        if (bracketsClose.ToList().Contains(t.Value)) bracketIndent--;
-                        return ret;
+                        var bracketIndentBefore = bracketIndent;
+                        if (bracketsOpen.ToList().Contains(t.Value)) bracketIndent += reverse ? -1 : 1;
+                        if (bracketsClose.ToList().Contains(t.Value)) bracketIndent += reverse ? 1 : -1;
+                        
+                        return new {
+                            t.Value,
+                            index = index + 1,
+                            bracketIndent = reverse ? bracketIndent : bracketIndentBefore
+                        };
                     })
                     .TakeWhile(pair => pair.Value.Trim() != opMeta.Symbol || pair.bracketIndent != 0)
                     .Select(pair => pair.index)
                     .LastOrDefault();
 
                 if (opPos >= tempTokens.Length) continue;
+                if (reverse) opPos = tempTokens.Length - 1 - opPos;
 
-                var tokensLeft = tempTokens.Take(opPos).ToArray();
-                var tokensRight = tempTokens.Skip(opPos + 1).ToArray();
+                var tokensLeft = tokens.Take(opPos).ToArray();
+                var tokensRight = tokens.Skip(opPos + 1).ToArray();
 
-                if (reverse) {
-                    var temp = tokensLeft;
-                    tokensLeft = tokensRight.Reverse().ToArray();
-                    tokensRight = temp.Reverse().ToArray();
-                }
+                // if (reverse) {
+                //     var temp = tokensLeft;
+                //     tokensLeft = tokensRight.Reverse().ToArray();
+                //     tokensRight = temp.Reverse().ToArray();
+                // }
 
                 var handler = GetParsePreflight(op);
                 if (handler != null) {
