@@ -10,7 +10,7 @@ namespace BCake.Parser.Syntax.Types.Native.Std {
             null,
             "print",
             new ParameterType[] {
-                 new ParameterType(null, IntValueNode.Type, "i")
+                 new ParameterType(null, StringValueNode.Type, "s")
             }
         ) {}
 

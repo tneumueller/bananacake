@@ -12,6 +12,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
             if ((node = Nodes.Value.IntValueNode.Parse(token)) != null) return node;
             if ((node = Nodes.Value.BoolValueNode.Parse(token)) != null) return node;
             if ((node = Nodes.Value.NullValueNode.Parse(token)) != null) return node;
+            if ((node = Nodes.Value.StringValueNode.Parse(token)) != null) return node;
 
             return null;
         }

@@ -1,9 +1,12 @@
 namespace Demo {
-    private class Mensch {
+    private class Human {
         private int age;
+        public string name;
 
-        public Mensch(int _age) {
+        public Human(int _age, string _name) {
             age = _age;
+            name = _name;
+            println("New human " + name + "!");   
         }
 
         public bool isAdult() {
@@ -13,37 +16,9 @@ namespace Demo {
         public void birthday() {
             age = age + 1;
         }
-    }
 
-    public class Program {
-        private int a;
-        private bool b;
-
-        private Program() {
-
-        }
-
-        public int getA() {
-            Demo2 d;
-            Program p;
-            int i;
-
-            i = 5;
-            d = new Demo2();
-            p = new Program();
-
-            if (i + 1 > 5) {
-                int xyz;
-                xyz = 0;
-                i = i + 1;
-            }
-
-            return multiply(d, 1, 2, false);
-        }
-
-        public int multiply(Demo2 a, int b, int c, bool d) {
-            c = 5;
-            return b + c;
+        public void makeSiblings(Human h) {
+            println(name + " and " + h.name + " are now siblings");
         }
     }
 }
@@ -61,38 +36,29 @@ class Demo2 {
 }
 
 int main() {
-    Demo.Mensch mensch1 = new Demo.Mensch(18);
-    Demo.Mensch mensch2 = new Demo.Mensch(17);
+    Demo.Human human1 = new Demo.Human(21, "Thomas");
+    Demo.Human human2 = new Demo.Human(17, "Carina");
+    human1.makeSiblings(human2);
 
-    if (mensch1.isAdult()) {
-        println(1111);
+    if (human1.isAdult()) {
+        println(human1.name + " is adult");
     }
-    if (mensch2.isAdult()) {
-        println(2222);
+    if (human2.isAdult()) {
+        println(human2.name + " is adult");
     }
-    mensch2.birthday();
-    if (mensch2.isAdult()) {
-        println(3333);
+    human2.birthday();
+    if (human2.isAdult()) {
+        println(human2.name + " is now finally adult");
+    }
+
+    if ("123" == "1234") {
+        println("\"123\" == \"1234\"");
     }
 
     Demo2 testd = new Demo2();
-    print(testd.abcdefg);
     testd.test1();
-
-    println(testd.abcdefg);
 
     testd.abcdefg = 5;
 
     return testd.abcdefg;
-}
-
-int multiply(int a, int b) {
-    return a * b;
-}
-
-int modulo(int a, int b) {
-    if (a < b) {
-        return a;
-    }
-    return modulo(a - b, b);
 }

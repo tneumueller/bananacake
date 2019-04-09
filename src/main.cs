@@ -17,15 +17,15 @@ namespace BCake {
 
             ParseArguments(args);
 
-            Namespace globalNamespace = null;
-            var parsers = new List<Parser.Parser>();
-
-            foreach (var f in Files) {
-                Console.WriteLine(f.FullName);
-                parsers.Add(new Parser.Parser(f.FullName));
-            }
-
             try {
+                Namespace globalNamespace = null;
+                var parsers = new List<Parser.Parser>();
+
+                foreach (var f in Files) {
+                    Console.WriteLine(f.FullName);
+                    parsers.Add(new Parser.Parser(f.FullName));
+                }
+
                 foreach (var p in parsers) globalNamespace = p.ParseRoot();
 
                 var namespaces = globalNamespace.Scope.AllMembers.Select(elem => elem.Value).Where(elem => elem is Namespace).Cast<Namespace>();

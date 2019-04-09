@@ -35,7 +35,8 @@ namespace BCake.Parser.Syntax {
         private void InitPrimitives() {
             Scope.Declare(
                 IntValueNode.Type,
-                BoolValueNode.Type
+                BoolValueNode.Type,
+                StringValueNode.Type
             );
         }
 

@@ -107,5 +107,10 @@
     <Content Include="src\parser\syntax\types\native\std\print.function.cs" />
     <Content Include="src\parser\syntax\types\NativeFunctionType.cs" />
     <Content Include="src\runtime\nodes\value\RuntimeNamespaceValueNode.cs" />
+    <Content Include="src\parser\exceptions\EndOfFileException.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\value\StringValueNode.cs" />
+    <Content Include="src\parser\syntax\types\native\std\println.function.cs" />
+    <Content Include="src\runtime\exceptions\OutOfBoundsException.cs" />
+    <Content Include="src\runtime\nodes\value\RuntimeStringValueNode.cs" />
   </ItemGroup>
 </Project>

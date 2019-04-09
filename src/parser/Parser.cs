@@ -14,7 +14,7 @@ namespace BCake.Parser
 {
     public class Parser
     {
-        private static string rxSeparators = @"(\s*([\(\).,:;{}])\s*|\s+([\(\).,:;{}])?\s*)";
+        private static string rxSeparators = @"(\s*([\(\).,:;{}""])\s*|\s+([\(\).,:;{}""])?\s*)";
 
         public string Filename { get; private set; }
         private Token[] tokens;
@@ -55,17 +55,42 @@ namespace BCake.Parser
                 });
                 if (i < parts.Length) {
                     var separator = parts[i].Value.Trim();
-                    if (separator.Length > 0) tokens.Add(new Token {
-                        Value = separator,
-                        FilePath = Filename,
-                        Line = line,
-                        Column = parts[i].Index - lineBegin + 1
-                    });
+                    if (separator == "\"") {
+                        // beginning of string literal
+                        var partUntrimmed = parts[i].Value;
+                        var trimmedFront = partUntrimmed.Length - partUntrimmed.TrimStart().Length;
+                        var str = findString(content, parts[i].Index + trimmedFront, out var lineBreaks, out var column, out var end);
+                        if (str == null) throw new EndOfFileException(new Token {
+                            FilePath = Filename,
+                            Line = line,
+                            Column = lineBreaks > 0 ? column : parts[i].Index - lineBegin + 1
+                        });
 
-                    var linebreaks = parts[i].Value.Count(c => c == '\n');
-                    if (linebreaks > 0) {
-                        line += linebreaks;
-                        lineBegin = parts[i].Index + parts[i].Value.LastIndexOf('\n') + 1;
+                        tokens.Add(new Token {
+                            Value = str,
+                            FilePath = Filename,
+                            Line = line,
+                            Column = lineBreaks > 0 ? column : parts[i].Index - lineBegin + 1
+                        });
+
+                        line += lineBreaks;
+                        if (lineBreaks > 0) lineBegin = end - column;
+
+                        while (parts[i].Index < end) i++;
+                        i--;
+                    } else {
+                        if (separator.Length > 0) tokens.Add(new Token {
+                            Value = separator,
+                            FilePath = Filename,
+                            Line = line,
+                            Column = parts[i].Index - lineBegin + 1
+                        });
+
+                        var linebreaks = parts[i].Value.Count(c => c == '\n');
+                        if (linebreaks > 0) {
+                            line += linebreaks;
+                            lineBegin = parts[i].Index + parts[i].Value.LastIndexOf('\n') + 1;
+                        }
                     }
                 }
             }
@@ -240,6 +265,52 @@ namespace BCake.Parser
             return -1;
         }
 
+        public static string findString(string content, int startPos, out int lineBreaks, out int column, out int end) {
+            var mode = StringMode.String;
+            var escapeNext = false;
+            var result = "";
+            lineBreaks = 0;
+            column = 0;
+            end = -1;
+
+            var prefix = "";
+            var stringBegin = content.IndexOf("\"", startPos);
+            if (stringBegin - startPos > 0) {
+                prefix = content.Substring(startPos, stringBegin - startPos);
+            }
+
+            for (int i = stringBegin + 1; i < content.Length; ++i) {
+                var c = content[i];
+
+                switch (c) {
+                    case '"':
+                        if (!escapeNext) {
+                            end = i + 1;
+                            return prefix + "\"" + result + "\"";
+                        }
+                        escapeNext = false;
+                        break;
+
+                    case '\\':
+                        if (!escapeNext) {
+                            escapeNext = true;
+                            continue;
+                        }
+                        break;
+
+                    case '\n':
+                        lineBreaks++;
+                        column = 0;
+                        break;
+                }
+
+                column++;
+                result += c;
+            }
+
+            return null;
+        }
+
         public static int findListItemEnd(Token[] tokens, int startTokenIndex) {
             var brackets = new string[] {"(", "{", "[", "<"};
 
@@ -250,6 +321,11 @@ namespace BCake.Parser
             }
 
             return -1;
+        }
+
+        public enum StringMode {
+            None = 0,
+            String
         }
     }
 

@@ -17,6 +17,7 @@ namespace BCake.Runtime.Nodes.Value {
                 case IntValueNode i: return new RuntimeIntValueNode(i, scope);
                 case BoolValueNode b: return new RuntimeBoolValueNode(b, scope);
                 case NullValueNode n: return new RuntimeNullValueNode(n, scope);
+                case StringValueNode s: return new RuntimeStringValueNode(s, scope);
                 //case Type t: 
             }
 
