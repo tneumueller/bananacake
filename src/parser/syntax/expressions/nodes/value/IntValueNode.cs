@@ -24,7 +24,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
             if ((m = Regex.Match(token.Value, rxOctIntLiteral)).Success) {
                 return new IntValueNode(token, Convert.ToInt32(m.Groups[0].Value, 8));
             } else if ((m = Regex.Match(token.Value, rxDecIntLiteral)).Success) {
-                return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 10));
+                return new IntValueNode(token, Convert.ToInt32(m.Groups[0].Value, 10));
             } else if ((m = Regex.Match(token.Value, rxHexIntLiteral)).Success) {
                 return new IntValueNode(token, Convert.ToInt32(m.Groups[1].Value, 16));
             } else if ((m = Regex.Match(token.Value, rxBinIntLiteral)).Success) {

@@ -6,6 +6,7 @@ using BCake.Parser.Exceptions;
 using BCake.Parser.Syntax.Types;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
+using BCake.Parser.Syntax.Types.Native.Std;
 
 namespace BCake.Parser.Syntax {
     public class Namespace : Types.ComplexType {
@@ -16,6 +17,7 @@ namespace BCake.Parser.Syntax {
             Global = this;
 
             InitPrimitives();
+            InitNativeFunctions();
         }
         public Namespace(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens)
             : base(parent, name, access) {
@@ -34,6 +36,13 @@ namespace BCake.Parser.Syntax {
             Scope.Declare(
                 IntValueNode.Type,
                 BoolValueNode.Type
+            );
+        }
+
+        private void InitNativeFunctions() {
+            Scope.Declare(
+                Print.Implementation,
+                Println.Implementation
             );
         }
     }

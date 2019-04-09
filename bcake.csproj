@@ -104,5 +104,7 @@
     <Content Include="src\runtime\nodes\value\DefaultValueAttribute.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\value\NullValueNode.cs" />
     <Content Include="src\runtime\nodes\value\RuntimeFunctionValueNode.cs" />
+    <Content Include="src\parser\syntax\types\native\std\print.function.cs" />
+    <Content Include="src\parser\syntax\types\NativeFunctionType.cs" />
   </ItemGroup>
 </Project>

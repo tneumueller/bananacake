@@ -29,7 +29,8 @@ namespace BCake.Runtime.Nodes {
         }
 
         public override Nodes.Value.RuntimeValueNode Evaluate() {
-            return new RuntimeScopeNode(RuntimeScope, Function.Root).Evaluate();
+            if (Function is NativeFunctionType) return (Function as NativeFunctionType).Evaluate(Arguments);
+            else return new RuntimeScopeNode(RuntimeScope, Function.Root).Evaluate();
         }
     }
 }

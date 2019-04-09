@@ -46,7 +46,10 @@ class Demo2 {
 
 int main() {
     Demo2 testd = new Demo2();
+    print(testd.abcdefg);
     testd.test1();
+
+    println(testd.abcdefg);
 
     testd.abcdefg = 5;
 

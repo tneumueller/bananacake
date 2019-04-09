@@ -8,7 +8,8 @@ namespace BCake.Runtime.Nodes {
     public class RuntimeScopeNode : RuntimeNode {
         public ScopeNode ScopeNode { get; protected set; }
 
-        public RuntimeScopeNode(RuntimeScope parent, ScopeNode scopeNode) : base(scopeNode.DefiningToken, new RuntimeScope(parent, scopeNode.Scope)) {
+        public RuntimeScopeNode(RuntimeScope parent, ScopeNode scopeNode)
+            : base(scopeNode.DefiningToken, new RuntimeScope(parent, scopeNode.Scope)) {
             ScopeNode = scopeNode;
         }
 

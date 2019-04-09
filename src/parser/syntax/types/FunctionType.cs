@@ -14,6 +14,12 @@ namespace BCake.Parser.Syntax.Types {
         public ScopeNode Root { get; protected set; }
         public ParameterType[] Parameters { get; protected set; }
 
+        protected FunctionType(Type returnType, string name, ParameterType[] parameters)
+            : base(Namespace.Global.Scope, name, "public") {
+            ReturnType = returnType;
+            Parameters = parameters;
+        }
+
         public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] parameters, Token[] tokens)
             : base(null, name, access) {
             DefiningToken = token;
