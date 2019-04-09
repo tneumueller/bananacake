@@ -16,9 +16,17 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 _left = value;
                 if (value == null) return;
 
-                if (needsLValue && !(value.Root is ILValue))
+                Node lvalue = value.Root;
+                if (value.Root is OperatorAccess) {
+                    lvalue = new SymbolNode(
+                        value.Root.DefiningToken,
+                        (value.Root as OperatorAccess).ReturnSymbol
+                    );
+                }
+
+                if (needsLValue && !(lvalue is ILValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeLeft);
-                if (leftNeedsNone && (value.Root is ILValue || value.Root is IRValue))
+                if (leftNeedsNone && (lvalue is ILValue || lvalue is IRValue))
                     throw new Exceptions.InvalidArgumentException(value.DefiningToken, typeLeft);
 
                 CheckReturnTypes(value);
