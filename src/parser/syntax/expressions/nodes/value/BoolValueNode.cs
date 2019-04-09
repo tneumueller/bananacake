@@ -12,7 +12,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
 
         public BoolValueNode(Token token, bool value) : base(token) {
             Value = value;
-            Console.WriteLine("New BoolValueNode with value " + Value);
         }
 
         public new static ValueNode Parse(Token token) {

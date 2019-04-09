@@ -14,8 +14,6 @@ namespace BCake.Parser.Syntax.Types {
             : base(scope, name, type.DefaultValue) {
             DefiningToken = token;
             Type = type;
-
-            Console.WriteLine($"New local variable {Type.FullName} {FullName}");
         }
     }
 }

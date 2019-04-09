@@ -26,9 +26,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             }
         }
 
-        public OperatorAccess() {
-            System.Console.WriteLine("New OperatorAccess");
-        }
+        public OperatorAccess() {}
 
         protected override Expression ParseRight(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             if (Left == null) throw new System.Exception("Left hand side of access operator must not be null when parsing right hand side");

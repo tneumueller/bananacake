@@ -21,10 +21,6 @@ namespace BCake.Runtime.Nodes {
         }
 
         public override RuntimeValueNode Evaluate() {
-            if (!(SymbolNode.Symbol is Parser.Syntax.Types.PrimitiveType)) {
-                System.Console.WriteLine("reading value of complex type");
-            }
-
             return RuntimeScope.GetValue(SymbolNode.Symbol.Name);
         }
     }

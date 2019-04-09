@@ -6,9 +6,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public class OperatorNew : Operator, IRValue {
         public Types.FunctionType ParentFunction { get; protected set; }
 
-        public OperatorNew() {
-            System.Console.WriteLine("New OperatorNew");
-        }
+        public OperatorNew() {}
 
         public override void OnCreated(Token token, Scopes.Scope scope) {
             

@@ -14,8 +14,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Functions {
         public ArgumentsNode(Token token, Expression functionNode, Argument[] arguments) : base(token) {
             Arguments = arguments;
             FunctionNode = functionNode;
-
-            System.Console.WriteLine("New ArgumentsNode");
         }
 
         public static ArgumentsNode Parse(Expression functionNode, Scopes.Scope scope, Token[] tokens) {

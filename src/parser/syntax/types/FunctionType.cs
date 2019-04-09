@@ -27,7 +27,6 @@ namespace BCake.Parser.Syntax.Types {
             Scope.Declare(parameters);
 
             var argListStr = string.Join(", ", parameters.Select(a => $"{a.Type.FullName} {a.Name}"));
-            Console.WriteLine($"New function {Access} {ReturnType.FullName} {FullName}({argListStr})");
         }
 
         public static ParameterType[] ParseArgumentList(Scopes.Scope scope, Token[] tokens) {

@@ -14,8 +14,6 @@ namespace BCake.Parser.Syntax.Types {
             :base(parent.Scope, name, access) {
             DefiningToken = token;
             Type = type;
-
-            Console.WriteLine($"New variable {Access} {Type.FullName} {FullName}");
         }
     }
 }

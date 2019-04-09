@@ -11,9 +11,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public Types.FunctionType Function { get; protected set; }
         private Expression _functionNode;
 
-        public OperatorInvoke() {
-            System.Console.WriteLine("New OperatorInvoke");
-        }
+        public OperatorInvoke() {}
 
         protected override Expression ParseLeft(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             Types.Type symbol;

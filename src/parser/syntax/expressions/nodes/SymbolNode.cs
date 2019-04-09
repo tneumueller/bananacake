@@ -23,8 +23,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
 
         public SymbolNode(Token token, Types.Type symbol) : base(token) {
             Symbol = symbol;
-
-            Console.WriteLine("New symbol node " + Symbol.FullName);
         }
 
         public static bool CouldBeIdentifier(string s, out Match m) {

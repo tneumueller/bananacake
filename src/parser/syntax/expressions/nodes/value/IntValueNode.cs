@@ -16,7 +16,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Value {
 
         public IntValueNode(Token token, int value) : base(token) {
             Value = value;
-            Console.WriteLine("New IntValueNode with value " + Value);
         }
 
         public new static ValueNode Parse(Token token) {

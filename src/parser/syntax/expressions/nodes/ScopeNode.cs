@@ -15,11 +15,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
 
         public static ScopeNode Parse(Token token, Scopes.Scope parentScope, Token[] tokens) {
             var expressionDelimiters = new string[] {";", "{"};
-
-            Console.WriteLine("Parsing scopenode");
-            foreach (var t in tokens) Console.Write(t.Value);
-            Console.WriteLine();
-
             var scope = new Scopes.Scope(parentScope);
 
             var pos = 0;
