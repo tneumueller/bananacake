@@ -3,10 +3,12 @@ namespace Demo {
         private int age;
         public string name;
 
-        public Human(int _age, string _name) {
-            age = _age;
+        public Human(this.age, this.name) {
+            println("New human " + name + "!");
+        }
+
+        public void setName(string _name) {
             name = _name;
-            println("New human " + name + "!");   
         }
 
         public bool isAdult() {

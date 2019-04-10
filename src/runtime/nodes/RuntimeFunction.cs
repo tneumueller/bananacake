@@ -11,20 +11,21 @@ namespace BCake.Runtime.Nodes {
             RuntimeScope scope,
             RuntimeValueNode[] arguments
         )
-            : base(function.DefiningToken, scope) {
+                : base(function.DefiningToken, scope) {
             Function = function;
             Arguments = arguments;
 
-            RuntimeScope = scope = new RuntimeScope(
-                scope,
-                function.Scope
-            );
+            RuntimeScope = scope;
 
             for (var i = 0; i < Function.Parameters.Length; ++i) {
-                scope.SetValue(
-                    Function.Parameters[i].Name,
-                    arguments[i]
-                );
+                var param = Function.Parameters[i];
+                var arg = arguments[i];
+
+                if (param is FunctionType.InitializerParameterType) {
+                    RuntimeScope.Parent.SetValue(param.Name, arg);
+                }
+
+                scope.SetValue(param.Name, arg);
             }
         }
 

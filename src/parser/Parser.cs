@@ -148,6 +148,17 @@ namespace BCake.Parser
 
                             // +1 in Take to include closing bracket, makes things easier in the parse method
                             argList = FunctionType.ParseArgumentList(targetScope, tokens.Skip(argListBegin + 1).Take(i - argListBegin).ToArray());
+
+                            if (name != "!constructor") {
+                                foreach (var param in argList) {
+                                    if (param is FunctionType.InitializerParameterType) {
+                                        throw new Exceptions.InvalidParameterPropertyInitializerException(
+                                            param as FunctionType.InitializerParameterType,
+                                            "initializer parameters are only allowed in constructors"
+                                        );
+                                    }
+                                }
+                            }
                         }
                         else throw new UnexpectedTokenException(token);
                         break;
@@ -266,7 +277,9 @@ namespace BCake.Parser
         }
 
         public static string findString(string content, int startPos, out int lineBreaks, out int column, out int end) {
-            var mode = StringMode.String;
+            // currently unused but will be used in the future for different kinds of strings
+            // e.g. strings with a $ prefix where variables can be interpolated
+            var mode = StringMode.String; 
             var escapeNext = false;
             var result = "";
             lineBreaks = 0;

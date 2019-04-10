@@ -116,6 +116,28 @@ Currently, a class can only have one constructor. It is defined like this:
 }
 ```
 
+A parameter can be an implicit initializer.
+```
+private class Human {
+    private int age;
+    public string name;
+
+    public Human(this.age, this.name) {}
+}
+```
+is equivalent to
+```
+private class Human {
+    private int age;
+    public string name;
+
+    public Human(int _age, string _name) {
+        age = _age;
+        name = _name;
+    }
+}
+```
+
 #### Members
 
 Classes can also have members, e.g.
