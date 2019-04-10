@@ -25,6 +25,7 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorSmaller),
             typeof(OperatorSmallerEqual),
             typeof(OperatorEqual),
+            typeof(OperatorNotEqual),
 
             // arithmetic
             typeof(OperatorPlus),

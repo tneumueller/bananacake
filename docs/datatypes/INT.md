@@ -4,7 +4,7 @@
 
 | Operator       | Description              |
 |----------------|--------------------------|
-| `> >= < <= ==` | Comparison               |
+| `> >= < <= == !=` | Comparison               |
 | `+ -`          | Arithmetic summation     |
 | `* /`          | Arithmetic factorization |
 

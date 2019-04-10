@@ -8,7 +8,7 @@
 |----------------|--------------------------|
 | `return`       | Return                   |
 | `=`            | Assignment               |
-| `> >= < <= ==` | Comparison               |
+| `> >= < <= == !=` | Comparison               |
 | `+ -`          | Arithmetic summation     |
 | `* /`          | Arithmetic factorization |
 | `new`          | Instantiation            |
@@ -25,7 +25,7 @@ Returns the result of a following expression from the nearest function (just wha
 
 Assigns the value of an expression on the right hand side to a LValue on the left hand side.
 
-#### Comparison `> >= < <= ==`
+#### Comparison `> >= < <= == !=`
 
 Compares two values for relative equality. To see how comparison operators work for each primitive datatype, go to the individual documentation (see [Datatypes: Primitive](#datatypes-primitive)).
 

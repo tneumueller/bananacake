@@ -1,3 +1,3 @@
 # The Boolean datatype
 
-WIP
+- `== !=` Compares booleans for equality

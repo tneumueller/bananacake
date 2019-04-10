@@ -112,5 +112,7 @@
     <Content Include="src\parser\syntax\types\native\std\println.function.cs" />
     <Content Include="src\runtime\exceptions\OutOfBoundsException.cs" />
     <Content Include="src\runtime\nodes\value\RuntimeStringValueNode.cs" />
+    <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorNotEqual.cs" />
+    <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorSmaller.cs" />
   </ItemGroup>
 </Project>
