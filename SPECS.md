@@ -150,6 +150,23 @@ public class Test {
 
 The can also have the access levels as seen above.
 
+#### Explicit caster functions
+
+Classes can define how they can be casted to different datatypes by defining a caster function:
+
+```
+public class Human {
+    public string firstName;
+    public string lastName;
+
+    public Human(this.firstName, this.lastName) {}
+
+    public cast string() {
+        return firstName + " " + lastName;
+    }
+}
+```
+
 ### Namespaces
 
 Namespaces encapsulate classes, enums and other types. They can be used to add structure to your code and make it more readable. A namespace is defined as followed:
