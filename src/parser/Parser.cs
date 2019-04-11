@@ -127,37 +127,34 @@ namespace BCake.Parser
 
                     case "namespace":
                     case "class":
+                    case "cast":
                         if (!allowedTypes.Contains(token.Value)) throw new UnexpectedTokenException(token);
                         type = token.Value;
                         break;
 
                     case "(":
-                        if (type == null) {
-                            type = "function";
+                        if (type == null) type = "function";
+                        if (type == "function" || type == "cast") {
                             if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
 
-                            if (valueType == null) throw new UnexpectedTokenException(token);
-                            if (name == null && valueType == targetScope.Type) {
-                                name = "!constructor"; // the ! is used as a kind of "escape" because it is impossible for a user created function to contain a ! in its name
-                            } else if (name == null) {
-                                throw new UnexpectedTokenException(token);
-                            }
-
-                            var argListBegin = i;
-                            i = Parser.findClosingScope(tokens, i);
-
-                            // +1 in Take to include closing bracket, makes things easier in the parse method
-                            argList = FunctionType.ParseArgumentList(targetScope, tokens.Skip(argListBegin + 1).Take(i - argListBegin).ToArray());
-
-                            if (name != "!constructor") {
-                                foreach (var param in argList) {
-                                    if (param is FunctionType.InitializerParameterType) {
-                                        throw new Exceptions.InvalidParameterPropertyInitializerException(
-                                            param as FunctionType.InitializerParameterType,
-                                            "initializer parameters are only allowed in constructors"
-                                        );
-                                    }
-                                }
+                            if (type == "function") {
+                                parseFunction(
+                                    valueType,
+                                    name, out name,
+                                    out argList,
+                                    targetScope,
+                                    i, out i,
+                                    tokens
+                                );
+                            } else if (type == "cast") {
+                                parseCaster(
+                                    valueType,
+                                    name, out name,
+                                    out argList,
+                                    targetScope,
+                                    i, out i,
+                                    tokens
+                                );
                             }
                         }
                         else throw new UnexpectedTokenException(token);
@@ -188,7 +185,7 @@ namespace BCake.Parser
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
                                 )
                             );
-                        } else if (type == "function") {
+                        } else if (type == "function" || type == "cast") {
                             var newFunction = new FunctionType(
                                 tokens[i - 1],
                                 targetScope.Type,
@@ -199,6 +196,7 @@ namespace BCake.Parser
                                 tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
                             );
                             targetScope.Declare(newFunction);
+                            argList = null;
                         }
 
                         access = type = name = null;
@@ -251,6 +249,71 @@ namespace BCake.Parser
                         }
                 }
             }
+        }
+
+        private static void parseFunction(
+            Syntax.Types.Type valueType,
+            string _name, out string name,
+            out FunctionType.ParameterType[] argList,
+            Scope targetScope,
+            int _tokenIndex, out int tokenIndex,
+            Token[] tokens
+        ){
+            tokenIndex = _tokenIndex;
+            name = _name;
+
+            var token = tokens[tokenIndex];
+
+            if (valueType == null) throw new UnexpectedTokenException(token);
+                            
+            if (name == null && valueType == targetScope.Type) {
+                name = "!constructor"; // the ! is used as a kind of "escape" because it is impossible for a user created function to contain a ! in its name
+            } else if (name == null) {
+                throw new UnexpectedTokenException(token);
+            }
+
+            var argListBegin = tokenIndex;
+            tokenIndex = Parser.findClosingScope(tokens, tokenIndex);
+
+            // +1 in Take to include closing bracket, makes things easier in the parse method
+            argList = FunctionType.ParseArgumentList(targetScope, tokens.Skip(argListBegin + 1).Take(tokenIndex - argListBegin).ToArray());
+
+            if (name != "!constructor") {
+                foreach (var param in argList) {
+                    if (param is FunctionType.InitializerParameterType) {
+                        throw new Exceptions.InvalidParameterPropertyInitializerException(
+                            param as FunctionType.InitializerParameterType,
+                            "initializer parameters are only allowed in constructors"
+                        );
+                    }
+                }
+            }
+        }
+
+        private static void parseCaster(
+            Syntax.Types.Type valueType,
+            string _name, out string name,
+            out FunctionType.ParameterType[] argList,
+            Scope targetScope,
+            int _tokenIndex, out int tokenIndex,
+            Token[] tokens
+        ) {
+            tokenIndex = _tokenIndex;
+            name = $"!as_{ valueType.Name }";
+
+            parseFunction(
+                valueType,
+                name, out name,
+                out argList,
+                targetScope,
+                tokenIndex, out tokenIndex,
+                tokens
+            );
+
+            if (argList.Length > 0) throw new Exceptions.InvalidCasterDefinitionException(
+                argList.First().DefiningToken,
+                "Casters may not have parameters"
+            );
         }
 
         public static int findClosingScope(Token[] tokens, int startTokenIndex) {

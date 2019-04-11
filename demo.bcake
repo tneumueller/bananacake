@@ -8,6 +8,7 @@ namespace Demo {
         }
 
         public void setName(string _name) {
+            println("Renamed " + name + " to " + _name);
             name = _name;
         }
 
@@ -21,6 +22,10 @@ namespace Demo {
 
         public void makeSiblings(Human h) {
             println(name + " and " + h.name + " are now siblings");
+        }
+
+        public cast string() {
+            return name;
         }
     }
 }

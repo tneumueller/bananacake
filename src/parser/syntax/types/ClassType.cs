@@ -19,7 +19,7 @@ namespace BCake.Parser.Syntax.Types {
         }
 
         public override void ParseInner() {
-            Parser.ParseTypes(Scope, tokens, new string[] { "function", "variable" });
+            Parser.ParseTypes(Scope, tokens, new string[] { "function", "cast", "variable" });
         }
     }
 }
