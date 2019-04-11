@@ -167,6 +167,16 @@ public class Human {
 }
 ```
 
+Caster functions must not define parameters. They can have the same access levels all other members can have, that means that they can only be used in the correct scope.
+
+In general:
+
+```
+[<access-level>] cast <datatype>() {
+    // ...
+}
+```
+
 ### Namespaces
 
 Namespaces encapsulate classes, enums and other types. They can be used to add structure to your code and make it more readable. A namespace is defined as followed:
