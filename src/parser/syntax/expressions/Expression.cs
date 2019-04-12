@@ -33,6 +33,8 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorMultiply),
             typeof(OperatorDivide),
 
+            typeof(OperatorCast),
+
             typeof(OperatorNew),
             typeof(OperatorInvoke),
             typeof(OperatorAccess)
@@ -59,9 +61,17 @@ namespace BCake.Parser.Syntax.Expressions {
             if (tokens.Length < 1) return null;
 
             var leftSideJoined = string.Join("", tokens.Take(tokens.Length - 1).Select(t => t.Value));
+            var couldBeCompositeType = tokens
+                .Take(tokens.Length - 1)
+                .Select((token, index) => new { token, index })
+                .Where(pair => pair.index % 2 == 1)
+                .Select(pair => pair.token)
+                .All(token => token.Value == ".");
+
             if (tokens.Length >= 2
+                && couldBeCompositeType
                 && SymbolNode.CouldBeIdentifier(tokens.Last().Value, out var mName)
-                && SymbolNode.CouldBeIdentifier(leftSideJoined,out var mType)
+                && SymbolNode.CouldBeIdentifier(leftSideJoined, out var mType)
                 && !OperatorSymbols.Contains(leftSideJoined)
             ) {
                 var tLast = tokens.Last();

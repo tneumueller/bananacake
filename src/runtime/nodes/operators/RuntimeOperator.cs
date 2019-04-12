@@ -32,6 +32,8 @@ namespace BCake.Runtime.Nodes.Operators {
                 case OperatorInvoke op: return new RuntimeOperatorInvoke(op, scope);
                 case OperatorAccess op: return new RuntimeOperatorAccess(op, scope);
                 case OperatorNew op: return new RuntimeOperatorNew(op, scope);
+
+                case OperatorCast op: return new RuntimeOperatorCast(op, scope);
             }
 
             return null;

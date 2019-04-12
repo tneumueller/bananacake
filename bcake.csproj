@@ -115,5 +115,7 @@
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorNotEqual.cs" />
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorSmaller.cs" />
     <Content Include="src\parser\exceptions\InvalidCasterDefinitionException.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorCast.cs" />
+    <Content Include="src\runtime\nodes\operators\RuntimeOperatorCast.cs" />
   </ItemGroup>
 </Project>

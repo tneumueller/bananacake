@@ -4,16 +4,17 @@
 
 ### Operators
 
-| Operator       | Description              |
-|----------------|--------------------------|
-| `return`       | Return                   |
-| `=`            | Assignment               |
+| Operator          | Description              |
+|-------------------|--------------------------|
+| `return`          | Return                   |
+| `=`               | Assignment               |
 | `> >= < <= == !=` | Comparison               |
-| `+ -`          | Arithmetic summation     |
-| `* /`          | Arithmetic factorization |
-| `new`          | Instantiation            |
-| `(`            | Function call            |
-| `.`            | Access                   |
+| `+ -`             | Arithmetic summation     |
+| `* /`             | Arithmetic factorization |
+| `as`              | Explicit cast            |
+| `new`             | Instantiation            |
+| `(`               | Function call            |
+| `.`               | Access                   |
 
 Operators are evaluated top down in the order of this list, so `.` binds the strongest and `return` the weakest.
 
@@ -36,6 +37,16 @@ Do just what you'd expect. Some special behaviours exist, look at the individual
 #### Arithmetic factorization `* /`
 
 Do just what you'd expect. Some special behaviours exist, look at the individual documentation for each [primitive datatype](#datatypes-primitive).
+
+#### Explicit cast `as`
+
+You can convert symbols to other types by using the `as` operator, e.g.:
+
+```
+println(3 as string);
+```
+
+You can also cast class types with the `as` operator, however you need to explicitly define how the cast should be done. See [Explicit caster functions](#Explicit-caster-functions).
 
 #### Instantiation `new`
 
