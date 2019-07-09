@@ -1,9 +1,11 @@
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators.Comparison;
+using BCake.Parser.Syntax.Expressions.Nodes.Operators.Logical;
 using BCake.Runtime.Nodes.Value;
 using BCake.Runtime.Nodes.Expressions;
 using BCake.Runtime.Nodes.Operators.Comparison;
+using BCake.Runtime.Nodes.Operators.Logical;
 
 namespace BCake.Runtime.Nodes.Operators {
     public abstract class RuntimeOperator : RuntimeNode {
@@ -15,6 +17,8 @@ namespace BCake.Runtime.Nodes.Operators {
 
         public new static RuntimeOperator Create(Node node, RuntimeScope scope) {
             switch (node) {
+                case OperatorLogicalOr op: return new RuntimeOperatorLogicalOr(op, scope);
+
                 case OperatorPlus op: return new RuntimeOperatorPlus(op, scope);
                 case OperatorMinus op: return new RuntimeOperatorMinus(op, scope);
                 case OperatorMultiply op: return new RuntimeOperatorMultiply(op, scope);

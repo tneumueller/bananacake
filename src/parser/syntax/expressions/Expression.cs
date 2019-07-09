@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using BCake.Parser.Syntax.Expressions.Nodes;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators;
 using BCake.Parser.Syntax.Expressions.Nodes.Operators.Comparison;
+using BCake.Parser.Syntax.Expressions.Nodes.Operators.Logical;
 using BCake.Parser.Exceptions;
 
 namespace BCake.Parser.Syntax.Expressions {
@@ -18,6 +19,9 @@ namespace BCake.Parser.Syntax.Expressions {
 
             // assigment
             typeof(OperatorAssign),
+
+            // logical
+            typeof(OperatorLogicalOr),
             
             // comparison
             typeof(OperatorGreater),

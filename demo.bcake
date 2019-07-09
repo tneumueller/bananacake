@@ -64,6 +64,10 @@ int main() {
         println("\"123\" != \"1234\"");
     }
 
+    if (human1.name == human2.name || human2.name == "Carina") {
+        println("Logical or worked");
+    }
+
     Demo2 testd = new Demo2();
     testd.test1();
 

@@ -117,5 +117,10 @@
     <Content Include="src\parser\exceptions\InvalidCasterDefinitionException.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorCast.cs" />
     <Content Include="src\runtime\nodes\operators\RuntimeOperatorCast.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\logical\LogicalOrOperator.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\logical\OperatorLogicalOr.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\logical\LogicalOperator.cs" />
+    <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorGreaterEqual.cs" />
+    <Content Include="src\runtime\nodes\operators\logical\RuntimeOperatorLogicalOr.cs" />
   </ItemGroup>
 </Project>
