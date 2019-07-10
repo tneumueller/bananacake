@@ -122,5 +122,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\logical\LogicalOperator.cs" />
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorGreaterEqual.cs" />
     <Content Include="src\runtime\nodes\operators\logical\RuntimeOperatorLogicalOr.cs" />
+    <Content Include="src\parser\exceptions\DuplicateFunctionDeclarationException.cs" />
   </ItemGroup>
 </Project>

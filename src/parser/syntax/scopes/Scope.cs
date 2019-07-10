@@ -60,6 +60,8 @@ namespace BCake.Parser.Syntax.Scopes {
                         otherFunc.Overloads = otherFunc.Overloads.Append(thisFunc).ToArray();
                         return;
                     }
+
+                    throw new DuplicateFunctionDeclarationException(m.DefiningToken, otherFunc);
                 }
 
                 throw new DuplicateDeclarationException(m.DefiningToken, MembersByName[nameOverride]);
