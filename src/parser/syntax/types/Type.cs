@@ -6,6 +6,8 @@ namespace BCake.Parser.Syntax.Types {
         public object DefaultValue { get; protected set; }
         public virtual string FullName {
             get { 
+                if (Scope == null) return Name == "null" ? "void" : Name;
+
                 var typeName = Scope.FullName;
                 if (typeName == null || typeName.Length < 1) return Name;
                 else return typeName + "." + Name;
