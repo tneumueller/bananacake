@@ -106,7 +106,17 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
             var other = e == Right ? Left : Right;
             if (Right == null || Left == null) return;
-            if (Right.ReturnType != Left.ReturnType) throw new TypeException(e.DefiningToken, e.ReturnType, other.ReturnType);
+            if (Right.ReturnType != Left.ReturnType) {
+                if (Right.ReturnType != null && Left.ReturnType != null) {
+                    if (Right.ReturnType.Scope.GetSymbol($"!as_{ Left.ReturnType.Name }") != null) {
+                        throw new TypeException(Right.DefiningToken, Right.ReturnType, Left.ReturnType, Left.ReturnType);
+                    } else if (Left.ReturnType.Scope.GetSymbol($"!as_{ Right.ReturnType.Name }") != null) {
+                        throw new TypeException(Left.DefiningToken, Left.ReturnType, Right.ReturnType, Right.ReturnType);
+                    }
+                }
+
+                throw new TypeException(e.DefiningToken, e.ReturnType, other.ReturnType);
+            }
         }
     }
 }

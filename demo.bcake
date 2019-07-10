@@ -65,7 +65,7 @@ int main() {
         println("\"123\" != \"1234\"");
     }
 
-    if (human2.name == "Carina" || human2 as string == "Carina") {
+    if (human2.name == "Carina" || human2 == "Carina") {
         println("Logical or worked");
     }
 
