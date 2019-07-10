@@ -14,6 +14,8 @@ namespace BCake.Parser.Syntax.Types {
         public override string FullName { get { return Parent.FullName + ":" + Name; } }
         public ScopeNode Root { get; protected set; }
         public ParameterType[] Parameters { get; protected set; }
+        public FunctionType[] Overloads { get; set; } = new FunctionType[] {};
+
 
         protected FunctionType(Type returnType, string name, ParameterType[] parameters)
                 : base(Namespace.Global.Scope, name, "public") {
@@ -105,6 +107,23 @@ namespace BCake.Parser.Syntax.Types {
 
         public override void ParseInner() {
             Root = ScopeNode.Parse(DefiningToken, Scope, tokens);
+
+            foreach (var o in Overloads) o.Root = ScopeNode.Parse(o.DefiningToken, o.Scope, o.tokens);
+        }
+
+        public bool ParameterListDiffers(FunctionType other) {
+            return ParameterListDiffers(other.Parameters.Select(p => p.Type));
+        }
+        public bool ParameterListDiffers(IEnumerable<Type> _arguments) {
+            var arguments = _arguments.ToList();
+
+            if (Parameters.Length != arguments.Count) return true;
+            
+            for (var i = 0; i < Parameters.Length; ++i) {
+                if (Parameters[i].Type.FullName != arguments[i].FullName) return true;
+            }
+
+            return false;
         }
 
         public class ParameterType : Type {

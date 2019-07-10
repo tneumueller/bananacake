@@ -3,6 +3,10 @@ namespace Demo {
         private int age;
         public string name;
 
+        public Human(this.name) {
+            age = 0;
+        }
+
         public Human(this.age, this.name) {
             println("New human " + name + "!");
         }
@@ -44,7 +48,7 @@ class Demo2 {
 }
 
 int main() {
-    Demo.Human human1 = new Demo.Human(21, "Thomas");
+    Demo.Human human1 = new Demo.Human("Thomas");
     Demo.Human human2 = new Demo.Human(17, "Carina");
     human1.makeSiblings(human2);
 
@@ -65,7 +69,7 @@ int main() {
         println("\"123\" != \"1234\"");
     }
 
-    if (human2.name == "Carina" || human2 == "Carina") {
+    if (human2.name == "Carina" || human1.name == "Thomas") {
         println("Logical or worked");
     }
 

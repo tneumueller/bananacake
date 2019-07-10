@@ -55,16 +55,21 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var argList = tokens.Take(argListClose).ToArray();
 
             var arguments = Nodes.Functions.ArgumentsNode.Parse(_functionNode, scope, argList);
-            if (arguments.Arguments.Length != Function.Parameters.Length) {
+            var overloads = Function.Overloads.Prepend(Function);
+            Types.FunctionType overload = null;
+            foreach (var func in overloads) {
+                if (!func.ParameterListDiffers(arguments.Arguments.Select(a => a.Expression.ReturnType))) {
+                    overload = func;
+                    break;
+                }
+            }
+
+            if (overload == null) {
                 if (argList.Length > 0) throw new Exceptions.InvalidArgumentsException(argList.FirstOrDefault(), Function, arguments.Arguments);
                 else throw new Exceptions.InvalidArgumentsException(tokens[0], Function, arguments.Arguments);
             }
 
-            for (int i = 0; i < Function.Parameters.Length; ++i) {
-                var paramType = Function.Parameters[i].Type;
-                var argType = arguments.Arguments[i].Expression.Root.ReturnType;
-                if (paramType != argType) throw new Exceptions.InvalidArgumentsException(argList[0], Function, arguments.Arguments);
-            }
+            Function = overload;
 
             return new Expression(
                 argList.FirstOrDefault() ?? _functionNode.DefiningToken,

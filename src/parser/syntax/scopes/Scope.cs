@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using BCake.Parser.Syntax.Types;
@@ -49,7 +50,21 @@ namespace BCake.Parser.Syntax.Scopes {
             Declare(m, m.Name);
         }
         public void Declare(Type m, string nameOverride) {
-            if (MembersByName.ContainsKey(nameOverride)) throw new DuplicateDeclarationException(m.DefiningToken, MembersByName[nameOverride]);
+            if (MembersByName.ContainsKey(nameOverride)) { // if a symbol with the same name is already defined
+                if (m is FunctionType && MembersByName[nameOverride] is FunctionType) { // if both are functions
+                    var thisFunc = m as FunctionType;
+                    var otherFunc = MembersByName[nameOverride] as FunctionType;
+
+                    if (thisFunc.ParameterListDiffers(otherFunc)) { // the name is equal but the parameters are different, so this is an overload
+                        // add the overload and return
+                        otherFunc.Overloads = otherFunc.Overloads.Append(thisFunc).ToArray();
+                        return;
+                    }
+                }
+
+                throw new DuplicateDeclarationException(m.DefiningToken, MembersByName[nameOverride]);
+            }
+
             MembersByName.Add(nameOverride, m);
         }
 

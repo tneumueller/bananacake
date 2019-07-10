@@ -10,7 +10,7 @@ namespace BCake.Parser.Exceptions {
             BCake.Parser.Syntax.Expressions.Nodes.Functions.ArgumentsNode.Argument[] provided
         )
             : base(
-                $"Error: Invalid parameters provided for function {function.FullName}:\n\texpects {function.Parameters.Length}: ({FormatParamList(function.Parameters)})\n\tgiven {provided.Length}: ({FormatArgumentList(provided)})",
+                $"No matching overload for function {function.FullName}:\n\tgiven {provided.Length}: ({FormatArgumentList(provided)})",
                 token
             )
         {}
