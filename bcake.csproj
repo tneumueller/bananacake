@@ -123,5 +123,6 @@
     <Content Include="src\runtime\nodes\operators\comparison\RuntimeOperatorGreaterEqual.cs" />
     <Content Include="src\runtime\nodes\operators\logical\RuntimeOperatorLogicalOr.cs" />
     <Content Include="src\parser\exceptions\DuplicateFunctionDeclarationException.cs" />
+    <Content Include="src\parser\syntax\types\native\std\std.namespace.cs" />
   </ItemGroup>
 </Project>

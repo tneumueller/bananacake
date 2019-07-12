@@ -214,3 +214,8 @@ Classes and functions can be defined outside of a namespace, variables can't.
 | [Integer](docs/datatypes/INT.md) | `int` | `-2^16 - 1` to `2^16` |
 | [Boolean](docs/datatypes/BOOL.md) | `bool` | `true`, `false` |
 | [String](docs/datatypes/STRING.md) | `string` | `"strings of variable length"` |
+
+## Standard Functions
+
+- [`println`](docs/standard-lib/PRINTLN.md)
+

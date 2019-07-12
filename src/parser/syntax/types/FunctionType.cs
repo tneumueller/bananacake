@@ -11,7 +11,7 @@ namespace BCake.Parser.Syntax.Types {
     public class FunctionType : ComplexType {
         public Type Parent { get; protected set; }
         public Type ReturnType { get; protected set; }
-        public override string FullName { get { return Parent.FullName + ":" + Name; } }
+        public override string FullName { get { return Parent == null ? Name : Parent.FullName + ":" + Name; } }
         public ScopeNode Root { get; protected set; }
         public ParameterType[] Parameters { get; protected set; }
         public FunctionType[] Overloads { get; set; } = new FunctionType[] {};

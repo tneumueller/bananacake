@@ -64,6 +64,8 @@ int main() {
     }
 
     println(human2 as string);
+    println(100);
+    println(true);
 
     if ("123" != "1234") {
         println("\"123\" != \"1234\"");

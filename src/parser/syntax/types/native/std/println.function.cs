@@ -4,14 +4,18 @@ using BCake.Runtime.Nodes.Value;
 
 namespace BCake.Parser.Syntax.Types.Native.Std {
     public class Println : NativeFunctionType {
-        public static NativeFunctionType Implementation = new Println();
+        public static NativeFunctionType Implementation = new Println(StringValueNode.Type, true);
 
-        private Println() : base(
+        private Println(Type paramType, bool initOverloads = false) : base(
             null,
             "println",
             new ParameterType[] {
-                 new ParameterType(null, StringValueNode.Type, "s")
-            }
+                 new ParameterType(null, paramType, "s")
+            },
+            initOverloads ? new Println[] {
+                new Println(IntValueNode.Type),
+                new Println(BoolValueNode.Type)
+            } : null
         ) {}
 
         public override RuntimeValueNode Evaluate(RuntimeValueNode[] arguments) {

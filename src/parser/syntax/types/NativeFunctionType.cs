@@ -14,6 +14,11 @@ namespace BCake.Parser.Syntax.Types {
             : base(returnType, name, parameters) {
         }
 
+        public NativeFunctionType(Type returnType, string name, ParameterType[] parameters, NativeFunctionType[] overloads)
+            : base(returnType, name, parameters) {
+            Overloads = overloads;
+        }
+
         public override void ParseInner() {}
 
         public abstract RuntimeValueNode Evaluate(RuntimeValueNode[] arguments);
