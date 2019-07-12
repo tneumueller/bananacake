@@ -100,6 +100,29 @@ Access defaults to public and is obsolete when the function is declared globally
 Private functions inside a namespace can only be accessed from within the same namespace.
 Private functions inside classes can only be accessed from within the same class.
 
+#### Overloads
+
+Functions can have an arbitrary amount of overloads, meaning definition of multiple functions with equal names, as long as the parameters are not the same. For example:
+
+```
+public void foo(int a, int b) { // ... }
+public void foo(int a, int b, int c) { // ... }
+```
+
+is perfectly fine, while
+
+```
+public void foo(int a, int b) { // ... }
+public void foo(int b, int a) { // ... }
+```
+
+isn't, because by looking only at the types of the parameters, both functions share the same signature:
+```
+public void foo(int, int)
+```
+
+which makes them indistinguishable, which is not allowed.
+
 ### Classes
 
 BCake features classes. A class can be declared like this:
@@ -120,12 +143,13 @@ Access levels define which other modules will be able to access a symbol. There 
 
 #### Constructor
 
-Currently, a class can only have one constructor. It is defined like this:
+The constructor of a class is defined like this:
 ```
 <access> <classname> ([<parameters>]) {
     // ...
 }
 ```
+Multiple overloads of a constructor can exist.
 
 A parameter can be an implicit initializer.
 ```
@@ -151,7 +175,7 @@ private class Human {
 
 #### Members
 
-Classes can also have members, e.g.
+Classes can have members, e.g.
 ```
 public class Test {
     public int a;
@@ -159,7 +183,7 @@ public class Test {
 }
 ```
 
-The can also have the access levels as seen above.
+which can have the access levels defined above.
 
 #### Explicit caster functions
 
@@ -216,6 +240,8 @@ Classes and functions can be defined outside of a namespace, variables can't.
 | [String](docs/datatypes/STRING.md) | `string` | `"strings of variable length"` |
 
 ## Standard Functions
+
+BananaCake defines a set of basic standard functions:
 
 - [`println`](docs/standard-lib/PRINTLN.md)
 
