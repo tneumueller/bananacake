@@ -32,7 +32,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 var classType = symbol as Types.ClassType;
 
                 Function = classType?.Scope.GetSymbol("!constructor", true) as Types.FunctionType;
-                if (Function.Access != "public" && !scope.IsChildOf(classType.Scope)) {
+                if (Function.Access != Types.Access.@public && !scope.IsChildOf(classType.Scope)) {
                     throw new Exceptions.AccessViolationException(_functionNode.DefiningToken, Function, scope);
                 }
 

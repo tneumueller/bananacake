@@ -9,7 +9,7 @@ using BCake.Parser.Syntax.Expressions.Nodes;
 namespace BCake.Parser.Syntax.Types {
     public class ClassType : ComplexType {
         public override string FullName { get => Scope.FullName; }
-        public ClassType(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens)
+        public ClassType(Scopes.Scope parent, Access access, string name, BCake.Parser.Token[] tokens)
             : base(null, name) {
             Access = access;
             this.tokens = tokens;

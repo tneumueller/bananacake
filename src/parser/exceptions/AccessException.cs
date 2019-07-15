@@ -5,7 +5,7 @@ namespace BCake.Parser.Exceptions {
             BCake.Parser.Syntax.Types.Type member,
             BCake.Parser.Syntax.Scopes.Scope sourceScope
         )
-            : base($"Error: Cannot access {member.Access} symbol \"{member.FullName}\" from scope \"{sourceScope.FullName}\"", token)
+            : base($"Cannot access {member.Access} symbol \"{member.FullName}\" from current scope due to it's protection level", token)
         {}
     }
 }

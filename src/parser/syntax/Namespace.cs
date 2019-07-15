@@ -19,7 +19,7 @@ namespace BCake.Parser.Syntax {
             InitPrimitives();
             InitNativeFunctions();
         }
-        public Namespace(Scopes.Scope parent, string access, string name, BCake.Parser.Token[] tokens)
+        public Namespace(Scopes.Scope parent, Access access, string name, BCake.Parser.Token[] tokens)
             : base(parent, name, access) {
             Access = access;
             Name = name;

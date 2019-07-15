@@ -10,8 +10,8 @@ namespace BCake.Parser.Syntax.Types {
         public Type Type { get; protected set; }
         public override string FullName { get { return Scope.FullName + ":" + Name; } }
 
-        public MemberVariableType(Token token, Type parent, string access, Type type, string name)
-            :base(parent.Scope, name, access) {
+        public MemberVariableType(Token token, Type parent, Access access, Type type, string name)
+            : base(parent.Scope, access, name) {
             DefiningToken = token;
             Type = type;
         }

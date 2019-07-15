@@ -18,12 +18,12 @@ namespace BCake.Parser.Syntax.Types {
 
 
         protected FunctionType(Type returnType, string name, ParameterType[] parameters)
-                : base(Namespace.Global.Scope, name, "public") {
+                : base(Namespace.Global.Scope, name, Access.@public) {
             ReturnType = returnType;
             Parameters = parameters;
         }
 
-        public FunctionType(Token token, Type parent, string access, Type returnType, string name, ParameterType[] parameters, Token[] tokens)
+        public FunctionType(Token token, Type parent, Access access, Type returnType, string name, ParameterType[] parameters, Token[] tokens)
                 : base(null, name, access) {
             DefiningToken = token;
             Parent = parent;

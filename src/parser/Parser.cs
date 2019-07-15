@@ -105,7 +105,8 @@ namespace BCake.Parser
         }
 
         public static void ParseTypes(Scope targetScope, Token[] tokens, string[] allowedTypes) {
-            string access = null, type = null, name = null;
+            Access access = Access.@default;
+            string type = null, name = null;
             Syntax.Types.Type valueType = null;
             FunctionType.ParameterType[] argList = null;
 
@@ -116,8 +117,8 @@ namespace BCake.Parser
                     case "public":
                     case "protected":
                     case "private":
-                        if (access != null) throw new UnexpectedTokenException(token);
-                        access = token.Value;
+                        if (access != Access.@default) throw new UnexpectedTokenException(token);
+                        access = accessFromString(token);
                         break;
 
                     case "void":
@@ -162,7 +163,7 @@ namespace BCake.Parser
 
                     case "{":
                         if (type == null || name == null) throw new UnexpectedTokenException(token);
-                        if (access == null) access = "public";
+                        if (access == Access.@default) access = Access.@public;
 
                         var beginScope = i;
                         i = findClosingScope(tokens, i);
@@ -199,7 +200,8 @@ namespace BCake.Parser
                             argList = null;
                         }
 
-                        access = type = name = null;
+                        access = Access.@default;
+                        type = name = null;
                         valueType = null;
                         break;
 
@@ -218,7 +220,8 @@ namespace BCake.Parser
                             );
                             targetScope.Declare(newMember);
 
-                            access = name = type = null;
+                            access = Access.@default;
+                            name = type = null;
                             valueType = null;
                         }
                         else throw new UnexpectedTokenException(token);
@@ -248,6 +251,14 @@ namespace BCake.Parser
                             break;
                         }
                 }
+            }
+        }
+
+        private static Access accessFromString(Token t) {
+            switch (t.Value) {
+                case "public": return Access.@public;
+                case "private": return Access.@private;
+                default: throw new UnexpectedTokenException(t);
             }
         }
 
@@ -404,7 +415,6 @@ namespace BCake.Parser
             String
         }
     }
-
 
     public class Token {
         public string Value, FilePath;

@@ -124,5 +124,6 @@
     <Content Include="src\runtime\nodes\operators\logical\RuntimeOperatorLogicalOr.cs" />
     <Content Include="src\parser\exceptions\DuplicateFunctionDeclarationException.cs" />
     <Content Include="src\parser\syntax\types\native\std\std.namespace.cs" />
+    <Content Include="src\parser\syntax\types\TypeAccess.cs" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 namespace Demo {
-    private class Human {
+    public class Human {
         private int age;
         public string name;
 
