@@ -32,7 +32,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             if (Left == null) throw new System.Exception("Left hand side of access operator must not be null when parsing right hand side");
 
             var symbol = Expression.Parse(scope, tokens, Left.ReturnType.Scope);
-            // if (symbol.ReturnType != )
 
             return symbol;
         }
@@ -48,6 +47,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 default:
                     SymbolToAccess = leftSymbol.Symbol;
                     MemberToAccess = (Right.Root as SymbolNode).Symbol;
+
+                    var canAccess = MemberToAccess.Access == Access.@public || scope.IsChildOf(MemberToAccess.Scope);
+                    if (!canAccess) throw new BCake.Parser.Exceptions.AccessViolationException(Right.DefiningToken, MemberToAccess, scope);
                     break;
             }
         }
