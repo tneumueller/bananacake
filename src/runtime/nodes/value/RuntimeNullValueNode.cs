@@ -2,7 +2,8 @@ using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Runtime.Nodes.Value {
     public class RuntimeNullValueNode : RuntimeValueNode {
-        public RuntimeNullValueNode(NullValueNode valueNode, RuntimeScope scope) : base(valueNode, scope) {}
+        public RuntimeNullValueNode(NullValueNode valueNode, RuntimeScope scope)
+            : base(valueNode, NullValueNode.Type, scope) {}
 
         public override RuntimeValueNode OpPlus(RuntimeValueNode other) {
             throw new Exceptions.RuntimeException("", DefiningToken);

@@ -3,7 +3,8 @@ using BCake.Parser.Syntax.Types;
 
 namespace BCake.Runtime.Nodes.Value {
     public class RuntimeNamespaceValueNode : RuntimeValueNode, IAccessible {
-        public RuntimeNamespaceValueNode(Namespace ns, RuntimeScope scope) : base(null, scope) {
+        public RuntimeNamespaceValueNode(Namespace ns, RuntimeScope scope)
+            : base(null, ns, scope) {
             Value = ns;
         }
 

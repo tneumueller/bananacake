@@ -10,7 +10,7 @@ namespace BCake.Runtime.Nodes.Value {
     // )]
     public class RuntimeClassInstanceValueNode : RuntimeValueNode, IAccessible {
         public RuntimeClassInstanceValueNode(Node node, ComplexType type, RuntimeScope scope)
-            : base(node, ConstructScope(type, scope)) {
+            : base(node, type, scope) {
             Value = this;
 
             RuntimeScope.SetValue("this", this);
@@ -21,20 +21,10 @@ namespace BCake.Runtime.Nodes.Value {
                     m.Key,
                     new RuntimeFunctionValueNode(
                         m.Value as FunctionType,
-                        new RuntimeScope(
-                            RuntimeScope,
-                            m.Value.Scope
-                        )
+                       RuntimeScope
                     )
                 );
             }
-        }
-
-        protected static RuntimeScope ConstructScope(ComplexType type, RuntimeScope parent) {
-            return new RuntimeScope(
-                parent,
-                type.Scope
-            );
         }
 
         public RuntimeValueNode AccessMember(string name) {

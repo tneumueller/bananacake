@@ -10,8 +10,7 @@ namespace BCake.Runtime.Nodes {
             FunctionType function,
             RuntimeScope scope,
             RuntimeValueNode[] arguments
-        )
-                : base(function.DefiningToken, scope) {
+        ) : base(function.DefiningToken, scope) {
             Function = function;
             Arguments = arguments;
 

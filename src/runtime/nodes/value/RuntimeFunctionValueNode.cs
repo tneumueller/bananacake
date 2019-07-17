@@ -2,7 +2,8 @@ using BCake.Parser.Syntax.Types;
 
 namespace BCake.Runtime.Nodes.Value {
     public class RuntimeFunctionValueNode : RuntimeValueNode {
-        public RuntimeFunctionValueNode(FunctionType function, RuntimeScope scope) : base(null, scope) {
+        public RuntimeFunctionValueNode(FunctionType function, RuntimeScope scope)
+            : base(null, function, scope) {
             Value = function;
         }
 

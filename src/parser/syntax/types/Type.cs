@@ -16,13 +16,15 @@ namespace BCake.Parser.Syntax.Types {
         public Token DefiningToken { get; protected set; }
 
         public Type(Scopes.Scope scope, string name, object defaultValue) {
-            Scope = scope;
+            Scope = new Scopes.Scope(scope, this);
+            // Scope.Declare(this, "this");
+
             Name = name;
             DefaultValue = defaultValue;
         }
-        public Type(Scopes.Scope scope, Access access, string name) : this(scope, access, name, null) {
-        }
-        public Type(Scopes.Scope scope, Access access, string name, object defaultValue) : this(scope, name, defaultValue) {
+        public Type(Scopes.Scope scope, Access access, string name) : this(scope, access, name, null) {}
+        public Type(Scopes.Scope scope, Access access, string name, object defaultValue)
+            : this(scope, name, defaultValue) {
             Access = access;
         }
     }

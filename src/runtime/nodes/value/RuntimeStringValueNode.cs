@@ -3,7 +3,8 @@ using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
 namespace BCake.Runtime.Nodes.Value {
     public class RuntimeStringValueNode : RuntimeValueNode {
-        public RuntimeStringValueNode(StringValueNode valueNode, RuntimeScope scope) : base(valueNode, scope) {}
+        public RuntimeStringValueNode(StringValueNode valueNode, RuntimeScope scope)
+            : base(valueNode, StringValueNode.Type, scope) {}
 
         public override RuntimeValueNode OpPlus(RuntimeValueNode other) {
             return Wrap((string)Value + other.Value.ToString());

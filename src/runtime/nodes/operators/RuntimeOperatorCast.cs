@@ -17,10 +17,11 @@ namespace BCake.Runtime.Nodes.Operators {
             var right = (Operator.Right.Root as SymbolNode).Symbol;
             var casterFunction = left.RuntimeScope.GetValue($"!as_{ right.Name }");
 
+            var args = left.Type is PrimitiveType ? new RuntimeValueNode[] { left } : new RuntimeValueNode[] {};
             var runtimeCasterFunction = new RuntimeFunction(
                 casterFunction.Value as FunctionType,
                 left.RuntimeScope,
-                new RuntimeValueNode[] {}
+                args
             );
             return runtimeCasterFunction.Evaluate();
         }

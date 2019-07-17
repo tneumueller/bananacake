@@ -1,84 +1,23 @@
-namespace Demo {
-    public class Human {
-        private int age;
-        public string name;
+namespace Math {
+    public class Vector3 {
+        private int x;
+        private int y;
+        private int z;
 
-        public Human(this.name) {
-            age = 0;
-        }
-
-        public Human(this.age, this.name) {
-            println("New human " + name + "!");
-        }
-
-        public void setName(string _name) {
-            println("Renamed " + name + " to " + _name);
-            name = _name;
-        }
-
-        public bool isAdult() {
-            return age >= 18;
-        }
-
-        public void birthday() {
-            age = age + 1;
-        }
-
-        public void makeSiblings(Human h) {
-            println(name + " and " + h.name + " are now siblings");
-        }
+        public Vector3(this.x, this.y, this.z) {}
 
         public cast string() {
-            println("Casting human to string");
-            return name;
+            string _x = x as string;
+            return "(" + _x + ")";
         }
-    }
-}
-
-class Demo2 {
-    public int abcdefg;
-
-    public Demo2() {
-        abcdefg = -55;
-    }
-
-    public int test1() {
-        abcdefg = 1337;
     }
 }
 
 int main() {
-    Demo.Human human1 = new Demo.Human("Thomas");
-    Demo.Human human2 = new Demo.Human(17, "Carina");
-    human1.makeSiblings(human2);
+    Math.Vector3 v1 = new Math.Vector3(42, 3, 1);
+    Math.Vector3 v2 = new Math.Vector3(1, 1, 4);
 
-    if (human1.isAdult()) {
-        println(human1.name + " is adult");
-    }
-    if (human2.isAdult()) {
-        println(human2.name + " is adult");
-    }
-    human2.birthday();
-    if (human2.isAdult()) {
-        println(human2.name + " is now finally adult");
-    }
+    println(v1 as string);
 
-    println(human2 as string);
-    println(100);
-    println(true);
-
-    if ("123" != "1234") {
-        println("\"123\" != \"1234\"");
-    }
-
-    if (human2.name == "Carina" || human1.name == "Thomas") {
-        println("Logical or worked");
-    }
-
-    Demo2 testd = new Demo2();
-    testd.test1();
-
-    testd.abcdefg = 5;
-
-    return testd.abcdefg;
+    return 0;
 }

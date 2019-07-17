@@ -39,7 +39,7 @@ namespace BCake.Runtime.Nodes.Operators {
                 var typeInstance = new RuntimeClassInstanceValueNode(
                     functionNode,
                     constructingType,
-                    RuntimeScope.ResolveRuntimeScope(function.Scope)
+                    RuntimeScope.ResolveRuntimeScope(constructingType.Scope)
                 );
 
                 var constr = typeInstance.AccessMember("!constructor");

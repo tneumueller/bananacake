@@ -6,7 +6,8 @@ namespace BCake.Runtime.Nodes.Value {
         ValueNodeType = typeof(BoolValueNode)
     )]
     public class RuntimeBoolValueNode : RuntimeValueNode {
-        public RuntimeBoolValueNode(BoolValueNode valueNode, RuntimeScope scope) : base(valueNode, scope) {}
+        public RuntimeBoolValueNode(BoolValueNode valueNode, RuntimeScope scope)
+            : base(valueNode, BoolValueNode.Type, scope) {}
 
         public override RuntimeValueNode OpPlus(RuntimeValueNode other) {
             throw new Exceptions.RuntimeException("", DefiningToken);

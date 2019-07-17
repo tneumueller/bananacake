@@ -7,9 +7,12 @@ using BCake.Runtime.Nodes.Expressions;
 
 namespace BCake.Runtime.Nodes.Value {
     public abstract class RuntimeValueNode : RuntimeNode {
+        public Type Type { get; protected set; }
         public object Value { get; protected set; }
-        public RuntimeValueNode(Node node, RuntimeScope scope) : base(node?.DefiningToken, scope) {
+        public RuntimeValueNode(Node node, Type type, RuntimeScope scope)
+            : base(node?.DefiningToken, ConstructScope(type, scope)) {
             if (node is ValueNode) Value = (node as ValueNode).Value;
+            Type = type;
         }
 
         public new static RuntimeValueNode Create(Node node, RuntimeScope scope) {
@@ -24,9 +27,17 @@ namespace BCake.Runtime.Nodes.Value {
             return null; // todo handle this case properly (exception?)
         }
 
+        protected static RuntimeScope ConstructScope(Type type, RuntimeScope parent) {
+            return new RuntimeScope(
+                parent,
+                type.Scope
+            );
+        }
+
         public override RuntimeValueNode Evaluate() {
             return this;
         }
+        
 
         public abstract RuntimeValueNode OpPlus(RuntimeValueNode other);
         public abstract RuntimeValueNode OpMinus(RuntimeValueNode other);

@@ -34,10 +34,12 @@ namespace BCake.Parser.Syntax {
 
         private void InitPrimitives() {
             Scope.Declare(
+                StringValueNode.Type,
                 IntValueNode.Type,
-                BoolValueNode.Type,
-                StringValueNode.Type
+                BoolValueNode.Type
             );
+
+            IntValueNode.Type.Scope.Declare(IntToStringCast.Implementation);
         }
 
         private void InitNativeFunctions() {
