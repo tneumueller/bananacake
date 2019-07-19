@@ -15,7 +15,15 @@ namespace BCake.Parser.Syntax.Types {
             this.tokens = tokens;
 
             Scope = new Scopes.Scope(parent, this);
-            Scope.Declare(this, "this");
+
+            var thisMember = new MemberVariableType(
+                DefiningToken,
+                this,
+                Access.@private,
+                this,
+                "this"
+            );
+            Scope.Declare(thisMember, "this");
         }
 
         public override void ParseInner() {

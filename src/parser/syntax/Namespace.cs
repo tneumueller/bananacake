@@ -47,6 +47,14 @@ namespace BCake.Parser.Syntax {
                 Print.Implementation,
                 Println.Implementation
             );
+
+            StringValueNode.Type.Scope.Declare(
+                BCake.Parser.Syntax.Types.Native.String.Operators.StringOperatorPlus.Implementation
+            );
+
+            IntValueNode.Type.Scope.Declare(
+                BCake.Parser.Syntax.Types.Native.Integer.Operators.IntegerOperatorPlus.Implementation
+            );
         }
     }
 }

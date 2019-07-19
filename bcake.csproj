@@ -129,5 +129,6 @@
     <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorIndex.cs" />
     <Content Include="src\parser\exceptions\OperatorNotDefinedException.cs" />
     <Content Include="src\parser\syntax\expressions\nodes\operators\overloadable\OverloadableOperator.cs" />
+    <Content Include="src\parser\syntax\types\native\string\operators\StringOperatorPlus.function.cs" />
   </ItemGroup>
 </Project>

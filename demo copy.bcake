@@ -8,14 +8,17 @@ namespace Math {
 
         public Vector3 plus(Vector3 other) {
             println("adding");
-            println(this as string);
             println(other as string);
             println(x);
+            println(this as string);
             return new Vector3(x + other.x, y + other.y, z + other.z);
         }
 
         public Vector3 operatorPlus(Vector3 other) {
             println("adding");
+            println(other as string);
+            println(x);
+            println(this as string);
             return new Vector3(x + other.x, y + other.y, z + other.z);
         }
 
@@ -42,7 +45,10 @@ int main() {
     Math.Vector3 v1 = new Math.Vector3(42, 3, 1);
     Math.Vector3 v2 = new Math.Vector3(1, 1, 4);
 
-    Math.Vector3 v3 = v1 + v2;
+    println(v1 as string);
+    println(v2 as string);
+
+    Math.Vector3 v3 = v1.plus(v2);
     println(v3 as string);
 
     Std.Array a = new Std.Array();

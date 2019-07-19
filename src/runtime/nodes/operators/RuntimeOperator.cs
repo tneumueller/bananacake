@@ -17,9 +17,10 @@ namespace BCake.Runtime.Nodes.Operators {
 
         public new static RuntimeOperator Create(Node node, RuntimeScope scope) {
             switch (node) {
+                case OverloadableOperator op: return RuntimeOperatorInvoke.FromOperatorOverload(op, scope);
+
                 case OperatorLogicalOr op: return new RuntimeOperatorLogicalOr(op, scope);
 
-                case OperatorPlus op: return new RuntimeOperatorPlus(op, scope);
                 case OperatorMinus op: return new RuntimeOperatorMinus(op, scope);
                 case OperatorMultiply op: return new RuntimeOperatorMultiply(op, scope);
                 case OperatorDivide op: return new RuntimeOperatorDivide(op, scope);
@@ -34,7 +35,6 @@ namespace BCake.Runtime.Nodes.Operators {
 
                 case OperatorAssign op: return new RuntimeOperatorAssign(op, scope);
                 case OperatorInvoke op: return new RuntimeOperatorInvoke(op, scope);
-                case OperatorIndex op: return RuntimeOperatorInvoke.FromOperatorOverload(op, scope);
                 case OperatorAccess op: return new RuntimeOperatorAccess(op, scope);
                 case OperatorNew op: return new RuntimeOperatorNew(op, scope);
 

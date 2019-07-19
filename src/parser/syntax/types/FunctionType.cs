@@ -17,8 +17,8 @@ namespace BCake.Parser.Syntax.Types {
         public FunctionType[] Overloads { get; set; } = new FunctionType[] {};
 
 
-        protected FunctionType(Type returnType, string name, ParameterType[] parameters)
-                : base(Namespace.Global.Scope, name, Access.@public) {
+        protected FunctionType(Scopes.Scope scope, Type returnType, string name, ParameterType[] parameters)
+                : base(scope, name, Access.@public) {
             ReturnType = returnType;
             Parameters = parameters;
         }

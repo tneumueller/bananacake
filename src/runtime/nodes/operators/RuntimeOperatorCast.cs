@@ -20,7 +20,7 @@ namespace BCake.Runtime.Nodes.Operators {
             var args = left.Type is PrimitiveType ? new RuntimeValueNode[] { left } : new RuntimeValueNode[] {};
             var runtimeCasterFunction = new RuntimeFunction(
                 casterFunction.Value as FunctionType,
-                left.RuntimeScope,
+                casterFunction.RuntimeScope,
                 args
             );
             return runtimeCasterFunction.Evaluate();

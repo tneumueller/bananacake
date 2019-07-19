@@ -27,7 +27,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var opMeta = Operator.GetOperatorMetadata(this.GetType());
             var opName = $"!operator_{ opMeta.OverloadableName }";
             _operatorFunction = _targetNode.ReturnType.Scope.GetSymbol(opName, true) as Types.FunctionType;
-            if (_operatorFunction == null) throw new Exceptions.OperatorNotDefinedException<OperatorIndex>(DefiningToken, _targetNode.ReturnType);
+            if (_operatorFunction == null) throw new Exceptions.OperatorNotDefinedException(this.GetType(), DefiningToken, _targetNode.ReturnType);
 
             return _targetNode;
         }

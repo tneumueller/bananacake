@@ -1,6 +1,9 @@
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
-    [Operator(Symbol = "+")]
-    public class OperatorPlus : Operator, IRValue {
+    [Operator(
+        Symbol = "+",
+        OverloadableName = "plus"
+    )]
+    public class OperatorPlus : OverloadableOperator, IRValue {
         
     }
 }

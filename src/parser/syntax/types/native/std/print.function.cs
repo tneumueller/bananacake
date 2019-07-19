@@ -1,5 +1,6 @@
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
+using BCake.Runtime;
 using BCake.Runtime.Nodes.Value;
 
 namespace BCake.Parser.Syntax.Types.Native.Std {
@@ -7,6 +8,7 @@ namespace BCake.Parser.Syntax.Types.Native.Std {
         public static NativeFunctionType Implementation = new Print();
 
         private Print() : base(
+            Namespace.Global.Scope,
             null,
             "print",
             new ParameterType[] {
@@ -14,7 +16,7 @@ namespace BCake.Parser.Syntax.Types.Native.Std {
             }
         ) {}
 
-        public override RuntimeValueNode Evaluate(RuntimeValueNode[] arguments) {
+        public override RuntimeValueNode Evaluate(RuntimeScope scope, RuntimeValueNode[] arguments) {
             System.Console.Write(arguments[0].Value);
 
             return null;

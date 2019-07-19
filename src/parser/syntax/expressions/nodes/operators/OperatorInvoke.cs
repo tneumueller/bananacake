@@ -118,6 +118,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                     op.DefiningToken,
                     null,
                     new ArgumentsNode.Argument[] {
+                        new ArgumentsNode.Argument(op.Left, true), // provide the left hand side for native implementations
                         new ArgumentsNode.Argument(op.Right)
                     }
                 )

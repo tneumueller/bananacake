@@ -19,12 +19,12 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             var rightSymbol = (Right?.Root as SymbolNode).Symbol;
 
             Types.Type leftType;
-            if (leftSymbol is Types.MemberVariableType) {
-                leftType = (leftSymbol as Types.MemberVariableType).Type;
-            } else if (leftSymbol is Types.LocalVariableType) {
-                leftType = (leftSymbol as Types.LocalVariableType).Type;
-            } else {
-                throw new InvalidCastException(leftSymbol, rightSymbol, DefiningToken);
+            switch (leftSymbol) {
+                case Types.MemberVariableType t: leftType = t.Type; break;
+                case Types.LocalVariableType t: leftType = t.Type; break;
+                case Types.FunctionType.ParameterType t: leftType = t.Type; break;
+                case Types.ClassType t: leftType = t; break;
+                default: throw new InvalidCastException(leftSymbol, rightSymbol, DefiningToken);
             }
 
             var casterFunction = leftType.Scope.GetSymbol($"!as_{ rightSymbol.Name }", true);

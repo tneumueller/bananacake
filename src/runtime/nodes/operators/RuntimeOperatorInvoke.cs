@@ -13,8 +13,19 @@ namespace BCake.Runtime.Nodes.Operators {
         public RuntimeOperatorInvoke(OperatorInvoke op, RuntimeScope scope) : base(op, scope) {}
 
         public override RuntimeValueNode Evaluate() {
+            // var functionNode = RuntimeScope.ResolveSymbolNode(Operator.Left.Root as SymbolNode);
+            // var function = functionNode.Symbol as FunctionType;
+            
+            var function = (Operator as OperatorInvoke).Function;
+            var functionNode = function.Root;
+
+            var functionScope = RuntimeScope.ResolveRuntimeScope(function.Scope);
+            RuntimeFunction runtimeFunction;
+
             var argumentsNode = Operator.Right.Root as ArgumentsNode;
             var arguments = argumentsNode.Arguments;
+            if (!(function is NativeFunctionType)) arguments = arguments.Where(a => !a.OnlyNative).ToArray();
+
             var argumentsValues = arguments
                 .Select(arg => {
                     var exp = new RuntimeExpression(
@@ -24,15 +35,6 @@ namespace BCake.Runtime.Nodes.Operators {
                     return exp.Evaluate();
                 })
                 .Cast<RuntimeValueNode>();
-
-            // var functionNode = RuntimeScope.ResolveSymbolNode(Operator.Left.Root as SymbolNode);
-            // var function = functionNode.Symbol as FunctionType;
-            
-            var function = (Operator as OperatorInvoke).Function;
-            var functionNode = function.Root;
-
-            var functionScope = RuntimeScope.ResolveRuntimeScope(function.Scope);
-            RuntimeFunction runtimeFunction;
 
             if (function.Name == "!constructor") {
                 var constructingType = function.Scope.GetClosestType();
@@ -59,8 +61,9 @@ namespace BCake.Runtime.Nodes.Operators {
 
                 if (!(left is RuntimeFunctionValueNode)) throw new Exceptions.RuntimeException("Cannot invoke non-function", Operator.Left.DefiningToken);
 
+                var functionType = left.Value as FunctionType;
                 runtimeFunction = new RuntimeFunction(
-                    left.Value as FunctionType,
+                    functionType,
                     left.RuntimeScope,
                     argumentsValues.ToArray()
                 );

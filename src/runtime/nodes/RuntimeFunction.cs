@@ -1,4 +1,5 @@
 using BCake.Parser.Syntax.Types;
+
 using BCake.Runtime.Nodes.Value;
 
 namespace BCake.Runtime.Nodes {
@@ -29,7 +30,9 @@ namespace BCake.Runtime.Nodes {
         }
 
         public override Nodes.Value.RuntimeValueNode Evaluate() {
-            if (Function is NativeFunctionType) return (Function as NativeFunctionType).Evaluate(Arguments);
+            if (Function is NativeFunctionType) {
+                return (Function as NativeFunctionType).Evaluate(RuntimeScope, Arguments);
+            }
             else return new RuntimeScopeNode(RuntimeScope, Function.Root).Evaluate();
         }
     }

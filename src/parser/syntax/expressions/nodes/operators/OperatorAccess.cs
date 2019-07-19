@@ -48,7 +48,10 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                     SymbolToAccess = leftSymbol.Symbol;
                     MemberToAccess = (Right.Root as SymbolNode).Symbol;
 
-                    var canAccess = MemberToAccess.Access == Access.@public || scope.IsChildOf(MemberToAccess.Scope);
+                    var leftType = leftSymbol.ReturnType;
+                    var isSameType = leftType.FullName == scope.GetClosestType()?.FullName;
+
+                    var canAccess = MemberToAccess.Access == Access.@public || scope.IsChildOf(MemberToAccess.Scope) || isSameType;
                     if (!canAccess) throw new BCake.Parser.Exceptions.AccessViolationException(Right.DefiningToken, MemberToAccess, scope);
                     break;
             }
