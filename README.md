@@ -8,4 +8,4 @@ Most people like bananas and we all love cake, so this language is just like ban
 ### Most important features
 
 * Namespaces, same as in C#
-* Public functions, because I miss these in C#
+* Global functions outside of classes, because I miss these in C#

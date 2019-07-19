@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BCake.Parser.Syntax.Expressions.Nodes.Functions;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     [Operator(
@@ -9,7 +10,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     )]
     public class OperatorInvoke : Operator, IRValue {
         public Types.FunctionType Function { get; protected set; }
-        private Expression _functionNode;
+        protected Expression _functionNode;
 
         public OperatorInvoke() {}
 
@@ -39,11 +40,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
                 symbol = Function;
             }
 
-            // _functionNode = new Expression(
-            //     _functionNode.DefiningToken,
-            //     _functionNode.Scope,
-            //     new SymbolNode(_functionNode.DefiningToken, symbol)
-            // );
             return _functionNode;
         }
 
@@ -90,6 +86,44 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             }
 
             return true;
+        }
+
+        public static OperatorInvoke FromOverloadableOperator(
+            Scopes.Scope scope,
+            OverloadableOperator op,
+            Types.FunctionType operatorFunction,
+            Expression operatorFunctionExpression
+        ) {
+            var opInvoke = new OperatorInvoke();
+            opInvoke.Function = operatorFunction;
+
+            // opInvoke.Left = new Expression(
+            //     op.DefiningToken,
+            //     scope,
+            //     new ValueN
+            // );
+
+            opInvoke.Left = new Expression(
+                op.DefiningToken,
+                operatorFunctionExpression.ReturnType.Scope,
+                new SymbolNode(
+                    op.DefiningToken,
+                    operatorFunction
+                )
+            );
+            opInvoke.Right = new Expression(
+                op.DefiningToken,
+                scope,
+                new ArgumentsNode(
+                    op.DefiningToken,
+                    null,
+                    new ArgumentsNode.Argument[] {
+                        new ArgumentsNode.Argument(op.Right)
+                    }
+                )
+            );
+
+            return opInvoke;
         }
     }
 }

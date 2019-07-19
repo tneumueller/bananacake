@@ -21,7 +21,7 @@ namespace BCake.Runtime.Nodes.Value {
                     m.Key,
                     new RuntimeFunctionValueNode(
                         m.Value as FunctionType,
-                       RuntimeScope
+                        RuntimeScope
                     )
                 );
             }

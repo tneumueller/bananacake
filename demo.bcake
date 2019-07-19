@@ -8,7 +8,19 @@ namespace Math {
 
         public cast string() {
             string _x = x as string;
-            return "(" + _x + ")";
+            string _y = y as string;
+            string _z = z as string;
+            return "(" + _x + ", " + _y + ", " + _z + ")";
+        }
+    }
+}
+
+namespace Std {
+    public class Array {
+        public Array() {}
+
+        public int operatorIndex(int x) {
+            return x * 2;
         }
     }
 }
@@ -18,6 +30,10 @@ int main() {
     Math.Vector3 v2 = new Math.Vector3(1, 1, 4);
 
     println(v1 as string);
+    println(v2 as string);
+
+    Std.Array a = new Std.Array();
+    println(a[8]);
 
     return 0;
 }

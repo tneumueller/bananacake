@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 using BCake.Parser.Exceptions;
+using BCake.Parser.Syntax.Expressions;
 using BCake.Parser.Syntax.Expressions.Nodes;
+using BCake.Parser.Syntax.Expressions.Nodes.Operators;
 using BCake.Parser.Syntax.Scopes;
 using BCake.Parser.Syntax.Types;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
@@ -14,7 +16,7 @@ namespace BCake.Parser
 {
     public class Parser
     {
-        private static string rxSeparators = @"(\s*([\(\).,:;{}""])\s*|\s+([\(\).,:;{}""])?\s*)";
+        private static string rxSeparators = @"(\s*([\(\)\[\].,:;{}""])\s*|\s+([\(\)\[\].,:;{}""])?\s*)";
 
         public string Filename { get; private set; }
         private Token[] tokens;
@@ -138,24 +140,40 @@ namespace BCake.Parser
                         if (type == "function" || type == "cast") {
                             if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
 
-                            if (type == "function") {
-                                parseFunction(
-                                    valueType,
-                                    name, out name,
-                                    out argList,
-                                    targetScope,
-                                    i, out i,
-                                    tokens
-                                );
-                            } else if (type == "cast") {
-                                parseCaster(
-                                    valueType,
-                                    name, out name,
-                                    out argList,
-                                    targetScope,
-                                    i, out i,
-                                    tokens
-                                );
+                            switch (type) {
+                                case "function": {
+                                        if (name != null && name.StartsWith("operator")) {
+                                            var @operator = name.Substring("operator".Length);
+                                            if (!Expression.OperatorOverloadableNames.Contains(@operator)) throw new InvalidOperatorDefinitionException(
+                                                token,
+                                                $"Cannot create overload for unknown operator \"{ @operator }\" - function names may not begin with \"operator\" because it is a keyword used for operator overloading"
+                                            );
+
+                                            // setting the name like this defines this function as an operator overload, no further action required
+                                            name = $"!operator_{ @operator.ToLower() }";
+                                        }
+
+                                        parseFunction(
+                                            valueType,
+                                            name, out name,
+                                            out argList,
+                                            targetScope,
+                                            i, out i,
+                                            tokens
+                                        );
+                                        break;
+                                    }
+
+                                case "cast":
+                                    parseCaster(
+                                        valueType,
+                                        name, out name,
+                                        out argList,
+                                        targetScope,
+                                        i, out i,
+                                        tokens
+                                    );
+                                    break;
                             }
                         }
                         else throw new UnexpectedTokenException(token);
@@ -338,6 +356,9 @@ namespace BCake.Parser
                     break;
                 case "(":
                     closing = ")";
+                    break;
+                case "[":
+                    closing = "]";
                     break;
             }
 

@@ -10,6 +10,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public ParameterType Left, Right;
         public EvaluationDirection Direction;
         public bool CheckReturnTypes = true;
+        public string OverloadableName = null;
 
 
         public enum ParameterType {

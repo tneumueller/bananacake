@@ -67,5 +67,12 @@ namespace BCake.Runtime.Nodes.Operators {
                 return runtimeFunction.Evaluate();
             }
         }
+
+        public static RuntimeOperatorInvoke FromOperatorOverload(OverloadableOperator op, RuntimeScope scope) {
+            return new RuntimeOperatorInvoke(
+                op.ToOperatorInvoke(scope.Scope),
+                scope
+            );
+        }
     }
 }

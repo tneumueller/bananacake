@@ -5,7 +5,7 @@ namespace BCake.Parser.Exceptions {
             string name,
             BCake.Parser.Syntax.Scopes.Scope scope
         )
-            : base($"Error: Undefined symbol - the symbol \"{name}\" has not been declared in this scope\n\tat scope {scope.FullName}", token)
+            : base($"Undefined symbol - the symbol \"{name}\" has not been declared in this scope\n\tat scope {scope.FullName}", token)
         {}
     }
 }

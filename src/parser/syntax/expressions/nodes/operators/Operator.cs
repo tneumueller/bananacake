@@ -6,6 +6,9 @@ using BCake.Parser.Exceptions;
 
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public abstract class Operator : Node {
+        /// <summary>
+        /// a list of the names that can be used to overload operators for classes
+        /// </summary>
         private bool needsLValue, needsRValue, leftNeedsNone, rightNeedsNone, checkReturnTypes;
         OperatorAttribute.ParameterType typeLeft, typeRight;
         public Expression Left {
@@ -73,6 +76,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
         public virtual void OnCreated(Token token, Scopes.Scope scope) {}
 
+        public static OperatorAttribute GetOperatorMetadata<T>() {
+            return GetOperatorMetadata(typeof(T));
+        }
         public static OperatorAttribute GetOperatorMetadata(Type t) {
             var opSymbolAttr = t.GetCustomAttributes(
                 typeof(OperatorAttribute),
@@ -83,9 +89,9 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
 
         public static Node Parse(Scopes.Scope scope, Scopes.Scope typeSource, Type opType, Token token, Token[] left, Token[] right) {
             var op = (Operator)Activator.CreateInstance(opType);
+            op.DefiningToken = token;
             op.Left = op.ParseLeft(scope, left, typeSource);
             op.Right = op.ParseRight(scope, right, op.Left?.ReturnType?.Scope);
-            op.DefiningToken = token;
             op.OnCreated(token, scope);
             return op;
         }

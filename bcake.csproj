@@ -126,5 +126,8 @@
     <Content Include="src\parser\syntax\types\native\std\std.namespace.cs" />
     <Content Include="src\parser\syntax\types\TypeAccess.cs" />
     <Content Include="src\parser\syntax\types\native\typecasts\IntToStringCast.function.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\OperatorIndex.cs" />
+    <Content Include="src\parser\exceptions\OperatorNotDefinedException.cs" />
+    <Content Include="src\parser\syntax\expressions\nodes\operators\overloadable\OverloadableOperator.cs" />
   </ItemGroup>
 </Project>

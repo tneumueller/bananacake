@@ -6,7 +6,7 @@ namespace BCake.Parser.Exceptions {
             BCake.Parser.Token token,
             OperatorAttribute.ParameterType expectedType
         )
-            : base($"Error: The expression on the left hand side of an assignment operation in invalid - {expectedType} expected", token)
+            : base($"The expression on the left hand side of an assignment operation in invalid - {expectedType} expected", token)
         {}
     }
 }

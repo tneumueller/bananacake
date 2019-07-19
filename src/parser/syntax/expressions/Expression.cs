@@ -40,11 +40,21 @@ namespace BCake.Parser.Syntax.Expressions {
             typeof(OperatorCast),
 
             typeof(OperatorNew),
+            typeof(OperatorIndex),
             typeof(OperatorInvoke),
             typeof(OperatorAccess)
         };
         private static readonly string[] OperatorSymbols = OperatorPrecedence
             .Select(op => Operator.GetOperatorMetadata(op).Symbol)
+            .ToArray();
+        public static readonly string[] OperatorOverloadableNames = OperatorPrecedence
+            .Select(op => Operator.GetOperatorMetadata(op))
+            .Where(meta => meta.OverloadableName != null)
+            .Select(meta => {
+                var name = meta.OverloadableName;
+                name = name[0].ToString().ToUpper()[0] + name.Substring(1);
+                return name;
+            })
             .ToArray();
 
         public Token DefiningToken { get; protected set; }
