@@ -5,7 +5,7 @@
 ### Operators
 
 | Operator          | Description              |
-|-------------------|--------------------------|
+| ----------------- | ------------------------ |
 | `return`          | Return                   |
 | `=`               | Assignment               |
 | `> >= < <= == !=` | Comparison               |
@@ -123,6 +123,34 @@ public void foo(int, int)
 
 which makes them indistinguishable, which is not allowed.
 
+
+#### Operator Overloads
+
+A function can override any operator defined by the language to specify its own, custom implementation.
+This is done by creating a non-static method in the class, that takes excactly one parameter (unless specified otherwise).
+All overload methods must have a name that begins with "overload_" followed by the name of the operator in lowercase letters.
+
+**Examples:**
+```
+public class Vector3 {
+    private int x;
+    private int y;
+    private int z;
+
+    public Vector3(this.x, this.y, this.z) {}
+
+    public Vector3 operator_plus(Vector3 other) {
+        return new Vector3(x + other.x, y + other.y, z + other.z);
+    }
+}
+```
+
+**Overloadable operators:**
+| Symbol | Name  |
+| ------ | ----- |
+| `+`    | plus  |
+| `[]`   | index |
+
 ### Classes
 
 BCake features classes. A class can be declared like this:
@@ -233,10 +261,10 @@ Classes and functions can be defined outside of a namespace, variables can't.
 #### Primitive
 <a name="datatypes-primitive"></a>
 
-| Name | Symbol | Value range |
-|-|-|-|
-| [Integer](docs/datatypes/INT.md) | `int` | `-2^16 - 1` to `2^16` |
-| [Boolean](docs/datatypes/BOOL.md) | `bool` | `true`, `false` |
+| Name                               | Symbol   | Value range                    |
+| ---------------------------------- | -------- | ------------------------------ |
+| [Integer](docs/datatypes/INT.md)   | `int`    | `-2^16 - 1` to `2^16`          |
+| [Boolean](docs/datatypes/BOOL.md)  | `bool`   | `true`, `false`                |
 | [String](docs/datatypes/STRING.md) | `string` | `"strings of variable length"` |
 
 ## Standard Functions
