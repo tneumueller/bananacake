@@ -10,12 +10,12 @@ using BCake.Runtime.Nodes.Expressions;
 
 namespace BCake.Runtime.Nodes.Operators {
     public class RuntimeOperatorInvoke : RuntimeOperator {
-        public RuntimeOperatorInvoke(OperatorInvoke op, RuntimeScope scope) : base(op, scope) {}
+        public RuntimeOperatorInvoke(OperatorInvoke op, RuntimeScope scope) : base(op, scope) { }
 
         public override RuntimeValueNode Evaluate() {
             // var functionNode = RuntimeScope.ResolveSymbolNode(Operator.Left.Root as SymbolNode);
             // var function = functionNode.Symbol as FunctionType;
-            
+
             var function = (Operator as OperatorInvoke).Function;
             var functionNode = function.Root;
 
@@ -53,10 +53,11 @@ namespace BCake.Runtime.Nodes.Operators {
 
                 runtimeFunction.Evaluate();
                 return typeInstance;
-            } else {
+            }
+            else {
                 var left = new RuntimeExpression(
                     Operator.Left,
-                    RuntimeScope.ResolveRuntimeScope(Operator.Left.Scope)
+                    RuntimeScope//.ResolveRuntimeScope(Operator.Left.Scope)
                 ).Evaluate();
 
                 if (!(left is RuntimeFunctionValueNode)) throw new Exceptions.RuntimeException("Cannot invoke non-function", Operator.Left.DefiningToken);

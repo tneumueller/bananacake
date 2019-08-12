@@ -12,8 +12,6 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
         public Types.FunctionType Function { get; protected set; }
         protected Expression _functionNode;
 
-        public OperatorInvoke() {}
-
         protected override Expression ParseLeft(Scopes.Scope scope, Token[] tokens, Scopes.Scope typeSource) {
             Types.Type symbol;
 
@@ -103,13 +101,39 @@ namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
             //     new ValueN
             // );
 
+            var leftScope = operatorFunctionExpression.ReturnType.Scope;
+            if (op.Left.Root is SymbolNode) {
+                var symbolNode = op.Left.Root as SymbolNode;
+                if (symbolNode.ReturnType is Types.PrimitiveType) leftScope = symbolNode.ReturnType.Scope;
+                else leftScope = symbolNode.Symbol.Scope;
+            }
+
+            Node left;
+            if (op.Left.ReturnType is Types.PrimitiveType) {
+                left = Operator.Parse(
+                    leftScope,
+                    leftScope,
+                    typeof(OperatorAccess),
+                    op.Left.DefiningToken,
+                    new Token[] { new Token { Value = op.Left.ReturnType.Name } },
+                    new Token[] { new Token { Value = operatorFunction.Name } }
+                );
+            }
+            else {
+                left = Operator.Parse(
+                    leftScope,
+                    leftScope,
+                    typeof(OperatorAccess),
+                    op.Left.DefiningToken,
+                    new Token[] { op.Left.DefiningToken },
+                    new Token[] { new Token { Value = operatorFunction.Name } }
+                );
+            }
+
             opInvoke.Left = new Expression(
                 op.DefiningToken,
-                operatorFunctionExpression.ReturnType.Scope,
-                new SymbolNode(
-                    op.DefiningToken,
-                    operatorFunction
-                )
+                leftScope,
+                left
             );
             opInvoke.Right = new Expression(
                 op.DefiningToken,

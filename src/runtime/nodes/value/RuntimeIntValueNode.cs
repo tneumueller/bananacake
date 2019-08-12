@@ -6,8 +6,18 @@ namespace BCake.Runtime.Nodes.Value {
         ValueNodeType = typeof(IntValueNode)
     )]
     public class RuntimeIntValueNode : RuntimeValueNode {
+        private static RuntimeScope _definitions;
+        public static RuntimeScope Definitions {
+            get {
+                if (_definitions == null) {
+                    _definitions = new RuntimeScope(null, IntValueNode.Type.Scope);
+                }
+                return _definitions;
+            }
+        }
+
         public RuntimeIntValueNode(IntValueNode valueNode, RuntimeScope scope)
-            : base(valueNode, IntValueNode.Type, scope) {}
+            : base(valueNode, IntValueNode.Type, scope) { }
 
         public override RuntimeValueNode OpPlus(RuntimeValueNode other) {
             return Wrap((int)Value + (int)other.Value);

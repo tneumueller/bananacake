@@ -14,7 +14,7 @@ namespace Math {
             return new Vector3(x + other.x, y + other.y, z + other.z);
         }
 
-        public Vector3 operatorPlus(Vector3 other) {
+        public Vector3 operator_plus(Vector3 other) {
             println("adding");
             return new Vector3(x + other.x, y + other.y, z + other.z);
         }
@@ -32,7 +32,7 @@ namespace Std {
     public class Array {
         public Array() {}
 
-        public int operatorIndex(int x) {
+        public int operator_index(int x) {
             return x * 2;
         }
     }

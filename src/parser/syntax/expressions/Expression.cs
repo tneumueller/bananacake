@@ -50,11 +50,7 @@ namespace BCake.Parser.Syntax.Expressions {
         public static readonly string[] OperatorOverloadableNames = OperatorPrecedence
             .Select(op => Operator.GetOperatorMetadata(op))
             .Where(meta => meta.OverloadableName != null)
-            .Select(meta => {
-                var name = meta.OverloadableName;
-                name = name[0].ToString().ToUpper()[0] + name.Substring(1);
-                return name;
-            })
+            .Select(meta => meta.OverloadableName)
             .ToArray();
 
         public Token DefiningToken { get; protected set; }
@@ -93,7 +89,8 @@ namespace BCake.Parser.Syntax.Expressions {
 
                 if (tokens.Length == 2) {
                     symbol = Types.CompositeType.Resolve(SymbolNode.GetSymbol(typeSource, tokens[0]));
-                } else {
+                }
+                else {
                     symbol = Expression.Parse(
                         scope,
                         tokens.Take(tokens.Length - 1).ToArray(),
@@ -124,7 +121,7 @@ namespace BCake.Parser.Syntax.Expressions {
                         var bracketIndentBefore = bracketIndent;
                         if (bracketsOpen.ToList().Contains(t.Value)) bracketIndent += reverse ? -1 : 1;
                         if (bracketsClose.ToList().Contains(t.Value)) bracketIndent += reverse ? 1 : -1;
-                        
+
                         return new {
                             t.Value,
                             index = index + 1,
@@ -165,9 +162,10 @@ namespace BCake.Parser.Syntax.Expressions {
                     return new Expression(
                         tempTokens[0],
                         scope,
-                        Operator.Parse(scope, typeSource, op, tempTokens[0], new Token[] {}, tempTokens.Skip(1).ToArray())
+                        Operator.Parse(scope, typeSource, op, tempTokens[0], new Token[] { }, tempTokens.Skip(1).ToArray())
                     );
-                } else {
+                }
+                else {
                     return new Expression(
                         tempTokens[0],
                         scope,

@@ -12,10 +12,8 @@ using BCake.Parser.Syntax.Scopes;
 using BCake.Parser.Syntax.Types;
 using BCake.Parser.Syntax.Expressions.Nodes.Value;
 
-namespace BCake.Parser
-{
-    public class Parser
-    {
+namespace BCake.Parser {
+    public class Parser {
         private static string rxSeparators = @"(\s*([\(\)\[\].,:;{}""])\s*|\s+([\(\)\[\].,:;{}""])?\s*)";
 
         public string Filename { get; private set; }
@@ -80,7 +78,8 @@ namespace BCake.Parser
 
                         while (parts[i].Index < end) i++;
                         i--;
-                    } else {
+                    }
+                    else {
                         if (separator.Length > 0) tokens.Add(new Token {
                             Value = separator,
                             FilePath = Filename,
@@ -109,6 +108,7 @@ namespace BCake.Parser
         public static void ParseTypes(Scope targetScope, Token[] tokens, string[] allowedTypes) {
             Access access = Access.@default;
             string type = null, name = null;
+            Token definingToken = null;
             Syntax.Types.Type valueType = null;
             FunctionType.ParameterType[] argList = null;
 
@@ -142,8 +142,8 @@ namespace BCake.Parser
 
                             switch (type) {
                                 case "function": {
-                                        if (name != null && name.StartsWith("operator")) {
-                                            var @operator = name.Substring("operator".Length);
+                                        if (name != null && name.StartsWith("operator_")) {
+                                            var @operator = name.Substring("operator_".Length);
                                             if (!Expression.OperatorOverloadableNames.Contains(@operator)) throw new InvalidOperatorDefinitionException(
                                                 token,
                                                 $"Cannot create overload for unknown operator \"{ @operator }\" - function names may not begin with \"operator\" because it is a keyword used for operator overloading"
@@ -195,7 +195,8 @@ namespace BCake.Parser
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
                                 )
                             );
-                        } else if (type == "class") {
+                        }
+                        else if (type == "class") {
                             targetScope.Declare(
                                 new Syntax.Types.ClassType(
                                     targetScope,
@@ -204,9 +205,10 @@ namespace BCake.Parser
                                     tokens.Skip(beginScope + 1).Take(i - beginScope - 1).ToArray()
                                 )
                             );
-                        } else if (type == "function" || type == "cast") {
+                        }
+                        else if (type == "function" || type == "cast") {
                             var newFunction = new FunctionType(
-                                tokens[i - 1],
+                                definingToken,
                                 targetScope.Type,
                                 access,
                                 valueType,
@@ -227,7 +229,7 @@ namespace BCake.Parser
                         if (type == null) {
                             type = "variable";
                             if (!allowedTypes.Contains(type)) throw new UnexpectedTokenException(token);
-                            if (name == null || valueType == null) throw new UnexpectedTokenException(token);
+                            if (name == null || valueType == null) throw new UnexpectedTokenException(token);
 
                             var newMember = new MemberVariableType(
                                 tokens[i - 1],
@@ -247,7 +249,7 @@ namespace BCake.Parser
 
                     default: {
                             var temp = "";
-                            
+
                             while (true) {
                                 if (SymbolNode.CouldBeIdentifier(token.Value.Trim(), out var m)) temp += m.Value;
                                 else throw new UnexpectedTokenException(token);
@@ -256,14 +258,17 @@ namespace BCake.Parser
                                     temp += ".";
                                     i += 2;
                                     token = tokens[i];
-                                } else break;
+                                }
+                                else break;
                             }
 
                             if (type != "class" && type != "namespace" && valueType == null) {
                                 valueType = targetScope.GetSymbol(temp) ?? throw new UndefinedSymbolException(token, temp, targetScope);
-                            } else {
+                            }
+                            else {
                                 if (name != null) throw new UnexpectedTokenException(token);
                                 name = temp;
+                                definingToken = token;
                             }
 
                             break;
@@ -287,17 +292,18 @@ namespace BCake.Parser
             Scope targetScope,
             int _tokenIndex, out int tokenIndex,
             Token[] tokens
-        ){
+        ) {
             tokenIndex = _tokenIndex;
             name = _name;
 
             var token = tokens[tokenIndex];
 
             if (valueType == null) throw new UnexpectedTokenException(token);
-                            
+
             if (name == null && valueType == targetScope.Type) {
                 name = "!constructor"; // the ! is used as a kind of "escape" because it is impossible for a user created function to contain a ! in its name
-            } else if (name == null) {
+            }
+            else if (name == null) {
                 throw new UnexpectedTokenException(token);
             }
 
@@ -374,7 +380,7 @@ namespace BCake.Parser
         public static string findString(string content, int startPos, out int lineBreaks, out int column, out int end) {
             // currently unused but will be used in the future for different kinds of strings
             // e.g. strings with a $ prefix where variables can be interpolated
-            var mode = StringMode.String; 
+            var mode = StringMode.String;
             var escapeNext = false;
             var result = "";
             lineBreaks = 0;
@@ -420,7 +426,7 @@ namespace BCake.Parser
         }
 
         public static int findListItemEnd(Token[] tokens, int startTokenIndex) {
-            var brackets = new string[] {"(", "{", "[", "<"};
+            var brackets = new string[] { "(", "{", "[", "<" };
 
             for (int i = startTokenIndex; i < tokens.Length; ++i) {
                 var token = tokens[i];

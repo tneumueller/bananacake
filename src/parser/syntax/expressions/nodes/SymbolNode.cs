@@ -15,6 +15,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
                     case Types.FunctionType t: return t.ReturnType;
                     case Types.FunctionType.ParameterType t: return t.Type;
                     case Types.ClassType t: return t;
+                    case Types.PrimitiveType t: return t;
                     case Namespace t: return t;
                 }
                 return null; // todo what now? does not make much sense
@@ -60,7 +61,7 @@ namespace BCake.Parser.Syntax.Expressions.Nodes {
                 });
             }
             compositeTypeTokens.RemoveAt(compositeTypeTokens.Count - 1);
-                
+
             var symbolExpression = Expression.Parse(scope, compositeTypeTokens.ToArray());
 
             return new Types.CompositeType(

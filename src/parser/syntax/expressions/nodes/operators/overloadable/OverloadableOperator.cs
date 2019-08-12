@@ -3,7 +3,7 @@ using System.Linq;
 namespace BCake.Parser.Syntax.Expressions.Nodes.Operators {
     public abstract class OverloadableOperator : Operator {
         public Types.Type Target { get; protected set; }
-        protected Expression _targetNode;
+        public Expression _targetNode { get; protected set; }
         protected Types.FunctionType _operatorFunction;
         public override Types.Type ReturnType {
             get => _operatorFunction.ReturnType;

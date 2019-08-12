@@ -22,13 +22,25 @@ namespace BCake.Runtime {
 
             InitScopes();
             RuntimeScope.Init(Global.Scope);
+            InitPrimitives();
 
-            var exitCodeNode = new Runtime.Nodes.RuntimeFunction(entrypoint, RuntimeScope.ResolveRuntimeScope(entrypoint.Scope), new RuntimeValueNode[] {}).Evaluate() as RuntimeIntValueNode;
+            var exitCodeNode = new Runtime.Nodes.RuntimeFunction(entrypoint, RuntimeScope.ResolveRuntimeScope(entrypoint.Scope), new RuntimeValueNode[] { }).Evaluate() as RuntimeIntValueNode;
             var exitCode = (int)exitCodeNode.Value;
 
             System.Console.WriteLine($"Process ended with exit code {exitCode}");
 
             return exitCode;
+        }
+
+        private void InitPrimitives() {
+            RuntimeScope.SetValue(
+                IntValueNode.Type.Name,
+                new RuntimeTypeValueNode(IntValueNode.Type)
+            );
+            RuntimeScope.SetValue(
+                StringValueNode.Type.Name,
+                new RuntimeTypeValueNode(StringValueNode.Type)
+            );
         }
 
         private void InitScopes() {
@@ -68,7 +80,7 @@ namespace BCake.Runtime {
             public ScopeTreeNode(Scope scope) {
                 Scope = scope;
                 Children = new List<ScopeTreeNode>();
-            } 
+            }
         }
     }
 }
